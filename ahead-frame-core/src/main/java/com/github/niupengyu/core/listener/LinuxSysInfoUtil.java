@@ -117,8 +117,10 @@ public abstract class LinuxSysInfoUtil {
         if(inSize1 != 0 && outSize1 !=0 && inSize2 != 0 && outSize2 !=0){
             double interval = (endTime - startTime)/1000;
             //网口传输速度,单位为bps
-            curRate = (inSize2 - inSize1 + outSize2 - outSize1)*8/(1000000*interval);
-            netUsage = curRate/totalBandwidth;
+            curRate = (inSize2 - inSize1)*8/(1000000*interval);
+            netUsage = (outSize2 - outSize1)*8/(1000000*interval);
+
+            //netUsage = curRate/totalBandwidth;
         }
         return new double[]{curRate,netUsage};
     }
