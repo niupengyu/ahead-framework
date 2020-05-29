@@ -82,6 +82,13 @@ public class StringUtil implements java.io.Serializable {
         return null;
     }
 
+    public static String mapValueString(Map<?, ?> mapSet,String key){
+        if(mapSet!=null&& mapSet.containsKey(key)){
+            return StringUtil.valueOf(mapSet.get(key));
+        }
+        return "";
+    }
+
     public static boolean listIsNull(List<?> mains) {
         if (isNull(mains)) {
             return true;

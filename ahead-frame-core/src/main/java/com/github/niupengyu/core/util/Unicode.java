@@ -40,12 +40,66 @@ public class Unicode
 		}
 		return result;
 	}
-	
-	/**
-	 * 把中文转成Unicode码
-	 * @param str
-	 * @return
-	 */
+
+	public static String decodeUnicode(final String dataStr) {
+		if(StringUtil.isNull(dataStr)){
+			return "";
+		}
+		int start = 0;
+		int end = 0;
+		final StringBuffer buffer = new StringBuffer();
+		while (start > -1) {
+			end = dataStr.indexOf("\\u", start + 2);
+			String charStr = "";
+			if (end == -1) {
+				charStr = dataStr.substring(start + 2, dataStr.length());
+			} else {
+				charStr = dataStr.substring(start + 2, end);
+			}
+			char letter = (char) Integer.parseInt(charStr, 16); // 16进制parse整形字符串。
+			buffer.append(new Character(letter).toString());
+			start = end;
+		}
+		return buffer.toString();
+	}
+
+	public static String gbEncoding(final String gbString,int offset) {
+		char[] utfBytes = gbString.toCharArray();
+		String unicodeBytes = "";
+		for (int i = 0; i < utfBytes.length; i++) {
+			char c=utfBytes[i];
+			String hex="";
+			//System.out.println(c);
+            /*if(c<=57&&c>=48){
+                hex=encodingNumber(c);
+            }else if(c<=90&&c>=65){
+                hex=encodingDZm(c);
+            }else if(c<=122&&c>=97){
+                hex=encodingXZm(c);
+            }else if(Unicode.isChinese(c)){
+                hex=Integer.toHexString(c+1);
+            }else{*/
+			hex= Integer.toHexString(c);
+			//}
+			//System.out.println(hex);
+			//System.out.println(Integer.toHexString(c));
+			//System.out.println(c+offset);
+			//String hex=Integer.toHexString(c+offset);
+			String hexB = hex;
+			if (hexB.length() <= 2) {
+				hexB = "00" + hexB;
+			}
+			unicodeBytes = unicodeBytes + "\\u" + hexB;
+		}
+		return unicodeBytes;
+	}
+
+
+		/**
+         * 把中文转成Unicode码
+         * @param str
+         * @return
+         */
 	public static String chinaToUnicode2(String str)
 	{
 		String result = "";
