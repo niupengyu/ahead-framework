@@ -23,10 +23,8 @@ public abstract class LinuxSysInfoUtil {
         long inSize1 = 0, outSize1 = 0;
         for(String line:cpu){
             line = line.trim();
-            System.out.println(line);
             if(line.startsWith(netName)){
                 String[] temp = line.split("\\s+");
-                System.out.println(Arrays.toString(temp));
                 String str=temp[0].substring(netName.length());
                 String str2=temp[8];
                 if(StringUtil.isNull(str)){
@@ -89,7 +87,6 @@ public abstract class LinuxSysInfoUtil {
         List<String> cpu=cpuInfos();
         if(!cpu.isEmpty()){
             String str=cpu.get(0);
-            System.out.println(str);
             String[] line=str.split("\\s+");
             idleCpuTime1 = Long.parseLong(line[4]);
             for(String s : line){
@@ -110,8 +107,6 @@ public abstract class LinuxSysInfoUtil {
         Thread.sleep(1000);
         long endTime = System.currentTimeMillis();
         long[] netSize1=netInfo(netName);
-        System.out.println(Arrays.toString(netSize));
-        System.out.println(Arrays.toString(netSize1));
         long inSize1 = netSize[0], outSize1 = netSize[1];	//分别为系统启动后空闲的CPU时间和总的CPU时间
         long inSize2 = netSize1[0], outSize2 = netSize1[1];	//分别为系统启动后空闲的CPU时间和总的CPU时间
         if(inSize1 != 0 && outSize1 !=0 && inSize2 != 0 && outSize2 !=0){
@@ -130,15 +125,12 @@ public abstract class LinuxSysInfoUtil {
         Thread.sleep(1000);
         long[] cpuTime1=cpuTimeInfo();
 
-        System.out.println(Arrays.toString(cpuTime));
-        System.out.println(Arrays.toString(cpuTime1));
         long idleCpuTime1 = cpuTime[0], totalCpuTime1 = cpuTime[1];	//分别为系统启动后空闲的CPU时间和总的CPU时间
         long idleCpuTime2 = cpuTime1[0], totalCpuTime2 = cpuTime1[1];	//分别为系统启动后空闲的CPU时间和总的CPU时间
         double cpuUsage = 0;
         if(idleCpuTime1 != 0 && totalCpuTime1 !=0 && idleCpuTime2 != 0 && totalCpuTime2 !=0){
             double d1=idleCpuTime2 - idleCpuTime1;
             double d2=totalCpuTime2 - totalCpuTime1;
-            System.out.println("d1 "+d1+" d2 "+d2);
             cpuUsage = 1 - d1/d2;
         }
         return cpuUsage;
