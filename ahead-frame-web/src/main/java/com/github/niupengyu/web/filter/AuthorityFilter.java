@@ -62,29 +62,35 @@ public class AuthorityFilter implements Filter {
     HttpServletResponse res = (HttpServletResponse) response;
 
     String type=req.getMethod();
+    if(StringUtil.setIsNull(allowOriginsSet)){
+      res.setHeader("Access-Control-Allow-Methods", "*");
+      res.setHeader("Access-Control-Max-Age", maxAge);
+      res.setHeader("Access-Control-Allow-Headers", "*");
+      res.setHeader("Access-Control-Allow-Credentials", "false");
+      res.setHeader("Access-Control-Allow-Origin", "*");
+    }else{
+      String origin=req.getHeader("origin");
+      System.out.println(origin+" === ");
+      if(StringUtil.notNull(origin)){
+        boolean flag=StringUtil.notNull(origin)&&allowOriginsSet.contains(origin);
+        if(flag){
+          res.setHeader("Access-Control-Allow-Origin", origin);
+        }
+      }else{
+        String referer=req.getHeader("Referer");
+        System.out.println(referer+" referer=== ");
+        if(StringUtil.notNull(referer)&&referer.endsWith("/")){
+          referer=referer.substring(0,referer.length()-1);
+        }
+        res.setHeader("Access-Control-Allow-Origin", referer);
+      }
 
-     if (type.toUpperCase().equals("OPTIONS")==true) {
-       String referer=req.getHeader("Referer");
-       if(referer.endsWith("/")){
-         referer=referer.substring(0,referer.length()-1);
-       }
-       res.setHeader("Access-Control-Allow-Origin", referer);
-     }else{
-       String origin=req.getHeader("origin");
-       boolean flag=StringUtil.notNull(origin)&&allowOriginsSet.contains(origin);
-       if(flag){
-         res.setHeader("Access-Control-Allow-Origin", origin);
-       }
-     }
-
-    //else{
-    //  res.setHeader("Access-Control-Allow-Origin", allowOrigin);
-    //}
-    res.setHeader("Access-Control-Allow-Methods", allowMethods);
-    res.setHeader("Access-Control-Max-Age", maxAge);
-    res.setHeader("Access-Control-Allow-Headers", allowHeaders);
-    res.setHeader("Access-Control-Allow-Credentials", allowCredentials);
-    chain.doFilter(req, res);
+      res.setHeader("Access-Control-Allow-Methods", allowMethods);
+      res.setHeader("Access-Control-Max-Age", maxAge);
+      res.setHeader("Access-Control-Allow-Headers", allowHeaders);
+      res.setHeader("Access-Control-Allow-Credentials", allowCredentials);
+      chain.doFilter(req, res);
+    }
 
   }
 
