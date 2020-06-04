@@ -28,6 +28,8 @@ public class DateUtil {
 
 	public static final String FORMAT="yyyy-MM-dd HH:mm:ss";
 
+	public static final String STAMP_FORMAT="yyyy-MM-dd HH:mm:ss.SSS";
+
 	public static final String DATE_FORMAT="yyyy-MM-dd";
 
 	public static final String TIME_FORMAT="HH:mm:ss";
@@ -67,6 +69,14 @@ public class DateUtil {
 	
 	public static String dateFormat(){
 		return LocalDateTime.now().format(DateTimeFormatter.ofPattern(FORMAT));
+	}
+
+	public static String timeStampFormat(LocalDateTime dateTime){
+		return dateTime.format(DateTimeFormatter.ofPattern(STAMP_FORMAT));
+	}
+
+	public static String timeStampFormat(){
+		return LocalDateTime.now().format(DateTimeFormatter.ofPattern(STAMP_FORMAT));
 	}
 
 	public static String dateFormatDate(){
@@ -145,6 +155,10 @@ public class DateUtil {
 
 	public static LocalDateTime getLocalDateTime(String date){
 		return LocalDateTime.parse(date,DateTimeFormatter.ofPattern(FORMAT));
+	}
+
+	public static LocalDateTime getLocalDateTimeStamp(String date){
+		return LocalDateTime.parse(date,DateTimeFormatter.ofPattern(STAMP_FORMAT));
 	}
 
 	public static LocalDate getLocalDate(String date){
