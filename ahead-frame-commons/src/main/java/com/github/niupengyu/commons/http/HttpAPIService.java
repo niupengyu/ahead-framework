@@ -61,7 +61,7 @@ public class HttpAPIService {
      */
     @Deprecated
     public String doGet(String url) throws Exception {
-        logger.info(url);
+        logger.debug(url);
         // 声明 http get 请求
         HttpGet httpGet = new HttpGet(url);
 
@@ -80,7 +80,7 @@ public class HttpAPIService {
     }
 
     public HttpResult doGetResult(String url,Map<String,String> map) throws Exception {
-        logger.info(url);
+        logger.debug(url);
         URIBuilder uriBuilder = new URIBuilder(url);
         if (map != null) {
             Iterator var4 = map.entrySet().iterator();
@@ -97,7 +97,7 @@ public class HttpAPIService {
     }
 
     public HttpResult doGetResult(String url) throws Exception {
-        logger.info(url);
+        logger.debug(url);
         URIBuilder uriBuilder = new URIBuilder(url);
         HttpGet httpGet = new HttpGet(uriBuilder.build().toString());
         httpGet.setConfig(this.config);
@@ -134,7 +134,7 @@ public class HttpAPIService {
      * @throws Exception
      */
     public HttpResult doPost(String url, Map<String, String> map) throws Exception {
-        logger.info("doPost " + url);
+        logger.debug("doPost " + url);
         // 声明httpPost请求
         HttpPost httpPost = new HttpPost(url);
         // 加入配置信息
@@ -160,7 +160,7 @@ public class HttpAPIService {
     }
 
     public HttpResult doPost(String url, Map<String, String> map,Map<String,String> headers) throws Exception {
-        logger.info("doPost " + url);
+        logger.debug("doPost " + url);
         // 声明httpPost请求
         HttpPost httpPost = new HttpPost(url);
         // 加入配置信息
@@ -239,7 +239,7 @@ public class HttpAPIService {
      * @throws Exception
      */
     public HttpResult doJson(String url, String json) throws Exception {
-        logger.info("doPost " + url);
+        logger.debug("doPost " + url);
         // 声明httpPost请求
         HttpPost httpPost = new HttpPost(url);
         // 加入配置信息
@@ -259,7 +259,7 @@ public class HttpAPIService {
     }
 
     public HttpResult doJson(String url, String json,Map<String,String> headers) throws Exception {
-        logger.info("doPost " + url);
+        logger.debug("doPost " + url);
         // 声明httpPost请求
         HttpPost httpPost = new HttpPost(url);
         // 加入配置信息
@@ -284,7 +284,7 @@ public class HttpAPIService {
     }
 
     public HttpResult doXml(String url, String xml) throws Exception {
-        logger.info("doXml " + url);
+        logger.debug("doXml " + url);
         // 声明httpPost请求
         HttpPost httpPost = new HttpPost(url);
         // 加入配置信息
@@ -302,7 +302,7 @@ public class HttpAPIService {
     }
 
     public HttpResult doXml(String url, String xml,Map<String,String> headers) throws Exception {
-        logger.info("doXml " + url);
+        logger.debug("doXml " + url);
         // 声明httpPost请求
         HttpPost httpPost = new HttpPost(url);
         // 加入配置信息
@@ -325,7 +325,7 @@ public class HttpAPIService {
     }
 
     public HttpResult doPut(String url, String json) throws Exception {
-        logger.info("doPost " + url);
+        logger.debug("doPost " + url);
         // 声明httpPost请求
         HttpPut httpPut = new HttpPut(url);
         // 加入配置信息
@@ -345,7 +345,7 @@ public class HttpAPIService {
     }
 
     public HttpResult doPut(String url, String json,Map<String,String> headers) throws Exception {
-        logger.info("doPost " + url);
+        logger.debug("doPost " + url);
         // 声明httpPost请求
         HttpPut httpPut = new HttpPut(url);
         // 加入配置信息
@@ -377,7 +377,7 @@ public class HttpAPIService {
      * @throws Exception
      */
     public File download(String url, String localPath) {
-        logger.info("download " + url);
+        logger.debug("download " + url);
         // 声明 http get 请求
         InputStream in = null;
         OutputStream out = null;
@@ -461,7 +461,7 @@ public class HttpAPIService {
                 file = getFileName(response);
             }
         } catch (Exception e) {
-            logger.info("识别文件名异常 " + url);
+            logger.debug("识别文件名异常 " + url);
         }
         return file;
     }
