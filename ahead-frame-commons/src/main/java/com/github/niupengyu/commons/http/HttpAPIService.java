@@ -461,7 +461,7 @@ public class HttpAPIService {
                 file = getFileName(response);
             }
         } catch (Exception e) {
-            logger.debug("识别文件名异常 " + url);
+            logger.debug  ("识别文件名异常 " + url);
         }
         return file;
     }

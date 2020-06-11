@@ -25,6 +25,8 @@ public class MessageManager<T> {
      */
     private String name;
 
+    private boolean stop=false;
+
     /**
      * 构造器
      * @param name
@@ -87,4 +89,11 @@ public class MessageManager<T> {
         return size;
     }
 
+    public boolean isStop() {
+        return stop;
+    }
+
+    public void setStop(boolean stop) {
+        this.stop = stop;
+    }
 }

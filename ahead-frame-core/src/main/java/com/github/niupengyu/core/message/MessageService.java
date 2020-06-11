@@ -16,6 +16,14 @@ public abstract class MessageService<T> implements Runnable{
     public MessageService(String name) {
         dataManager=new MessageManager<>(name);
     }
+    /**
+     * 构造器
+     * @param dataManager
+     */
+    public MessageService(MessageManager<T>
+            dataManager) {
+        this.dataManager=dataManager;
+    }
 
     /**
      * 添加一条消息
@@ -34,9 +42,15 @@ public abstract class MessageService<T> implements Runnable{
         while(true){
             T messageBean=dataManager.getMessage();
             if(messageBean==null){
-                continue;
+                boolean state=dataManager.isStop();
+                if(state){
+                    break;
+                }else{
+                    continue;
+                }
             }
             this.execute(messageBean);
+
         }
     }
 
