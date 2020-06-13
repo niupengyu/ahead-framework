@@ -13,6 +13,9 @@
  */
 package com.github.niupengyu.web.config;
 
+import com.fasterxml.jackson.databind.SerializationConfig;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.github.niupengyu.core.util.StringUtil;
 import com.github.niupengyu.web.beans.ResponseData;
 import com.github.niupengyu.web.filter.AuthorityFilter;
@@ -34,6 +37,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -49,6 +53,10 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 //import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 import java.nio.charset.Charset;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -72,6 +80,8 @@ public class MvcConfig implements WebMvcConfigurer
 		configurer.setUseSuffixPatternMatch(flag);
 
 	}
+
+	private final static String DATE_TIME_FORMATTER = "yyyy-MM-dd HH:mm:ss";
 
 	@Bean
 	public LocaleChangeInterceptor localeChangeInterceptor(){
@@ -148,8 +158,26 @@ public class MvcConfig implements WebMvcConfigurer
 	@Bean
 	public MappingJackson2HttpMessageConverter messageConverter() {
 		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-		converter.setObjectMapper(new ObjectMapper());
+		converter.setObjectMapper(objectMapper());
 		return converter;
+	}
+
+	@Bean
+	ObjectMapper objectMapper() {
+		ObjectMapper objectMapper= new Jackson2ObjectMapperBuilder()
+				.findModulesViaServiceLoader(true)
+				.serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(
+						DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER)))
+				.deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(
+						DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER)))
+				.serializerByType(Timestamp.class, new LocalDateTimeSerializer(
+						DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER)))
+				.deserializerByType(Timestamp.class, new LocalDateTimeDeserializer(
+						DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER)))
+				.build();
+		SimpleDateFormat myDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		objectMapper.setDateFormat(myDateFormat);
+		return objectMapper;
 	}
 
     /*@Override

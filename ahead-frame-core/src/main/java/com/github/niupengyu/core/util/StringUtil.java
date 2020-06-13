@@ -181,6 +181,13 @@ public class StringUtil implements java.io.Serializable {
         return valueOf(value);
     }
 
+    public static String valueOf(Object value, Object defaults) {
+        if (StringUtil.isNull(value)) {
+            return valueOf(defaults);
+        }
+        return valueOf(value);
+    }
+
    /* public static Integer valueOf(Integer value, Integer defaults) {
         if (StringUtil.isNull(value)) {
             return defaults;
