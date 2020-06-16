@@ -87,6 +87,15 @@ public class DateUtil {
 		return LocalDate.now().minusDays(i).format(DateTimeFormatter.ofPattern(DATE_FORMAT));
 	}
 
+	public static long between(LocalDateTime startDateTime,LocalDateTime endDateTime){
+		Duration duration = Duration.between(startDateTime,endDateTime);
+		return duration.toDays();
+	}
+
+	public static long between(LocalDate startDateTime,LocalDate endDateTime){
+		return endDateTime.toEpochDay()-startDateTime.toEpochDay();
+	}
+
 	public static String dateFormat(LocalDateTime dateTime,String format){
 		return dateTime.format(DateTimeFormatter.ofPattern(format));
 	}
