@@ -42,6 +42,14 @@ public class Value {
         return Long.valueOf(value);
     }
 
+    public String valueBlob() {
+        return value;
+    }
+
+    public String valueClob() {
+        return value;
+    }
+
     public Object valueTimestamp() {
         if("now".equals(value)){
             return new Timestamp(System.currentTimeMillis());
