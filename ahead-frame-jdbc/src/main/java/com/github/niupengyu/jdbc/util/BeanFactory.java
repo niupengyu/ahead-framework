@@ -157,8 +157,12 @@ public class BeanFactory {
                     MybatisInterceptor[] interceptors=mybatisConfiguration.getInterceptor();
                     for(MybatisInterceptor interceptor:interceptors){
                         Interceptor mi= null;
+                        String className=interceptor.getClassName();
+                        if(StringUtil.isNull(className)){
+                            continue;
+                        }
                         try {
-                            mi = (Interceptor) Class.forName(interceptor.getClassName()).newInstance();
+                            mi = (Interceptor) Class.forName(className).newInstance();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
