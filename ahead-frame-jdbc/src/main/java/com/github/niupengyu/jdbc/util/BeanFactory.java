@@ -163,16 +163,17 @@ public class BeanFactory {
                         }
                         try {
                             mi = (Interceptor) Class.forName(className).newInstance();
+                            Properties prop=new Properties();
+                            Map<String,Object> props=interceptor.getProp();
+                            for(Map.Entry<String,Object> entry:props.entrySet()){
+                                prop.put(entry.getKey(),entry.getValue());
+                            }
+                            mi.setProperties(prop);
+                            configuration.addInterceptor(mi);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        Properties prop=new Properties();
-                        Map<String,Object> props=interceptor.getProp();
-                        for(Map.Entry<String,Object> entry:props.entrySet()){
-                            prop.put(entry.getKey(),entry.getValue());
-                        }
-                        mi.setProperties(prop);
-                        configuration.addInterceptor(mi);
+
                     }
                 }
                 return configuration;
