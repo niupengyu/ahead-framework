@@ -81,7 +81,7 @@ public class  DbConfig {
 
 	private Map<String,Object> prop;
 
-	private Map<String,Object> configuration;
+	private MybatisConfiguration configuration;
 
 	private Boolean transaction;
 
@@ -89,11 +89,11 @@ public class  DbConfig {
 
 	}
 
-	public Map<String, Object> getConfiguration() {
+	public MybatisConfiguration getConfiguration() {
 		return configuration;
 	}
 
-	public void setConfiguration(Map<String, Object> configuration) {
+	public void setConfiguration(MybatisConfiguration configuration) {
 		this.configuration = configuration;
 	}
 

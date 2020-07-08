@@ -77,7 +77,7 @@ public class DataSourceBean extends BaseConfig{
 
     private Map<String,Object> prop;
 
-    private Map<String,Object> configuration;
+    private MybatisConfiguration configuration;
 
     public Boolean getEnable() {
         return enable;
@@ -87,11 +87,11 @@ public class DataSourceBean extends BaseConfig{
         this.enable = enable;
     }
 
-    public Map<String, Object> getConfiguration() {
+    public MybatisConfiguration getConfiguration() {
         return configuration;
     }
 
-    public void setConfiguration(Map<String, Object> configuration) {
+    public void setConfiguration(MybatisConfiguration configuration) {
         this.configuration = configuration;
     }
 

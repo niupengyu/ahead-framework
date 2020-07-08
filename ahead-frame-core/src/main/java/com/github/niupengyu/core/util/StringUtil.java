@@ -256,6 +256,11 @@ public class StringUtil implements java.io.Serializable {
         return value;
     }
 
+    public static <T> T objectValueOf(T value, T defaults) {
+
+        return value==null?defaults:value;
+    }
+
     public static Long longValueOf(Long value,Long value1, Long defaults) {
         if (value!=null) {
             return value;

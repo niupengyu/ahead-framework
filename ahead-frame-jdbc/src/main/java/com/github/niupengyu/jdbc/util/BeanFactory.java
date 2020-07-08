@@ -4,8 +4,10 @@ import com.github.niupengyu.core.util.Content;
 import com.github.niupengyu.core.util.StringUtil;
 import com.github.niupengyu.jdbc.bean.DataSourceBean;
 import com.github.niupengyu.jdbc.bean.DbConfig;
-import com.github.niupengyu.jdbc.handler.OracleClobTypeHandlerCallback;
-import org.apache.ibatis.type.JdbcType;
+import com.github.niupengyu.jdbc.bean.MybatisConfiguration;
+import com.github.niupengyu.jdbc.bean.MybatisInterceptor;
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.session.Configuration;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.slf4j.Logger;
@@ -14,6 +16,8 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.core.io.Resource;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.function.Supplier;
 
 public class BeanFactory {
@@ -37,7 +41,7 @@ public class BeanFactory {
 
         BeanDefinitionBuilder configuration = BeanDefinitionBuilder
                 .genericBeanDefinition(org.apache.ibatis.session.Configuration.class,
-                        configurationSupplier(dbConfig.getMappers()));
+                        configurationSupplier(dbConfig.getMappers(), null, dbConfig));
 
         Boolean callSettersOnNulls=StringUtil.booleanValueOf(
                 dbConfig.getCallSettersOnNulls(),true);
@@ -50,7 +54,7 @@ public class BeanFactory {
         logger.info("callSettersOnNulls "+callSettersOnNulls +
                 " useColumnLabel "+useColumnLabel+
                 " mapUnderscoreToCamelCase "+mapUnderscoreToCamelCase);
-        setConfigurationProp(configuration,callSettersOnNulls,useColumnLabel,mapUnderscoreToCamelCase);
+        setConfigurationProp(configuration,callSettersOnNulls,useColumnLabel,mapUnderscoreToCamelCase, null, dbConfig);
         //TODO 分页插件
         return configuration;
     }
@@ -61,10 +65,11 @@ public class BeanFactory {
                 .genericBeanDefinition(org.apache.ibatis.session.Configuration.class);
         List<String> mappers=StringUtil.valueOf(ds.getMappers(),dbConfig.getMappers());
         configuration=BeanDefinitionBuilder.genericBeanDefinition(org.apache.ibatis.session.Configuration.class,
-                configurationSupplier(mappers));
+                configurationSupplier(mappers,ds,dbConfig));
 //        org.apache.ibatis.session.Configuration configuration1=
 //                new org.apache.ibatis.session.Configuration();
 //        configuration1.getTypeHandlerRegistry().register(JdbcType.CLOB, new OracleClobTypeHandlerCallback());
+
         Boolean callSettersOnNulls=StringUtil.booleanValueOf(ds.getCallSettersOnNulls(),
                 dbConfig.getCallSettersOnNulls(),true);
 
@@ -78,20 +83,32 @@ public class BeanFactory {
                 " useColumnLabel "+useColumnLabel+
                 " mapUnderscoreToCamelCase "+mapUnderscoreToCamelCase);
 
-        setConfigurationProp(configuration,callSettersOnNulls,useColumnLabel,mapUnderscoreToCamelCase);
+        setConfigurationProp(configuration,callSettersOnNulls,useColumnLabel,mapUnderscoreToCamelCase,ds,dbConfig);
         return configuration;
     }
 
     public void setConfigurationProp(BeanDefinitionBuilder configuration,
-                                     Boolean callSettersOnNulls,Boolean useColumnLabel,Boolean mapUnderscoreToCamelCase
-                                     ){
+                                     Boolean callSettersOnNulls, Boolean useColumnLabel, Boolean mapUnderscoreToCamelCase,
+                                     DataSourceBean ds, DbConfig dbConfig){
         /*configuration.setCallSettersOnNulls(callSettersOnNulls);
         configuration.setUseColumnLabel(useColumnLabel);
         configuration.setMapUnderscoreToCamelCase(mapUnderscoreToCamelCase);*/
         configuration.addPropertyValue("callSettersOnNulls",callSettersOnNulls);
         configuration.addPropertyValue("useColumnLabel",useColumnLabel);
         configuration.addPropertyValue("mapUnderscoreToCamelCase",mapUnderscoreToCamelCase);
-
+        MybatisConfiguration mybatisConfiguration=null;
+        if(dbConfig!=null){
+            mybatisConfiguration=dbConfig.getConfiguration();
+        }
+        if(ds!=null&&mybatisConfiguration==null){
+            mybatisConfiguration=ds.getConfiguration();
+        }
+        if(mybatisConfiguration!=null){
+            Map<String,Object> prop=mybatisConfiguration.getProp();
+            for(Map.Entry<String,Object> entry:prop.entrySet()){
+                configuration.addPropertyValue(entry.getKey(),entry.getValue());
+            }
+        }
     }
 
     public BeanDefinitionBuilder createMapperScanner(List<String> mappers,String dsName) {
@@ -115,16 +132,43 @@ public class BeanFactory {
         return mapperScannerConfigurerBuilder;
     }
 
-    private Supplier<org.apache.ibatis.session.Configuration> configurationSupplier(List<String> mappers){
-       return new Supplier<org.apache.ibatis.session.Configuration>() {
+    private Supplier<Configuration>
+    configurationSupplier(List<String> mappers,
+                                                                                    DataSourceBean ds, DbConfig dbConfig){
+       return new Supplier<Configuration>() {
             @Override
-            public org.apache.ibatis.session.Configuration get() {
-                org.apache.ibatis.session.Configuration configuration=
-                        new org.apache.ibatis.session.Configuration();
+            public Configuration get() {
+                Configuration configuration=
+                        new Configuration();
                 //configuration.getTypeHandlerRegistry().register(JdbcType.CLOB, new OracleClobTypeHandlerCallback());
                 if(!StringUtil.listIsNull(mappers)){
                     for(String mapper:mappers){
                         configuration.addMappers(mapper);
+                    }
+                }
+                MybatisConfiguration mybatisConfiguration=null;
+                if(dbConfig!=null){
+                    mybatisConfiguration=dbConfig.getConfiguration();
+                }
+                if(ds!=null&&mybatisConfiguration==null){
+                    mybatisConfiguration=ds.getConfiguration();
+                }
+                if(mybatisConfiguration!=null){
+                    MybatisInterceptor[] interceptors=mybatisConfiguration.getInterceptor();
+                    for(MybatisInterceptor interceptor:interceptors){
+                        Interceptor mi= null;
+                        try {
+                            mi = (Interceptor) Class.forName(interceptor.getClassName()).newInstance();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        Properties prop=new Properties();
+                        Map<String,Object> props=interceptor.getProp();
+                        for(Map.Entry<String,Object> entry:props.entrySet()){
+                            prop.put(entry.getKey(),entry.getValue());
+                        }
+                        mi.setProperties(prop);
+                        configuration.addInterceptor(mi);
                     }
                 }
                 return configuration;
