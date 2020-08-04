@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github.niupengyu</groupId>
         <artifactId>ahead-frame</artifactId>
-        <version>1.2.3-RELEASE</version>
+        <version>1.2.4-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <version>${ahead.framework.version}</version>

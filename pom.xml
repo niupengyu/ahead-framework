@@ -6,7 +6,7 @@
 
     <groupId>com.github.niupengyu</groupId>
     <artifactId>ahead-frame</artifactId>
-    <version>1.2.3-RELEASE</version>
+    <version>1.2.4-RELEASE</version>
     <packaging>pom</packaging>
     <name>ahead-frame</name>
     <!--<parent>
@@ -46,7 +46,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <!--<ahead.framework.version>1.0-RELEASE</ahead.framework.version>-->
-        <ahead.framework.version>1.2.3-RELEASE</ahead.framework.version>
+        <ahead.framework.version>1.2.4-RELEASE</ahead.framework.version>
     </properties>
     <modules>
         <module>ahead-frame-core</module>
