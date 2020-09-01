@@ -47,6 +47,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <!--<ahead.framework.version>1.0-RELEASE</ahead.framework.version>-->
         <ahead.framework.version>1.2.4-RELEASE</ahead.framework.version>
+        <project.skip.deploy>true</project.skip.deploy>
     </properties>
     <modules>
         <module>ahead-frame-core</module>
@@ -97,6 +98,9 @@
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.20.1</version>
+                    <configuration>
+                        <skipTests>true</skipTests>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -127,6 +131,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9.1</version>
                 <configuration>
+                    <skip>${project.skip.deploy}</skip>
                     <encoding>UTF-8</encoding>
                     <aggregate>true</aggregate>
                     <charset>UTF-8</charset>
@@ -149,6 +154,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.0.1</version>
+                <configuration>
+                    <skipSource>${project.skip.deploy}</skipSource>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -163,6 +171,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>1.6</version>
+                <configuration>
+                    <skip>${project.skip.deploy}</skip>
+                </configuration>
                 <executions>
                     <execution>
                         <!-- 必须和配置中的gpg校验id一致 -->

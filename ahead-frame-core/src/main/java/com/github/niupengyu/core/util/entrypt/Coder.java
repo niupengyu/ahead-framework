@@ -1,4 +1,6 @@
 package com.github.niupengyu.core.util.entrypt;
+import org.apache.commons.codec.binary.Base64;
+
 import java.security.MessageDigest;
 
 import javax.crypto.KeyGenerator;
@@ -6,8 +8,6 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 /**
  * 基础加密组件
@@ -41,7 +41,8 @@ public abstract class Coder {
 	 * @throws Exception
 	 */
 	public static byte[] decryptBASE64(String key) throws Exception {
-		return (new BASE64Decoder()).decodeBuffer(key);
+		//return (new BASE64Decoder()).decodeBuffer(key);
+		return Base64.decodeBase64(key);
 	}
 
 	/**
@@ -52,7 +53,8 @@ public abstract class Coder {
 	 * @throws Exception
 	 */
 	public static String encryptBASE64(byte[] key) throws Exception {
-		return (new BASE64Encoder()).encodeBuffer(key);
+		//return (new BASE64Encoder()).encodeBuffer(key);
+		return Base64.encodeBase64String(key);
 	}
 
 	/**

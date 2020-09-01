@@ -4,7 +4,6 @@ import com.github.niupengyu.core.annotation.AutoConfig;
 import com.github.niupengyu.socket.client.config.ClientConfig;
 import com.github.niupengyu.socket.client.service.ClientHandler;
 import com.github.niupengyu.socket.handler.ClientService;
-import com.sun.javafx.iio.ios.IosDescriptor;
 import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
 import org.apache.mina.core.future.ConnectFuture;
 import org.apache.mina.core.session.IoSession;

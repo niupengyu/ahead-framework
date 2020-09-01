@@ -1,9 +1,9 @@
 package com.github.niupengyu.core.util;
 
 import com.github.niupengyu.core.filter.FileFilterForName;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
-import sun.misc.BASE64Encoder;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -149,8 +149,9 @@ public class FileUtil {
             e.printStackTrace();
         }
 
-        BASE64Encoder encoder = new BASE64Encoder();
-        return encoder.encode(data);
+        //BASE64Encoder encoder = new BASE64Encoder();
+        //return encoder.encode(data);
+        return Base64.encodeBase64String(data);
     }
 
     public static String mkdirs(String path) {

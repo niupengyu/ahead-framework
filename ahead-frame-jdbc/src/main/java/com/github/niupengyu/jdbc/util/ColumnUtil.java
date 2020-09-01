@@ -3,8 +3,8 @@ package com.github.niupengyu.jdbc.util;
 import com.github.niupengyu.core.util.DateUtil;
 import com.github.niupengyu.core.util.StringUtil;
 import com.github.niupengyu.core.util.ThreadLocalDateUtil;
-import oracle.sql.DATE;
-import oracle.sql.TIMESTAMP;
+//import oracle.sql.DATE;
+//import oracle.sql.TIMESTAMP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +74,7 @@ public class ColumnUtil {
         return value1;
     }
 
-    public static String convertOracleDate(Object date) throws Exception {
+    /*public static String convertOracleDate(Object date) throws Exception {
         logger.info("formatTime "+date);
         if(date==null){
             return "";
@@ -90,6 +90,6 @@ public class ColumnUtil {
             date=((DATE)date).timestampValue();
         }
         return new SimpleDateFormat(DateUtil.FORMAT).format(date).toString();
-    }
+    }*/
 
 }
