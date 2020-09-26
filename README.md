@@ -2,7 +2,7 @@
 aframe
 这是一个 java web  java jar 程序的快速开发框架
 
-nohup java -jar ahead-schedule-starter-jar-1.2.6-RELEASE >/dev/null 2>& 1
+//nohup java -jar ahead-schedule-starter-jar-1.2.6-RELEASE >/dev/null 2>& 1
 
 firewall-cmd --query-port=8083/tcp
 
@@ -11,7 +11,8 @@ firewall-cmd --zone=public --add-port=8083/tcp --permanent
 firewall-cmd --query-port=8083/tcp
 
 firewall-cmd --reload
-
+sed -i 's/\r$//' start.sh
+#! /bin/bash
 nohup java -jar bydr-schedule-1.0-SNAPSHOT.jar >/dev/null 2>1 &
 
 1，lsof -i:端口号
