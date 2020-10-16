@@ -60,5 +60,12 @@ public abstract class MessageService<T> implements Runnable{
      */
     public abstract void execute(T messageBean);
 
+    public boolean isStop() {
+        return dataManager.isStop();
+    }
+
+    public void setStop(boolean stop) {
+        dataManager.setStop(stop);
+    }
 
 }
