@@ -68,4 +68,18 @@ public abstract class MessageService<T> implements Runnable{
         dataManager.setStop(stop);
     }
 
+
+    public int messageSize(){
+
+        return dataManager.messageSize();
+    }
+    /**
+     * 获取消息长度
+     * @return
+     */
+    public int messageCount(){
+
+        return dataManager.messageCount();
+    }
+
 }

@@ -27,6 +27,8 @@ public class MessageManager<T> {
 
     private boolean stop=false;
 
+    private int count=0;
+
     /**
      * 构造器
      * @param name
@@ -44,6 +46,7 @@ public class MessageManager<T> {
         lock.lock();
         try {
             message.add(messageobj);
+            count++;
         }catch(Exception e){
             e.printStackTrace();
         }finally{
@@ -55,14 +58,15 @@ public class MessageManager<T> {
      * 读取一条最新的消息
      * @return
      */
-    public  T getMessage() {
+    public T getMessage(){
         lock.lock();
         T obj=null;
         try {
             if(message.size()>0){
                 obj=message.get(0);
                 message.remove(0);
-                logger.info(name+" 剩余消息 ----->["+message.size()+"]");
+                count--;
+                logger.info(name+" 剩余消息 ----->[{}/{}]",message.size(),count);
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -88,12 +92,20 @@ public class MessageManager<T> {
         }
         return size;
     }
+    /**
+     * 获取消息长度
+     * @return
+     */
+    public int messageCount(){
 
-    public boolean isStop() {
+        return count;
+    }
+
+    public boolean isStop(){
         return stop;
     }
 
-    public void setStop(boolean stop) {
+    public void setStop(boolean stop){
         this.stop = stop;
     }
 }
