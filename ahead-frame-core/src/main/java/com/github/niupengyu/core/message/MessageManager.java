@@ -66,7 +66,7 @@ public class MessageManager<T> {
                 obj=message.get(0);
                 message.remove(0);
                 count--;
-                logger.info(name+" 剩余消息 ----->[{}/{}]",message.size(),count);
+                logger.debug(name+" 剩余消息 ----->[{}/{}]",message.size(),count);
             }
         }catch(Exception e){
             e.printStackTrace();

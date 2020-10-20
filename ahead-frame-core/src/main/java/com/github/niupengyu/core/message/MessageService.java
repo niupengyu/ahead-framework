@@ -52,7 +52,10 @@ public abstract class MessageService<T> implements Runnable{
             this.execute(messageBean);
 
         }
+        this.endExecute();
     }
+
+    protected abstract void endExecute();
 
     /**
      * 获取的消息会发生给这个方法  实现这个方法 处理业务逻辑
