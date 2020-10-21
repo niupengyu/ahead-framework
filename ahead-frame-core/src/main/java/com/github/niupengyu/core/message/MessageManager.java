@@ -1,6 +1,7 @@
 package com.github.niupengyu.core.message;
 
 import com.github.niupengyu.core.exception.SysException;
+import com.github.niupengyu.core.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +58,6 @@ public class MessageManager<T> {
         try {
             message.add(messageobj);
             messageListener.addReceiveCount(1);
-
         }catch(Exception e){
             e.printStackTrace();
         }finally{
@@ -112,16 +112,16 @@ public class MessageManager<T> {
         List<T> list=null;
         try {
             int messageSize=message.size();
-            int length=0;
+            int length;
             if(messageSize>0){
                 if(messageSize>size){
-                    list=message.subList(0,size);
-                    message=message.subList(size,messageSize);
                     length=size;
+                    list=new ArrayList<>(message.subList(0,length));
+                    message=new ArrayList<>(message.subList(length,messageSize));
                 }else{
-                    list=message.subList(0,messageSize);
-                    message=new ArrayList<>();
                     length=messageSize;
+                    list=new ArrayList<>(message.subList(0,length));
+                    message=new ArrayList<>();
                 }
                 messageListener.addSendCount(length);
                 logger.debug(name+" 剩余消息 ----->[{}/{}]",message.size(),messageListener.count());
@@ -132,6 +132,7 @@ public class MessageManager<T> {
             lock.unlock();
         }
         return list;
+
     }
 
     /**
@@ -171,15 +172,42 @@ public class MessageManager<T> {
         this.stop = stop;
     }
 
-    public static void main(String[] args) {
-        List<Integer> list=new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list.add(4);
-        list.add(5);
+    public static void main(String[] args) throws Exception {
+        MessageManager<Integer> messageManager=new MessageManager<Integer>("test",new MessageListener());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int i=0;
+                    while(true){
+                        messageManager.add(i++);
+                        Thread.sleep(300);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true){
+                try {
 
-        System.out.println(list.subList(0,3));
-        System.out.println(list.subList(3,list.size()));
+                        List l=messageManager.getMessageList(3);
+                        System.out.println(l);
+                        System.out.println(l.size());
+                        System.out.println(l.size());
+                        Thread.sleep(1000l);
+                        System.out.println(l.size());
+                        System.out.println(l.size());
+                        System.out.println(l);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                }
+            }
+        }).start();
     }
 }

@@ -2,6 +2,8 @@ package com.github.niupengyu.core.message;
 
 import com.github.niupengyu.core.exception.SysException;
 
+import java.util.List;
+
 public abstract class MessageService<T> implements Runnable{
     /**
      * 消息管理类
@@ -32,6 +34,15 @@ public abstract class MessageService<T> implements Runnable{
      */
     public void add(T messageBean) throws SysException {
         dataManager.add(messageBean);
+    }
+
+    /**
+     * 添加多条消息
+     * @param messageList
+     * @throws SysException
+     */
+    public void addList(List<T> messageList) throws SysException {
+        dataManager.addList(messageList);
     }
 
     /**

@@ -1,5 +1,8 @@
 package com.github.niupengyu.core.message;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MessageListener {
 
     private int receiveCount=0;
@@ -16,7 +19,11 @@ public class MessageListener {
 
 
     public int count(){
-        return receiveCount=sendCount;
+        return receiveCount-sendCount;
+    }
+
+    public boolean complete(){
+        return receiveCount==sendCount&&sendCount>0;
     }
 
     public int getReceiveCount() {
@@ -26,4 +33,13 @@ public class MessageListener {
     public int getSendCount() {
         return sendCount;
     }
+
+    @Override
+    public String toString() {
+        return "MessageListener{" +
+                "receiveCount=" + receiveCount +
+                ", sendCount=" + sendCount +
+                '}';
+    }
+
 }

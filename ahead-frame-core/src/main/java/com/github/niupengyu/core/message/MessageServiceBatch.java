@@ -1,6 +1,7 @@
 package com.github.niupengyu.core.message;
 
 import com.github.niupengyu.core.exception.SysException;
+import com.github.niupengyu.core.util.StringUtil;
 
 import java.util.List;
 
@@ -56,16 +57,14 @@ public abstract class MessageServiceBatch<T> implements Runnable{
     public void run() {
         while(true){
             List<T> messageBean=dataManager.getMessageList(size);
-            if(messageBean==null){
+            if(messageBean!=null&&!messageBean.isEmpty()){
+                this.execute(messageBean);
+            }else{
                 boolean state=dataManager.isStop();
                 if(state){
                     break;
-                }else{
-                    continue;
                 }
             }
-            this.execute(messageBean);
-
         }
         this.endExecute();
     }
