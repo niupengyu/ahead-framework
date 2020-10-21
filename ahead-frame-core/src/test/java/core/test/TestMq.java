@@ -18,6 +18,11 @@ public class TestMq extends MessageService<String>/* 这里定义消息的数据
         super(name);
     }
 
+    @Override
+    protected void endExecute() {
+
+    }
+
     public static void main(String[] args) throws SysException {
         TestMq testMq=new TestMq("消息测试");
         //初始化 消息队列并启动

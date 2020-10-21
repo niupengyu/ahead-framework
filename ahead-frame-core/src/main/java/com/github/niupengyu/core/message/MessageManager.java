@@ -55,6 +55,23 @@ public class MessageManager<T> {
     }
 
     /**
+     * 添加消息的方法
+     * @param messageList
+     * @throws SysException
+     */
+    public void addList(List<T> messageList) throws SysException {
+        lock.lock();
+        try {
+            message.addAll(messageList);
+            count+=messageList.size();
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            lock.unlock();
+        }
+    }
+
+    /**
      * 读取一条最新的消息
      * @return
      */
@@ -74,6 +91,37 @@ public class MessageManager<T> {
             lock.unlock();
         }
         return obj;
+    }
+    /**
+     * 读取一条最新的消息
+     * @return
+     */
+    public List<T> getMessageList(int size){
+        lock.lock();
+        List<T> list=null;
+        try {
+            int messageSize=message.size();
+            int length=0;
+            if(messageSize>0){
+                if(messageSize>size){
+                    list=message.subList(0,size);
+                    message=message.subList(size,messageSize);
+                    length=size;
+                }else{
+                    list=message.subList(0,messageSize);
+                    message=new ArrayList<>();
+                    length=messageSize;
+                }
+
+                count-=length;
+                logger.debug(name+" 剩余消息 ----->[{}/{}]",message.size(),count);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            lock.unlock();
+        }
+        return list;
     }
 
     /**
@@ -107,5 +155,17 @@ public class MessageManager<T> {
 
     public void setStop(boolean stop){
         this.stop = stop;
+    }
+
+    public static void main(String[] args) {
+        List<Integer> list=new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        list.add(5);
+
+        System.out.println(list.subList(0,3));
+        System.out.println(list.subList(3,list.size()));
     }
 }
