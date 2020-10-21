@@ -27,7 +27,16 @@ public class MessageManager<T> {
 
     private boolean stop=false;
 
-    private int count=0;
+    private MessageListener messageListener;
+
+    /**
+     * 构造器
+     * @param name
+     */
+    public MessageManager(String name,MessageListener messageListener){
+        this.name=name;
+        this.messageListener=messageListener;
+    }
 
     /**
      * 构造器
@@ -35,6 +44,7 @@ public class MessageManager<T> {
      */
     public MessageManager(String name){
         this.name=name;
+        this.messageListener=new MessageListener();
     }
 
     /**
@@ -46,7 +56,8 @@ public class MessageManager<T> {
         lock.lock();
         try {
             message.add(messageobj);
-            count++;
+            messageListener.addReceiveCount(1);
+
         }catch(Exception e){
             e.printStackTrace();
         }finally{
@@ -63,7 +74,7 @@ public class MessageManager<T> {
         lock.lock();
         try {
             message.addAll(messageList);
-            count+=messageList.size();
+            messageListener.addReceiveCount(messageList.size());
         }catch(Exception e){
             e.printStackTrace();
         }finally{
@@ -82,8 +93,8 @@ public class MessageManager<T> {
             if(message.size()>0){
                 obj=message.get(0);
                 message.remove(0);
-                count--;
-                logger.debug(name+" 剩余消息 ----->[{}/{}]",message.size(),count);
+                messageListener.addSendCount(1);
+                logger.debug(name+" 剩余消息 ----->[{}/{}]",message.size(),messageListener.count());
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -112,9 +123,8 @@ public class MessageManager<T> {
                     message=new ArrayList<>();
                     length=messageSize;
                 }
-
-                count-=length;
-                logger.debug(name+" 剩余消息 ----->[{}/{}]",message.size(),count);
+                messageListener.addSendCount(length);
+                logger.debug(name+" 剩余消息 ----->[{}/{}]",message.size(),messageListener.count());
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -146,7 +156,11 @@ public class MessageManager<T> {
      */
     public int messageCount(){
 
-        return count;
+        return messageListener.count();
+    }
+
+    public MessageListener getMessageListener() {
+        return messageListener;
     }
 
     public boolean isStop(){

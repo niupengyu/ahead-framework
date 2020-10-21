@@ -85,4 +85,8 @@ public abstract class MessageService<T> implements Runnable{
         return dataManager.messageCount();
     }
 
+    public MessageListener getMessageListener() {
+        return dataManager.getMessageListener();
+    }
+
 }

@@ -247,6 +247,15 @@ public class ReadExcelTools {
         readWorkBook(readCallBack);
     }
 
+    public void readExcelSheet(ExcelReadCallBack readCallBack) throws IOException{
+        //获得Workbook工作薄对象
+        //Workbook workbook = getWorkBook(inputStream,fileName);
+        //创建返回对象，把每行中的值作为一个数组，所有行作为一个集合返回
+        if(workbook != null) {
+            readWorkBookSheet(readCallBack, sheet);
+        }
+    }
+
     /**
      * 读入excel文件，解析后返回 通过实现回调
      * @param readCallBack 回调
@@ -254,43 +263,46 @@ public class ReadExcelTools {
     private void readWorkBook(ExcelReadCallBack readCallBack) {
         if(workbook != null){
             for(int sheetNum = 0;sheetNum < sheet;sheetNum++){
-                //获得当前sheet工作表
-                Sheet sheet = workbook.getSheetAt(sheetNum);
-                if(sheet == null){
-                    continue;
-                }
-                //获得当前sheet的开始行
-                int firstRowNum  = sheet.getFirstRowNum();
-                //获得当前sheet的结束行
-                int lastRowNum = (firstrow<lastRow)?lastRow:sheet.getLastRowNum();
-                //循环除了第一行的所有行
-                //List<String[]> list = new ArrayList<String[]>();
-                for(int rowNum = firstRowNum+firstrow;rowNum <= lastRowNum;rowNum++){ //为了过滤到第一行因为我的第一行是数据库的列
-                    //获得当前行
-                    Row row = sheet.getRow(rowNum);
-                    if(row == null){
-                        continue;
-                    }
-                    //获得当前行的开始列
-                    int firstCellNum = row.getFirstCellNum();
-                    //获得当前行的列数
-                    int lastCellNum = row.getLastCellNum();//为空列获取
+                readWorkBookSheet(readCallBack,sheetNum);
+            }
+        }
+    }
+
+    private void readWorkBookSheet(ExcelReadCallBack readCallBack, int sheetNum) {
+        //获得当前sheet工作表
+        Sheet sheet = workbook.getSheetAt(sheetNum);
+        if(sheet == null){
+            return;
+        }
+        //获得当前sheet的开始行
+        int firstRowNum  = sheet.getFirstRowNum();
+        //获得当前sheet的结束行
+        int lastRowNum = (firstrow<lastRow)?lastRow:sheet.getLastRowNum();
+        //循环除了第一行的所有行
+        //List<String[]> list = new ArrayList<String[]>();
+        for(int rowNum = firstRowNum+firstrow;rowNum <= lastRowNum;rowNum++){ //为了过滤到第一行因为我的第一行是数据库的列
+            //获得当前行
+            Row row = sheet.getRow(rowNum);
+            if(row == null){
+                continue;
+            }
+            //获得当前行的开始列
+            int firstCellNum = row.getFirstCellNum();
+            //获得当前行的列数
+            int lastCellNum = row.getLastCellNum();//为空列获取
 //                    int lastCellNum = row.getPhysicalNumberOfCells();//为空列不获取
 //                    String[] cells = new String[row.getPhysicalNumberOfCells()];
-                    String[] cells =null;
-                    if(cols.length>0){
-                        cells = new String[cols.length];
-                        each(row,cells);
-                    }else{
-                        cells = new String[row.getLastCellNum()];
-                        each(firstCellNum,lastCellNum,row,cells);
-                    }
-                    //循环当前行
-                    //list.add(cells);
-                    readCallBack.read(fileName,sheetNum,rowNum,cells);
-                }
-
+            String[] cells =null;
+            if(cols.length>0){
+                cells = new String[cols.length];
+                each(row,cells);
+            }else{
+                cells = new String[row.getLastCellNum()];
+                each(firstCellNum,lastCellNum,row,cells);
             }
+            //循环当前行
+            //list.add(cells);
+            readCallBack.read(fileName,sheetNum,rowNum,cells);
         }
     }
 
