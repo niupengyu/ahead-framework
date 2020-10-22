@@ -30,6 +30,8 @@ import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.json.JsonArray;
+import javax.json.JsonObject;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
@@ -1134,6 +1136,67 @@ public class JdbcDao {
 				stmt1.setDouble(8,45.646465);
 				stmt1.setInt(9,546);
 				stmt1.setInt(10,0);*/
+				insertCallBack.addStmt(data,stmt);
+				stmt.addBatch();
+				i++;
+			}
+			stmt.executeBatch();
+			targetConn.commit();
+			res=i;
+		}catch (Exception e){
+			JdbcDao.rollback(targetConn);
+			logger.error("插入出错 "+sql,e);
+			throw new SysException(e.getMessage());
+		}finally {
+			JdbcDao.closeStmt(stmt);
+			JdbcDao.closeConn(targetConn);
+			stmt=null;
+			targetConn=null;
+		}
+		return res;
+	}
+	public int executeInsertJson(String sql, List<JSONObject> insertList, InsertCallBack insertCallBack) throws Exception {
+		logger.debug("execute {}",sql);
+		int res=-1;
+		PreparedStatement stmt=null;
+		Connection targetConn=null;
+		try{
+			targetConn=dataSource.getConnection();
+			targetConn.setAutoCommit(false);
+			stmt=targetConn.prepareStatement(sql);
+			int i=0;
+			for(JSONObject data:insertList){
+				insertCallBack.addStmt(data,stmt);
+				stmt.addBatch();
+				i++;
+			}
+			stmt.executeBatch();
+			targetConn.commit();
+			res=i;
+		}catch (Exception e){
+			JdbcDao.rollback(targetConn);
+			logger.error("插入出错 "+sql,e);
+			throw new SysException(e.getMessage());
+		}finally {
+			JdbcDao.closeStmt(stmt);
+			JdbcDao.closeConn(targetConn);
+			stmt=null;
+			targetConn=null;
+		}
+		return res;
+	}
+	public int executeInsertJson(String sql, JSONArray insertList, InsertCallBack insertCallBack) throws Exception {
+		logger.debug("execute {}",sql);
+		int res=-1;
+		PreparedStatement stmt=null;
+		Connection targetConn=null;
+		try{
+			targetConn=dataSource.getConnection();
+			targetConn.setAutoCommit(false);
+			stmt=targetConn.prepareStatement(sql);
+			int i=0;
+			for(;i<insertList.size();i++){
+				JSONObject data=insertList.getJSONObject(i);
 				insertCallBack.addStmt(data,stmt);
 				stmt.addBatch();
 				i++;
