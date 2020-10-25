@@ -1,5 +1,6 @@
 package com.github.niupengyu.commons.poi;
 
+import com.github.niupengyu.core.util.IdGeneratorUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -447,5 +448,24 @@ public class ReadExcelTools {
                 break;
         }
         return cellValue;
+    }
+
+    public static List<String[]> readExcel(String path) throws Exception {
+        File file=new File(path);
+        InputStream inputStream=new FileInputStream(file);
+        List<String[]> list=new ArrayList<>();
+        ReadExcelTools readExcelTools=new ReadExcelTools(inputStream,file.getName(),4,new int[]{0,1,2},2);
+        readExcelTools.readExcelSheet(  new ExcelReadCallBack() {
+            @Override
+            public void read(String s, int i, int i1, String[] strings) {
+                //params.add(new Object[]{IdGeneratorUtil.uuid32(),strings[0],strings[1],strings[2]});
+                try {
+                    list.add(strings);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        return list;
     }
 }
