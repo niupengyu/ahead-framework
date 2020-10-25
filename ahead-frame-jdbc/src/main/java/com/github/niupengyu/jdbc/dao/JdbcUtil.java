@@ -173,7 +173,7 @@ public class JdbcUtil {
     }
 
 
-    public int executeUpdate(String sql, Object[] vars) throws DaoException {
+    public int executeUpdate(String sql, Object ... vars) throws DaoException {
         int res=0;
         PreparedStatement stmt=null;
         logger.debug("executeUpdate "+sql);
@@ -213,7 +213,7 @@ public class JdbcUtil {
         return res;
     }
 
-    public boolean execute(String sql, Object[] vars) throws DaoException {
+    public boolean execute(String sql, Object ... vars) throws DaoException {
         logger.debug("execute "+sql);
         logger.debug("params "+Arrays.toString(vars));
         boolean res=false;

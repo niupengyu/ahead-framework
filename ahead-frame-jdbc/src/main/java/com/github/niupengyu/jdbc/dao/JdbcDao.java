@@ -240,7 +240,7 @@ public class JdbcDao {
 		return 0;
 	}
 
-	public int getIntValue(String sql,Object[] vars) throws DaoException{
+	public int getIntValue(String sql,Object ... vars) throws DaoException{
 		logger.debug("getIntValue {}",sql);
 		logger.debug("params {}",Arrays.toString(vars));
 		//logger.info(sql);
@@ -350,7 +350,7 @@ public class JdbcDao {
 		return value;
 	}
 
-	public Object getObject(String sql,Object[] params) throws DaoException{
+	public Object getObject(String sql,Object ... params) throws DaoException{
 		logger.debug("getObject {}",sql);
 		logger.debug("params {}",Arrays.toString(params));
 		Object value=null;
@@ -406,7 +406,7 @@ public class JdbcDao {
 		return value;
 	}
 
-	public String getString(String sql,Object[] params) throws DaoException{
+	public String getString(String sql,Object ... params) throws DaoException{
 		logger.debug("getString {}",sql);
 		logger.debug("params {}",Arrays.toString(params));
 		String value="";
@@ -616,7 +616,7 @@ public class JdbcDao {
 		return one(array,sql);
 	}
 
-	public Map<String, Object> selectOne(String sql,Object[] objects) throws DaoException{
+	public Map<String, Object> selectOne(String sql,Object ... objects) throws DaoException{
 		logger.debug("execute {}",sql);
 		List<Map<String, Object>> array=executeQuery(sql,objects);
 		return one(array,sql);
@@ -634,7 +634,7 @@ public class JdbcDao {
 		return one(array,sql);
 	}
 
-	public Map<String, Object> selectOne(String sql,Object[] objects,QueryCallBack queryCallBack) throws Exception{
+	public Map<String, Object> selectOne(String sql,QueryCallBack queryCallBack,Object[] objects) throws Exception{
 		List<Map<String, Object>> array=executeQuery(sql,objects,queryCallBack);
 		return one(array,sql);
 	}
@@ -649,7 +649,7 @@ public class JdbcDao {
 		return one(array,sql);
 	}
 
-	public Map<String, Object> selectOne(String sql,Object[] objects,String[] queryCallBack) throws Exception{
+	public Map<String, Object> selectOne(String sql,String[] queryCallBack,Object ... objects) throws Exception{
 		List<Map<String, Object>> array=executeQuery(sql,objects,queryCallBack);
 		return one(array,sql);
 	}
@@ -670,7 +670,7 @@ public class JdbcDao {
 		return array.get(0);
 	}
 
-	public List<Map<String,Object>> executeQuery(String sql, Object[] vars) throws DaoException {
+	public List<Map<String,Object>> executeQuery(String sql, Object ... vars) throws DaoException {
 		logger.debug("execute {}",sql);
 		Connection conn=null;
 		PreparedStatement stmt=null;
@@ -721,7 +721,7 @@ public class JdbcDao {
 		return list;
 	}
 
-	public List<Map<String,Object>> executeQuery(String sql, Object[] vars,QueryCallBack queryCallBack) throws Exception {
+	public List<Map<String,Object>> executeQuery(String sql,QueryCallBack queryCallBack, Object[] vars) throws Exception {
 		logger.debug("execute {}",sql);
 		//logger.info(sql);
 		//logger.info(Arrays.toString(vars));
@@ -796,7 +796,7 @@ public class JdbcDao {
 		return list;
 	}
 
-	public List<Map<String,Object>> executeQuery(String sql, Object[] vars,String[] queryCallBack) throws Exception {
+	public List<Map<String,Object>> executeQuery(String sql,String[] queryCallBack, Object ... vars) throws Exception {
 		logger.debug("execute {}",sql);
 		//logger.info(sql);
 		//logger.info(Arrays.toString(vars));
@@ -979,7 +979,7 @@ public class JdbcDao {
 		}
 	}*/
 
-	public int executeUpdate(String sql, Object[] vars) throws DaoException {
+	public int executeUpdate(String sql, Object ... vars) throws DaoException {
 		logger.debug("execute {}",sql);
 		int res=0;
 		Connection conn=null;
@@ -1004,7 +1004,7 @@ public class JdbcDao {
 		return res;
 	}
 	
-	public boolean execute(String sql, Object[] vars) throws DaoException {
+	public boolean execute(String sql, Object ... vars) throws DaoException {
 		logger.debug("execute {}",sql);
 		boolean res=false;
 		Connection conn=null;
