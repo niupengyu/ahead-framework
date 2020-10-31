@@ -1,5 +1,6 @@
 package com.github.niupengyu.jdbc.util;
 
+import com.github.niupengyu.core.util.IdGeneratorUtil;
 import com.github.niupengyu.jdbc.dao.JdbcDao;
 
 import java.sql.Date;
@@ -15,6 +16,9 @@ public class Value {
     }
 
     public String getValue() {
+        if("uuid".equals(value)){
+            return IdGeneratorUtil.uuid32();
+        }
         return value;
     }
 
@@ -31,6 +35,9 @@ public class Value {
     }
 
     public String valueString() {
+        if("uuid".equals(value)){
+            return IdGeneratorUtil.uuid32();
+        }
         return value;
     }
 
