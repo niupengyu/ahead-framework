@@ -6,7 +6,7 @@
 
     <groupId>com.github.niupengyu</groupId>
     <artifactId>ahead-frame</artifactId>
-    <version>1.2.4-RELEASE</version>
+    <version>1.2.5-RELEASE</version>
     <packaging>pom</packaging>
     <name>ahead-frame</name>
     <!--<parent>
@@ -46,7 +46,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <!--<ahead.framework.version>1.0-RELEASE</ahead.framework.version>-->
-        <ahead.framework.version>1.2.4-RELEASE</ahead.framework.version>
+        <ahead.framework.version>1.2.5-RELEASE</ahead.framework.version>
         <project.skip.deploy>true</project.skip.deploy>
     </properties>
     <modules>
@@ -63,8 +63,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.1.11.RELEASE</version>
-                <!--<version>2.0.5.RELEASE</version>-->
+                <version>2.3.5.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -72,7 +71,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Greenwich.SR4</version>
+                <version>Hoxton.SR9</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
