@@ -79,15 +79,15 @@ public class HttpAPIService {
         return null;
     }
 
-    public HttpResult doGetResult(String url,Map<String,String> map) throws Exception {
+    public HttpResult doGetResult(String url,List<Param> map) throws Exception {
         logger.debug(url);
         URIBuilder uriBuilder = new URIBuilder(url);
         if (map != null) {
-            Iterator var4 = map.entrySet().iterator();
+            Iterator<Param> var4 = map.iterator();
 
             while(var4.hasNext()) {
-                Map.Entry<String, String> entry = (Map.Entry)var4.next();
-                uriBuilder.setParameter(entry.getKey(), entry.getValue());
+                Param entry =var4.next();
+                uriBuilder.setParameter(entry.getName(), entry.getValue());
             }
         }
         HttpGet httpGet = new HttpGet(uriBuilder.build().toString());
@@ -112,12 +112,12 @@ public class HttpAPIService {
      * @return
      * @throws Exception
      */
-    public String doGet(String url, Map<String, String> map) throws Exception {
+    public String doGet(String url, List<Param> map) throws Exception {
         URIBuilder uriBuilder = new URIBuilder(url);
         if (map != null) {
             // 遍历map,拼接请求参数
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                uriBuilder.setParameter(entry.getKey(), entry.getValue());
+            for (Param entry : map) {
+                uriBuilder.setParameter(entry.getName(), entry.getValue());
             }
         }
         // 调用不带参数的get请求
@@ -133,7 +133,7 @@ public class HttpAPIService {
      * @return
      * @throws Exception
      */
-    public HttpResult doPost(String url, Map<String, String> map) throws Exception {
+    public HttpResult doPost(String url, List<NameValuePair> map) throws Exception {
         logger.debug("doPost " + url);
         // 声明httpPost请求
         HttpPost httpPost = new HttpPost(url);
@@ -142,12 +142,12 @@ public class HttpAPIService {
 
         // 判断map是否为空，不为空则进行遍历，封装from表单对象
         if (map != null) {
-            List<NameValuePair> list = new ArrayList<>();
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                list.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
-            }
+            /*List<NameValuePair> list = new ArrayList<>();
+            for (Param entry : map) {
+                list.add(new BasicNameValuePair(entry.getName(), entry.getValue()));
+            }*/
             // 构造from表单对象
-            UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(list, "UTF-8");
+            UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(map, "UTF-8");
             // 把表单放到post里
             httpPost.setEntity(urlEncodedFormEntity);
 
@@ -159,25 +159,25 @@ public class HttpAPIService {
                 response.getEntity(), "UTF-8"));
     }
 
-    public HttpResult doPost(String url, Map<String, String> map,Map<String,String> headers) throws Exception {
+    public HttpResult doPost(String url, List<BasicNameValuePair> map,List<Param> headers) throws Exception {
         logger.debug("doPost " + url);
         // 声明httpPost请求
         HttpPost httpPost = new HttpPost(url);
         // 加入配置信息
         httpPost.setConfig(config);
-        if(StringUtil.mapNotNull(headers)){
-            for(Map.Entry<String,String> entry:headers.entrySet()){
-                httpPost.addHeader(entry.getKey(),entry.getValue());
+        if(headers!=null){
+            for(Param entry:headers){
+                httpPost.addHeader(entry.getName(),entry.getValue());
             }
         }
         // 判断map是否为空，不为空则进行遍历，封装from表单对象
         if (map != null) {
-            List<NameValuePair> list = new ArrayList<>();
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                list.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
-            }
+            /*List<NameValuePair> list = new ArrayList<>();
+            for (Param entry : map) {
+                list.add(new BasicNameValuePair(entry.getName(), entry.getValue()));
+            }*/
             // 构造from表单对象
-            UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(list, "UTF-8");
+            UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(map, "UTF-8");
 
             // 把表单放到post里
             httpPost.setEntity(urlEncodedFormEntity);
@@ -190,8 +190,8 @@ public class HttpAPIService {
     }
 
 
-    public HttpResult sendFile(String url, Map<String, String> map,
-                                Map<String,String> headers,Map<String,File> fileMap) throws Exception {
+    public HttpResult sendFile(String url,
+                                Map<String,String> headers,Param param) throws Exception {
         HttpPost httpPost = new HttpPost(url);
         httpPost.setConfig(config);
         if(StringUtil.mapNotNull(headers)){
@@ -205,18 +205,18 @@ public class HttpAPIService {
 
         MultipartEntityBuilder multipartEntityBuilder=MultipartEntityBuilder.create();
         multipartEntityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-
+        List<Param> map=param.getParams();
         if (map != null) {
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                multipartEntityBuilder.addPart(entry.getKey(),
+            for (Param entry : map) {
+                multipartEntityBuilder.addPart(entry.getName(),
                         new StringBody(entry.getValue(), Charset.defaultCharset()));
             }
         }
 
-
+        List<Param> fileMap=param.getFileParams();
         if (fileMap != null) {
-            for (Map.Entry<String, File> entry : fileMap.entrySet()) {
-                multipartEntityBuilder.addPart(entry.getKey(), new FileBody(entry.getValue()));
+            for (Param entry : fileMap) {
+                multipartEntityBuilder.addPart(entry.getName(), new FileBody(entry.getFile()));
             }
         }
 
