@@ -28,42 +28,46 @@ import javax.servlet.http.HttpServletResponse;
 
 public class WebRequestInterceptorImpl extends HandlerInterceptorAdapter {
 
-  private static final Logger logger = LoggerFactory.getLogger(WebRequestInterceptorImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebRequestInterceptorImpl.class);
 
-  @Autowired
-  private AuthorizationService authorizationService;
+    @Autowired
+    private AuthorizationService authorizationService;
 
-  @Autowired
-  private LoginValidateService loginValidateService;
+    @Autowired
+    private LoginValidateService loginValidateService;
 
-  @Override
-  public boolean preHandle(HttpServletRequest request,
-                           HttpServletResponse response, Object handler) throws Exception {
-      //配置全局session request response
-      if(handler instanceof HandlerMethod){
-          HandlerMethod dwe=(HandlerMethod)handler;
-          Authorization authorization=dwe.getMethodAnnotation(Authorization.class);
-          LoginValidate loginValidate=dwe.getMethodAnnotation(LoginValidate.class);
+    @Override
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response, Object handler) throws Exception {
+        //配置全局session request response
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod dwe = (HandlerMethod) handler;
+            if (dwe.getBean() instanceof RequestContent) {
+                RequestContent cc = (RequestContent) dwe.getBean();
 
-          if(loginValidate==null||loginValidate.value()){
-              if(dwe.getBean() instanceof RequestContent){
-                  RequestContent cc=(RequestContent)dwe.getBean();
-                  Object login=loginValidateService.loginValidate(request);
-                  cc.initLogin(login);
-              }else{
-                  logger.warn("控制器"+dwe.getBean().getClass().getName()
-                          +"或许没有继承"+RequestContent.class.getName());
-              }
-          }
-          if(authorization==null||authorization.value()){
-            authorizationService.authorization(request);
-          }
-      }else{
-          logger.error("[1008]有请求跳过登录认证 "+handler.getClass());
-          throw new SysException("请求非法",401);
-      }
-      return super.preHandle(request, response, handler);
-  }
+                LoginValidate loginValidate = dwe.getMethodAnnotation(LoginValidate.class);
+                if (loginValidate == null || loginValidate.value()) {
+                    Object login = loginValidateService.loginValidate(request);
+                    cc.initLogin(login);
+                }
+
+                Authorization authorization = dwe.getMethodAnnotation(Authorization.class);
+                if (authorization == null || authorization.value()) {
+                    authorizationService.authorization(request);
+                }
+
+            } else {
+                logger.warn("控制器" + dwe.getBean().getClass().getName()
+                        + "或许没有继承" + RequestContent.class.getName());
+            }
+
+
+        } else {
+            logger.error("[1008]有请求跳过登录认证 " + handler.getClass());
+            throw new SysException("请求非法", 401);
+        }
+        return super.preHandle(request, response, handler);
+    }
 
 
 }
