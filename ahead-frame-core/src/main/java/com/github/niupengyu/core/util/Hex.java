@@ -25,7 +25,7 @@ public class Hex
 	 *            str 待转换的ASCII字符串
 	 * @return String 每个Byte之间空格分隔，如: [61 6C 6B]
 	 */
-	public static String str2HexStr(String str)
+	public static String str2HexStr(String str,String separator)
 	{
 
 		char[] chars = "0123456789ABCDEF".toCharArray();
@@ -39,7 +39,7 @@ public class Hex
 			sb.append(chars[bit]);
 			bit = bs[i] & 0x0f;
 			sb.append(chars[bit]);
-			sb.append(' ');
+			sb.append(separator);
 		}
 		return sb.toString().trim();
 	}
@@ -269,12 +269,7 @@ public class Hex
 		return new String(baos.toByteArray());
 	}
 
-	public static void main(String[] args)
-	{
-		String hex = "ef2c71b29202f3e642f2abd8d518f367ec3fbf6a6a61beb678ae0c871ee368ac";
-		System.out.println(Hex.hexStr2Str(hex));
-	}
-	
+
 	public static String binaryString2hexString(String bString)
 	{
 		if (bString == null || bString.equals("") || bString.length() % 8 != 0)

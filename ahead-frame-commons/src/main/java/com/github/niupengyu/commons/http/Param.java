@@ -47,16 +47,17 @@ public class Param {
         int num=str.length/2;
         List<NameValuePair> list = new ArrayList<>();
         for(int i=0;i<num;i++){
-            list.add(new BasicNameValuePair(str[i], str[i+1]));
+            int start=i*2;
+            list.add(new BasicNameValuePair(str[start], str[start+1]));
         }
         return list;
     }
-
     public static List<Param> getParams(String ... str){
         int num=str.length/2;
         List<Param> list = new ArrayList<>();
         for(int i=0;i<num;i++){
-            list.add(new Param(str[i], str[i+1]));
+            int start=i*2;
+            list.add(new Param(str[start], str[start+1]));
         }
         return list;
     }
