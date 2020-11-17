@@ -13,6 +13,7 @@ package com.github.niupengyu.web.initialier;
 import com.github.niupengyu.core.exception.SysException;
 import com.github.niupengyu.web.annotation.Authorization;
 import com.github.niupengyu.web.annotation.LoginValidate;
+import com.github.niupengyu.web.content.ClientContent;
 import com.github.niupengyu.web.content.RequestContent;
 import com.github.niupengyu.web.service.AuthorizationService;
 import com.github.niupengyu.web.service.LoginValidateService;
@@ -42,12 +43,13 @@ public class WebRequestInterceptorImpl extends HandlerInterceptorAdapter {
         //配置全局session request response
         if (handler instanceof HandlerMethod) {
             HandlerMethod dwe = (HandlerMethod) handler;
-            if (dwe.getBean() instanceof RequestContent) {
-                RequestContent cc = (RequestContent) dwe.getBean();
+            Object bean=dwe.getBean();
+            if (bean instanceof RequestContent) {
+                RequestContent cc = (RequestContent) bean;
 
                 LoginValidate loginValidate = dwe.getMethodAnnotation(LoginValidate.class);
                 if (loginValidate == null || loginValidate.value()) {
-                    Object login = loginValidateService.loginValidate(request);
+                    Object login = loginValidateService.loginValidate(request,response,(bean instanceof ClientContent));
                     cc.initLogin(login);
                 }
 

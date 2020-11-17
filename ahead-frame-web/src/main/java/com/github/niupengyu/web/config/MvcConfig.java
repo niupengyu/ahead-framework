@@ -124,7 +124,7 @@ public class MvcConfig implements WebMvcConfigurer
 		WebRequestInterceptorImpl webRequestInterceptor=
 				new WebRequestInterceptorImpl();
 		//webRequestInterceptor
-		return new WebRequestInterceptorImpl();
+		return webRequestInterceptor;
 	}
 
 	@ConditionalOnMissingBean(AuthorizationService.class)

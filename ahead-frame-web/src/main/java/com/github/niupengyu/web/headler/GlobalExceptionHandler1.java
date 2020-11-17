@@ -3,6 +3,7 @@ package com.github.niupengyu.web.headler;
 import com.github.niupengyu.web.beans.ResponseData;
 import com.github.niupengyu.core.exception.SysException;
 import com.github.niupengyu.web.content.ClientContent;
+import com.github.niupengyu.web.exception.CasException;
 import com.github.niupengyu.web.exception.RequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestControllerAdvice(annotations = RestController.class,assignableTypes = ClientContent.class)
 @ResponseBody
@@ -39,8 +41,8 @@ public class GlobalExceptionHandler1 {
     @ExceptionHandler(value = RequestException.class)
     @ResponseBody
     public ResponseData requestException(HttpServletRequest req, HttpServletResponse response, RequestException e){
-        logger.error("---GlobalExceptionHandler SysException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
-        logger.error("GlobalExceptionHandler1---SysException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
+        logger.error("---GlobalExceptionHandler RequestException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
+        logger.error("GlobalExceptionHandler1---RequestException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
         response.setContentType(ClientContent.CONTENT_JSON);
         ResponseData responseData=new ResponseData();
         responseData.setCode(e.getCode());

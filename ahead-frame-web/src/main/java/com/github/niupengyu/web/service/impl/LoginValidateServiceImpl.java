@@ -3,10 +3,9 @@ package com.github.niupengyu.web.service.impl;
 import com.github.niupengyu.web.service.LoginValidateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 public class LoginValidateServiceImpl implements LoginValidateService {
@@ -18,7 +17,7 @@ public class LoginValidateServiceImpl implements LoginValidateService {
     }
 
     @Override
-    public <T> T loginValidate(HttpServletRequest request) throws Exception {
+    public <T> T loginValidate(HttpServletRequest request, HttpServletResponse response, boolean rest) throws Exception {
 
 
         return null;
