@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
 
     private static final Logger logger= LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(value = SysException.class)
+    /*@ExceptionHandler(value = SysException.class)
     public ModelAndView baseErrorHandler(HttpServletRequest req, HttpServletResponse response, SysException e){
         logger.error("---GlobalExceptionHandler SysException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
         ModelAndView modelAndView=new ModelAndView();
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
         modelAndView.addObject("message",e.getMessage());
         response.setCharacterEncoding("utf-8");
         return modelAndView;
-    }
+    }*/
 
 
     @ExceptionHandler(value = CasException.class)
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
         response.sendRedirect(e.getMessage());
     }
 
-    @ExceptionHandler(value = NoHandlerFoundException.class)
+    /*@ExceptionHandler(value = NoHandlerFoundException.class)
     public ModelAndView defaultErrorHandler(HttpServletRequest req, HttpServletResponse response, NoHandlerFoundException e){
         logger.error("---GlobalExceptionHandler NoHandlerFoundException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
         ModelAndView modelAndView=new ModelAndView();
@@ -60,9 +60,9 @@ public class GlobalExceptionHandler {
         modelAndView.addObject("message",e.getMessage());
         response.setCharacterEncoding("utf-8");
         return modelAndView;
-    }
+    }*/
 
-    @ExceptionHandler(value = Exception.class)
+    /*@ExceptionHandler(value = Exception.class)
     public ModelAndView defaultErrorHandler(HttpServletRequest req, HttpServletResponse response, Exception e){
         logger.error("--- GlobalExceptionHandler Exception Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
         ModelAndView modelAndView=new ModelAndView();
@@ -75,6 +75,6 @@ public class GlobalExceptionHandler {
         modelAndView.addObject("message",e.getMessage());
         response.setCharacterEncoding("utf-8");
         return modelAndView;
-    }
+    }*/
 
 }
