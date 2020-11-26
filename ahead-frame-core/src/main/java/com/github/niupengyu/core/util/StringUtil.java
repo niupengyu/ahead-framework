@@ -348,6 +348,24 @@ public class StringUtil implements java.io.Serializable {
         sb.append(str);
         return sb.toString();
     }
+
+    /**
+     * ${xxx} 替换为参数
+     * @param content
+     * @param kvs
+     * @return
+     */
+    private static String parse(String content, Map<String,String> kvs){
+        Pattern p = Pattern.compile("(\\$\\{)([\\w]+)(\\})");
+        Matcher m = p.matcher(content);
+        StringBuffer sr = new StringBuffer();
+        while(m.find()){
+            String group = m.group();
+            m.appendReplacement(sr, String.valueOf(kvs.get(group)));
+        }
+        m.appendTail(sr);
+        return sr.toString();
+    }
 }
 
 
