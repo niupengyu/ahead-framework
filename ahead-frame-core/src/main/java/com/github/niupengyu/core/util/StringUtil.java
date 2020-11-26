@@ -355,7 +355,7 @@ public class StringUtil implements java.io.Serializable {
      * @param kvs
      * @return
      */
-    private static String parse(String content, Map<String,String> kvs){
+    public static String parse(String content, Map<String,String> kvs){
         Pattern p = Pattern.compile("(\\$\\{)([\\w]+)(\\})");
         Matcher m = p.matcher(content);
         StringBuffer sr = new StringBuffer();
