@@ -34,6 +34,12 @@ public abstract class ClientHandlerService implements ClientService {
     private boolean flag=false;
 
     StringBuffer sb=new StringBuffer();
+    private Thread thread;
+
+    public void startMessageManager(){
+        thread=new Thread(getMessageManager());
+        thread.start();
+    }
 
     @Override
     public void sendMessage(Object message) {
@@ -174,8 +180,9 @@ public abstract class ClientHandlerService implements ClientService {
     public void setResponse(Message message) {
         long time=System.currentTimeMillis();
         //message.setNode(getClientConfig().getId());
-        logger.debug("CLIENT 收到心跳回应 {} "+message,i);
-        i++;
+        logger.debug("CLIENT 收到心跳回应 {} ",message);
+        System.out.println("setResponse "+(i++));
+        this.messageManager.add(message);
         receivedHeartBeatResponse(message);
     }
 
@@ -200,5 +207,9 @@ public abstract class ClientHandlerService implements ClientService {
 
     public void setMessageManager(MessageService<Message> messageManager) {
         this.messageManager = messageManager;
+    }
+
+    public Thread getThread() {
+        return thread;
     }
 }

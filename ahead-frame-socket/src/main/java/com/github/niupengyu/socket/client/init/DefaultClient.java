@@ -45,6 +45,7 @@ public class DefaultClient {
         clientInitService.setIoFilterChainBuilder(clientSocketConfig.filterChainBuilder());
 
         clientHandlerService.setClientInitService(clientInitService);
+        clientHandlerService.startMessageManager();
         clientHandlerService.reconnection();
         //clientInitService.create();
     }

@@ -33,8 +33,11 @@ public class MyKeepAliveMessageFactory implements KeepAliveMessageFactory {
         return keepAliveService.isHeartbeatRequest(rb);
     }
 
+    int i=0;
+    
     public boolean isResponse(IoSession session, Object message) {
         Message rb = (Message) message;
+        System.out.println("isResponse "+(i++));
         return keepAliveService.isHeartbeatResponse(rb);
     }
 

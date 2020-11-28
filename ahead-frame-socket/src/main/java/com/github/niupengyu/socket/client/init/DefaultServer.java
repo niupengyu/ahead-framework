@@ -29,6 +29,7 @@ public class DefaultServer {
         masterInitService.setIoFilterChainBuilder(serverConfig.filterChainBuilder());
         masterInitService.setMasterConfig(masterConfig);
         masterInitService.setMyHandler(masterHandler);
+        serverHandlerService.startMessageManager();
         masterInitService.init();
     }
 

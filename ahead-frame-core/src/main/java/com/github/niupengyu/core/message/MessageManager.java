@@ -53,7 +53,7 @@ public class MessageManager<T> {
      * @param messageobj
      * @throws SysException
      */
-    public void add(T messageobj) throws SysException {
+    public void add(T messageobj)  {
         lock.lock();
         try {
             message.add(messageobj);

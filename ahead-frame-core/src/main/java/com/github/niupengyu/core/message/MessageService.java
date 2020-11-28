@@ -32,7 +32,7 @@ public abstract class MessageService<T> implements Runnable{
      * @param messageBean
      * @throws SysException
      */
-    public void add(T messageBean) throws SysException {
+    public void add(T messageBean) {
         dataManager.add(messageBean);
     }
 

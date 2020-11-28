@@ -29,6 +29,13 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
 
     //private Map<Long,String> sessionMap=new HashMap<>();
 
+    private Thread thread;
+
+    public void startMessageManager(){
+        thread=new Thread(getMessageManager());
+        thread.start();
+    }
+
     @Override
     public void messageReceived(Message str, IoSession session) throws SysException {
        String json=str.toJsonString();
@@ -100,6 +107,9 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
         }
     }
 
+    public Thread getThread() {
+        return thread;
+    }
 
     public void setMessageManager(MessageService<Message> messageManager) {
         this.messageManager = messageManager;
