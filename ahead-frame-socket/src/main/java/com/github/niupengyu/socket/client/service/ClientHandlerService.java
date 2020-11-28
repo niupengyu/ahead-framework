@@ -1,6 +1,7 @@
 package com.github.niupengyu.socket.client.service;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.niupengyu.core.message.MessageService;
 import com.github.niupengyu.core.util.DateUtil;
 import com.github.niupengyu.core.util.Hex;
@@ -23,7 +24,7 @@ public abstract class ClientHandlerService implements ClientService {
 
     private ClientConfig clientConfig;
 
-    private MessageService<String> messageManager;
+    private MessageService<Message> messageManager;
 
     private ClientInitService clientInitService;
 
@@ -122,6 +123,7 @@ public abstract class ClientHandlerService implements ClientService {
             String json=str.toString();
             System.out.println("client 收到一条消息------------- "+json);
             Message obj=(Message)str;
+            messageManager.add(obj);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -145,7 +147,7 @@ public abstract class ClientHandlerService implements ClientService {
                     if(end>start){
                         String mes=sb.substring(start+4,end);
                         System.out.println(Hex.hexStr2Str(mes));
-                        messageManager.add(mes);
+                        messageManager.add(JSONObject.parseObject(mes,Message.class));
                         sb.delete(0,end+4);
                         //System.out.println(Hex.hexStr2Str(sb.toString()));
                     }
@@ -168,12 +170,16 @@ public abstract class ClientHandlerService implements ClientService {
     public void setStatus(String status) {
         this.status = status;
     }
-
+    int i=0;
     public void setResponse(Message message) {
         long time=System.currentTimeMillis();
         //message.setNode(getClientConfig().getId());
-        logger.info("CLIENT 收到心跳回应 "+message);
+        logger.info("CLIENT 收到心跳回应 {} "+message,i);
+        i++;
+        receivedHeartBeatResponse(message);
     }
+
+    protected abstract void receivedHeartBeatResponse(Message message);
 
     public Message getRequest() {
         Message message=new Message();
@@ -186,5 +192,13 @@ public abstract class ClientHandlerService implements ClientService {
 
     public void setClientConfig(ClientConfig clientConfig) {
         this.clientConfig = clientConfig;
+    }
+
+    public MessageService<Message> getMessageManager() {
+        return messageManager;
+    }
+
+    public void setMessageManager(MessageService<Message> messageManager) {
+        this.messageManager = messageManager;
     }
 }

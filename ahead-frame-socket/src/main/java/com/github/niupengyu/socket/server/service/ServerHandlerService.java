@@ -1,5 +1,7 @@
 package com.github.niupengyu.socket.server.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.github.niupengyu.core.exception.SysException;
 import com.github.niupengyu.core.message.MessageService;
 import com.github.niupengyu.core.util.DateUtil;
 import com.github.niupengyu.core.util.Hex;
@@ -15,36 +17,42 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 
 
-public abstract class ServerHandlerService implements ServerService,Runnable{
+public abstract class ServerHandlerService  implements ServerService,Runnable{
 
     private static final Logger logger= LoggerFactory.getLogger(ServerHandlerService.class);
 
     StringBuffer sb=new StringBuffer();
 
-    private MessageService<String> messageManager;
+    private MessageService<Message> messageManager;
 
     private MasterConfig masterConfig;
 
     //private Map<Long,String> sessionMap=new HashMap<>();
 
     @Override
-    public void messageReceived(Message str, IoSession session){
+    public void messageReceived(Message str, IoSession session) throws SysException {
        String json=str.toJsonString();
        System.out.println("------------- "+json);
+       messageManager.add(str);
     }
 
     @Override
-    public void heartbeat(IoSession session, Message msg) {
+    public void heartbeat(IoSession session, Message msg) throws SysException {
         logger.info("SERVICE 接受到心跳信息"+msg);
+        //this.receiveHeartBeat(msg);
+        this.messageManager.add(msg);
         Message message=new Message();
         message.setType(SocketContent.HEARTBEAT);
         message.setHead(SocketContent.RESPONSE);
         message.setResponseNode(getMasterConfig().getName());
         long start= (long) msg.getMessage();
-        message.setMessage(DateUtil.getTimeDes(System.currentTimeMillis()-start));
+        message.setMessage(responseData(msg));
         message.setRequestNode(msg.getRequestNode());
         session.write(message);
     }
+
+    protected abstract Object responseData(Message msg);
+
 
     @Override
     public void heartbeatTimeOut(IoSession session) {
@@ -80,7 +88,7 @@ public abstract class ServerHandlerService implements ServerService,Runnable{
                         String mes=sb.substring(start+4,end);
                         //System.out.println(Hex.hexStr2Str(mes));
                         //System.out.println("================================");
-                        messageManager.add(mes);
+                        messageManager.add(JSONObject.parseObject(mes,Message.class));
                         sb.delete(0,end+4);
                         //System.out.println(Hex.hexStr2Str(sb.toString()));
                     }
@@ -93,7 +101,7 @@ public abstract class ServerHandlerService implements ServerService,Runnable{
     }
 
 
-    public void setMessageManager(MessageService<String> messageManager) {
+    public void setMessageManager(MessageService<Message> messageManager) {
         this.messageManager = messageManager;
     }
 
@@ -101,7 +109,7 @@ public abstract class ServerHandlerService implements ServerService,Runnable{
         this.masterConfig = masterConfig;
     }
 
-    public MessageService<String> getMessageManager() {
+    public MessageService<Message> getMessageManager() {
         return messageManager;
     }
 

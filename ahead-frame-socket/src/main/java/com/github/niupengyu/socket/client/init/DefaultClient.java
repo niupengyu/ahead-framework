@@ -1,6 +1,7 @@
 package com.github.niupengyu.socket.client.init;
 
 import com.github.niupengyu.core.exception.SysException;
+import com.github.niupengyu.core.message.MessageService;
 import com.github.niupengyu.core.util.IdGeneratorUtil;
 import com.github.niupengyu.core.util.StringUtil;
 import com.github.niupengyu.socket.client.config.ClientConfig;
@@ -16,7 +17,8 @@ public class DefaultClient {
 
 
     //@PostConstruct
-    public void create(ClientKeepAliveService keepAliveService, ClientHandlerService clientHandlerService, ClientConfig clientConfig) throws SysException {
+    public void create(ClientKeepAliveService keepAliveService, ClientHandlerService clientHandlerService, ClientConfig clientConfig,
+                       MessageService messageService) throws SysException {
 
         //clientConfig.setId(IdGeneratorUtil.uuid32());
         if(StringUtil.isNull(clientConfig.getId())){
@@ -25,6 +27,7 @@ public class DefaultClient {
 
         //ClientHandlerService clientHandlerService=new ClientHandlerService();
         clientHandlerService.setClientConfig(clientConfig);
+        clientHandlerService.setMessageManager(messageService);
 
         keepAliveService.setClientConfig(clientConfig);
         keepAliveService.setClientHandlerService(clientHandlerService);

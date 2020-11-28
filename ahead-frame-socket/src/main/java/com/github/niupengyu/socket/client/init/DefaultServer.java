@@ -1,5 +1,7 @@
 package com.github.niupengyu.socket.client.init;
 
+import com.github.niupengyu.core.message.MessageManager;
+import com.github.niupengyu.core.message.MessageService;
 import com.github.niupengyu.socket.server.config.MasterConfig;
 import com.github.niupengyu.socket.server.config.ServerConfig;
 import com.github.niupengyu.socket.server.init.MasterInitService;
@@ -10,9 +12,13 @@ import com.github.niupengyu.socket.server.service.ServerKeepAliveService;
 
 public class DefaultServer {
 
-    public void create(ServerHandlerService serverHandlerService, MasterConfig masterConfig, ServerKeepAliveService keepAliveService) {
+    public void create(ServerHandlerService serverHandlerService,
+                       MasterConfig masterConfig, ServerKeepAliveService keepAliveService,
+                       MessageService messageManager) {
 
         serverHandlerService.setMasterConfig(masterConfig);
+        serverHandlerService.setMessageManager(messageManager);
+
         ServerConfig serverConfig=new ServerConfig();
         MasterHandler masterHandler=new MasterHandler();
         masterHandler.setServerService(serverHandlerService);
