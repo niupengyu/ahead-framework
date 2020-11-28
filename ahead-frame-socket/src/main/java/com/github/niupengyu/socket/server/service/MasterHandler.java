@@ -1,9 +1,11 @@
 package com.github.niupengyu.socket.server.service;
 
 import com.github.niupengyu.core.annotation.AutoConfig;
+import com.github.niupengyu.core.message.MessageService;
 import com.github.niupengyu.socket.bean.Message;
 import com.github.niupengyu.socket.handler.KeepAliveService;
 import com.github.niupengyu.socket.handler.ServerService;
+import com.github.niupengyu.socket.server.config.MasterConfig;
 import com.github.niupengyu.socket.util.SessionManager;
 import com.github.niupengyu.socket.util.SocketContent;
 import org.apache.mina.core.service.IoHandlerAdapter;
@@ -25,6 +27,8 @@ public class MasterHandler extends IoHandlerAdapter {
 
 //    @Resource(name = "serverKeepAliveService")
     private KeepAliveService keepAliveService;
+
+    private MasterConfig masterConfig;
 
     private final Logger LOG = LoggerFactory.getLogger(MasterHandler.class);
     @Override
@@ -56,7 +60,7 @@ public class MasterHandler extends IoHandlerAdapter {
     public void sessionCreated(IoSession session) throws Exception {
         LOG.warn("remote client [" + session.getRemoteAddress().toString() + "] connected.");
         // 设置IoSession闲置时间，参数单位是秒
-        session.getConfig().setIdleTime(IdleStatus.BOTH_IDLE, 20);
+        session.getConfig().setIdleTime(IdleStatus.BOTH_IDLE, this.masterConfig.getIdeTime());
         String clientIP = ((InetSocketAddress)session.getRemoteAddress()).getAddress().getHostAddress();
         session.setAttribute(SocketContent.KEY_SESSION_CLIENT_IP, clientIP);
         LOG.info("sessionCreated, client IP: " + clientIP);
@@ -103,5 +107,13 @@ public class MasterHandler extends IoHandlerAdapter {
 
     public void setKeepAliveService(KeepAliveService keepAliveService) {
         this.keepAliveService = keepAliveService;
+    }
+
+    public MasterConfig getMasterConfig() {
+        return masterConfig;
+    }
+
+    public void setMasterConfig(MasterConfig masterConfig) {
+        this.masterConfig = masterConfig;
     }
 }

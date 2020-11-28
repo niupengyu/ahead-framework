@@ -19,7 +19,9 @@ public class Message{
 
     private long response;
 
-    private String node;
+    private String responseNode;
+
+    private String requestNode;
 
     private String head;
 
@@ -29,12 +31,20 @@ public class Message{
 
     private Object message;
 
-    public String getNode() {
-        return node;
+    public String getResponseNode() {
+        return responseNode;
     }
 
-    public void setNode(String node) {
-        this.node = node;
+    public void setResponseNode(String responseNode) {
+        this.responseNode = responseNode;
+    }
+
+    public String getRequestNode() {
+        return requestNode;
+    }
+
+    public void setRequestNode(String requestNode) {
+        this.requestNode = requestNode;
     }
 
     public String getHead() {

@@ -23,6 +23,26 @@ public class ClientConfig {
 
     private int serverPort;
 
+    private int requestInterval=30;
+
+    private int requestTimeout=10;
+
+    public int getRequestInterval() {
+        return requestInterval;
+    }
+
+    public void setRequestInterval(int requestInterval) {
+        this.requestInterval = requestInterval;
+    }
+
+    public int getRequestTimeout() {
+        return requestTimeout;
+    }
+
+    public void setRequestTimeout(int requestTimeout) {
+        this.requestTimeout = requestTimeout;
+    }
+
     public int getCount() {
         return count;
     }

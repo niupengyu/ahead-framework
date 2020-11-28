@@ -15,6 +15,8 @@ public class MasterConfig {
 
     private boolean enable;
 
+    private int ideTime=60;
+
     public String getName() {
         return name;
     }
@@ -39,4 +41,11 @@ public class MasterConfig {
         this.port = port;
     }
 
+    public int getIdeTime() {
+        return ideTime;
+    }
+
+    public void setIdeTime(int ideTime) {
+        this.ideTime = ideTime;
+    }
 }

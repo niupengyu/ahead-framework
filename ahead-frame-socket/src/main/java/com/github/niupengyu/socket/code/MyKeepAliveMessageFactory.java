@@ -24,7 +24,7 @@ public class MyKeepAliveMessageFactory implements KeepAliveMessageFactory {
         /** 返回预设语句 */
         Message rb = (Message) message;
         //String hex= Hex.byte2HexStr(rb.array());
-        logger.info("getResponse "+message);
+        //logger.info("getResponse "+message);
         return keepAliveService.getResponse(rb);
     }
 

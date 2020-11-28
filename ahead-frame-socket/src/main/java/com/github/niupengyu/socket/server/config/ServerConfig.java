@@ -48,7 +48,7 @@ public class ServerConfig {
 	}*/
 
 
-	@Bean("filterChainBuilder")
+//	@Bean("filterChainBuilder")
 	public DefaultIoFilterChainBuilder filterChainBuilder() {
 		DefaultIoFilterChainBuilder defaultIoFilterChainBuilder =
 				new DefaultIoFilterChainBuilder();

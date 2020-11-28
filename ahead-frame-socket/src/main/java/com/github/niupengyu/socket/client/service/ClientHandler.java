@@ -1,6 +1,5 @@
 package com.github.niupengyu.socket.client.service;
 
-import com.github.niupengyu.core.annotation.AutoConfig;
 import com.github.niupengyu.socket.bean.Message;
 import com.github.niupengyu.socket.handler.ClientService;
 import org.apache.mina.core.service.IoHandlerAdapter;
@@ -8,9 +7,6 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 public class ClientHandler extends IoHandlerAdapter{
     private static final Logger logger = LoggerFactory.getLogger(ClientHandler.class);
@@ -25,12 +21,11 @@ public class ClientHandler extends IoHandlerAdapter{
         //String str = message.toString();
         //LOG.info("messageReceived:" + str);
         Message obj=(Message)message;
-        System.out.println("s---------------"+obj.toJsonString());
-        if(clientService.isHeartBeat(obj)){
-            clientService.heartbeat(session,obj);
-        }else{
+        //if(clientService.isHeartBeat(obj)){
+        //    clientService.heartbeat(session,obj);
+        //}else{
             clientService.received(obj,session);
-        }
+        //}
     }
 
     @Override

@@ -38,6 +38,16 @@ public class ClientSocketConfig {
 
 	private KeepAliveService keepAliveService;
 
+	private int requestInterval;
+
+	private int requestTimeout;
+
+	public ClientSocketConfig(KeepAliveService keepAliveService,ClientConfig clientConfig){
+		this.keepAliveService=keepAliveService;
+		this.requestTimeout=clientConfig.getRequestTimeout();
+		this.requestInterval=clientConfig.getRequestInterval();
+	}
+
 	//private ClientService clientService;
 
 	//@Bean("slaveFilterChainBuilder")
@@ -101,9 +111,11 @@ public class ClientSocketConfig {
 		KeepAliveFilter keepAliveFilter = new KeepAliveFilter(keepAliveMessageFactory(),
 				IdleStatus.BOTH_IDLE, heartBeatHandler());
 		//心跳超时时间，不设置则默认30s
-		keepAliveFilter.setRequestTimeout(5);
+		logger.info("心跳超时时间 {}",requestTimeout);
+		keepAliveFilter.setRequestTimeout(requestTimeout);
+		logger.info("心跳频率 {}",requestInterval);
 		//心跳频率，不设置则默认60s
-		keepAliveFilter.setRequestInterval(10);
+		keepAliveFilter.setRequestInterval(requestInterval);
 		//不设置默认false
 		keepAliveFilter.setForwardEvent(true);
 

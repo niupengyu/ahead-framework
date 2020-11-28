@@ -5,7 +5,7 @@ import com.github.niupengyu.core.util.system.SystemUsageUtil;
 public class Test {
 
     public static void main(String[] args) {
-        SystemUsageUtil systemUsageUtil=new SystemUsageUtil();
+       System.out.println("问：我们是苏州市吴江区公".charAt(0));
     }
 
 }
