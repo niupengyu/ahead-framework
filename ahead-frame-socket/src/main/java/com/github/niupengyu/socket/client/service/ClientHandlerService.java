@@ -174,7 +174,7 @@ public abstract class ClientHandlerService implements ClientService {
     public void setResponse(Message message) {
         long time=System.currentTimeMillis();
         //message.setNode(getClientConfig().getId());
-        logger.info("CLIENT 收到心跳回应 {} "+message,i);
+        logger.debug("CLIENT 收到心跳回应 {} "+message,i);
         i++;
         receivedHeartBeatResponse(message);
     }

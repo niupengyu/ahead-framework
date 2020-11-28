@@ -38,7 +38,7 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
 
     @Override
     public void heartbeat(IoSession session, Message msg) throws SysException {
-        logger.info("SERVICE 接受到心跳信息"+msg);
+        logger.debug("SERVICE 接受到心跳信息"+msg);
         //this.receiveHeartBeat(msg);
         this.messageManager.add(msg);
         Message message=new Message();

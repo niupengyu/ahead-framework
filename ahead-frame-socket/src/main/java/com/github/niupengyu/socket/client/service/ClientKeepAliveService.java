@@ -47,7 +47,7 @@ public abstract class ClientKeepAliveService implements KeepAliveService {
     @Override
     public Object getRequest() {
         Message message=this.clientHandlerService.getRequest();
-        logger.info("发送心跳 {}",message);
+        logger.debug("发送心跳 {}",message);
         return message;
     }
 
