@@ -77,8 +77,7 @@ public class SessionManager {
     }
 
 
-
-    public static long getSession(String node){
+    public static Long getSession(String node){
         return sessionsNodesHashMap.get(node);
     }
 

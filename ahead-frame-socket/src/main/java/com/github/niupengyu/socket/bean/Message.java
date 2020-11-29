@@ -7,9 +7,9 @@ import com.github.niupengyu.socket.util.SocketContent;
 
 public class Message{
 
-    /*public Message(){
+    public Message(){
 
-    }*/
+    }
 
     /*public Message(String head, String type, Object message){
         this.head=head;
