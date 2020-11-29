@@ -3,6 +3,7 @@ package com.github.niupengyu.socket.client.service;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.niupengyu.core.message.MessageService;
+import com.github.niupengyu.core.message.MultipleMessageService;
 import com.github.niupengyu.core.util.DateUtil;
 import com.github.niupengyu.core.util.Hex;
 import com.github.niupengyu.socket.bean.Message;
@@ -24,7 +25,7 @@ public abstract class ClientHandlerService implements ClientService {
 
     private ClientConfig clientConfig;
 
-    private MessageService<Message> messageManager;
+    private MultipleMessageService<Message> messageManager;
 
     private ClientInitService clientInitService;
 
@@ -36,9 +37,8 @@ public abstract class ClientHandlerService implements ClientService {
     StringBuffer sb=new StringBuffer();
     private Thread thread;
 
-    public void startMessageManager(){
-        thread=new Thread(getMessageManager());
-        thread.start();
+    public void startMessageManager() throws Exception {
+        messageManager.start();
     }
 
     @Override
@@ -203,11 +203,11 @@ public abstract class ClientHandlerService implements ClientService {
         this.clientConfig = clientConfig;
     }
 
-    public MessageService<Message> getMessageManager() {
+    public MultipleMessageService<Message> getMessageManager() {
         return messageManager;
     }
 
-    public void setMessageManager(MessageService<Message> messageManager) {
+    public void setMessageManager(MultipleMessageService<Message> messageManager) {
         this.messageManager = messageManager;
     }
 

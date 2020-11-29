@@ -1,7 +1,10 @@
-package com.github.niupengyu.socket.client.init;
+package com.github.niupengyu.socket.factory;
 
 import com.github.niupengyu.core.message.MessageManager;
 import com.github.niupengyu.core.message.MessageService;
+import com.github.niupengyu.core.message.MultipleMessageService;
+import com.github.niupengyu.core.message.SimpleMessageService;
+import com.github.niupengyu.socket.bean.Message;
 import com.github.niupengyu.socket.server.config.MasterConfig;
 import com.github.niupengyu.socket.server.config.ServerConfig;
 import com.github.niupengyu.socket.server.init.MasterInitService;
@@ -14,10 +17,13 @@ public class DefaultServer {
 
     public void create(ServerHandlerService serverHandlerService,
                        MasterConfig masterConfig, ServerKeepAliveService keepAliveService,
-                       MessageService messageManager) {
+                       SimpleMessageService simpleMessageService,String name,int count) throws Exception {
+
+        MultipleMessageService<Message>
+                multipleMessageService=new MultipleMessageService(count,simpleMessageService,name);
 
         serverHandlerService.setMasterConfig(masterConfig);
-        serverHandlerService.setMessageManager(messageManager);
+        serverHandlerService.setMessageMultipleMessageService(multipleMessageService);
 
         ServerConfig serverConfig=new ServerConfig();
         MasterHandler masterHandler=new MasterHandler();

@@ -4,45 +4,18 @@ import com.github.niupengyu.core.exception.SysException;
 
 import java.util.List;
 
-public abstract class MessageService<T> implements Runnable{
-    /**
-     * 消息管理类
-     */
-    private MessageManager<T>
-            dataManager;
+public abstract class MessageService<T> extends AbstractMessageService<T> implements Runnable{
 
-    /**
-     * 构造器
-     * @param name
-     */
+    public MessageService(){
+
+    }
+
     public MessageService(String name) {
-        dataManager=new MessageManager<>(name);
-    }
-    /**
-     * 构造器
-     * @param dataManager
-     */
-    public MessageService(MessageManager<T>
-            dataManager) {
-        this.dataManager=dataManager;
+        super(name);
     }
 
-    /**
-     * 添加一条消息
-     * @param messageBean
-     * @throws SysException
-     */
-    public void add(T messageBean) {
-        dataManager.add(messageBean);
-    }
-
-    /**
-     * 添加多条消息
-     * @param messageList
-     * @throws SysException
-     */
-    public void addList(List<T> messageList) throws SysException {
-        dataManager.addList(messageList);
+    public MessageService(MessageManager<T> dataManager) {
+        super(dataManager);
     }
 
     /**
@@ -51,9 +24,9 @@ public abstract class MessageService<T> implements Runnable{
     @Override
     public void run() {
         while(true){
-            T messageBean=dataManager.getMessage();
+            T messageBean=this.getMessage();
             if(messageBean==null){
-                boolean state=dataManager.isStop();
+                boolean state=this.isStop();
                 if(state){
                     break;
                 }else{
@@ -68,36 +41,19 @@ public abstract class MessageService<T> implements Runnable{
 
     protected abstract void endExecute();
 
-    /**
-     * 获取的消息会发生给这个方法  实现这个方法 处理业务逻辑
-     * @param messageBean
-     */
-    public abstract void execute(T messageBean);
 
-    public boolean isStop() {
-        return dataManager.isStop();
-    }
+    public static void main(String[] args) {
+        new MessageService(new MessageManager("")) {
+            @Override
+            public void execute(Object messageBean) {
 
-    public void setStop(boolean stop) {
-        dataManager.setStop(stop);
-    }
+            }
 
+            @Override
+            protected void endExecute() {
 
-    public int messageSize(){
-
-        return dataManager.messageSize();
-    }
-    /**
-     * 获取消息长度
-     * @return
-     */
-    public int messageCount(){
-
-        return dataManager.messageCount();
-    }
-
-    public MessageListener getMessageListener() {
-        return dataManager.getMessageListener();
+            }
+        };
     }
 
 }

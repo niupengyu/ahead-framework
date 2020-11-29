@@ -3,6 +3,7 @@ package com.github.niupengyu.socket.server.service;
 import com.alibaba.fastjson.JSONObject;
 import com.github.niupengyu.core.exception.SysException;
 import com.github.niupengyu.core.message.MessageService;
+import com.github.niupengyu.core.message.MultipleMessageService;
 import com.github.niupengyu.core.util.DateUtil;
 import com.github.niupengyu.core.util.Hex;
 import com.github.niupengyu.socket.bean.Message;
@@ -23,7 +24,7 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
 
     StringBuffer sb=new StringBuffer();
 
-    private MessageService<Message> messageManager;
+    private MultipleMessageService<Message> messageMultipleMessageService;
 
     private MasterConfig masterConfig;
 
@@ -31,23 +32,22 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
 
     private Thread thread;
 
-    public void startMessageManager(){
-        thread=new Thread(getMessageManager());
-        thread.start();
+    public void startMessageManager() throws Exception {
+        messageMultipleMessageService.start();
     }
 
     @Override
     public void messageReceived(Message str, IoSession session) throws SysException {
        String json=str.toJsonString();
        System.out.println("------------- "+json);
-       messageManager.add(str);
+        messageMultipleMessageService.add(str);
     }
 
     @Override
     public void heartbeat(IoSession session, Message msg) throws SysException {
         logger.debug("SERVICE 接受到心跳信息"+msg);
         //this.receiveHeartBeat(msg);
-        this.messageManager.add(msg);
+        this.messageMultipleMessageService.add(msg);
         Message message=new Message();
         message.setType(SocketContent.HEARTBEAT);
         message.setHead(SocketContent.RESPONSE);
@@ -94,7 +94,7 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
                         String mes=sb.substring(start+4,end);
                         //System.out.println(Hex.hexStr2Str(mes));
                         //System.out.println("================================");
-                        messageManager.add(JSONObject.parseObject(mes,Message.class));
+                        messageMultipleMessageService.add(JSONObject.parseObject(mes,Message.class));
                         sb.delete(0,end+4);
                         //System.out.println(Hex.hexStr2Str(sb.toString()));
                     }
@@ -110,17 +110,18 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
         return thread;
     }
 
-    public void setMessageManager(MessageService<Message> messageManager) {
-        this.messageManager = messageManager;
+    public MultipleMessageService<Message> getMessageMultipleMessageService() {
+        return messageMultipleMessageService;
+    }
+
+    public void setMessageMultipleMessageService(MultipleMessageService<Message> messageMultipleMessageService) {
+        this.messageMultipleMessageService = messageMultipleMessageService;
     }
 
     public void setMasterConfig(MasterConfig masterConfig) {
         this.masterConfig = masterConfig;
     }
 
-    public MessageService<Message> getMessageManager() {
-        return messageManager;
-    }
 
     public MasterConfig getMasterConfig() {
         return masterConfig;
