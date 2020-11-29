@@ -45,9 +45,7 @@ public class MasterHandler extends IoHandlerAdapter {
         Message obj=(Message)message;
 
         if(keepAliveService.isHeartbeatRequest(obj)){
-            if(!SessionManager.sessionsNodesHashMap.containsKey(obj.getRequestNode())){
-                SessionManager.sessionsNodesHashMap.put(obj.getRequestNode(),session.getId());
-            }
+            SessionManager.putNode(obj.getRequestNode(),session.getId());
             serverService.heartbeat(session,obj);
         }else{
             serverService.messageReceived(obj,session);
@@ -76,7 +74,7 @@ public class MasterHandler extends IoHandlerAdapter {
     public void sessionClosed(IoSession session) throws Exception {
         LOG.warn("sessionClosed. "+session);
         serverService.closed(session);
-        SessionManager.sessionsConcurrentHashMap.remove(session.getId());
+        SessionManager.clear(session.getId());
         serverService.heartbeatTimeOut(session,"disconnect");
         session.closeOnFlush();
         // my

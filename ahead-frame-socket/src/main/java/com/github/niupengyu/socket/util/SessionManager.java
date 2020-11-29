@@ -16,6 +16,8 @@ public class SessionManager {
 
     public static ConcurrentHashMap<String, Long> sessionsNodesHashMap =
             new ConcurrentHashMap<String, Long>();
+    public static ConcurrentHashMap<Long, String> nodesSessionsHashMap =
+            new ConcurrentHashMap();
 
 
     public static void sendMessage(Message message, Long id){
@@ -52,5 +54,25 @@ public class SessionManager {
 
     public static StringBuffer getMessage(long id){
         return messagesConcurrentHashMap.get(id);
+    }
+
+    public static void clear(long id) {
+        SessionManager.sessionsConcurrentHashMap.remove(id);
+        String node=nodesSessionsHashMap.get(id);
+        SessionManager.sessionsNodesHashMap.remove(node);
+        SessionManager.nodesSessionsHashMap.remove(id);
+    }
+
+    public static void putNode(String node,long id) {
+        if(!SessionManager.sessionsNodesHashMap.containsKey(node)){
+            SessionManager.sessionsNodesHashMap.put(node,id);
+        }
+        if(!SessionManager.nodesSessionsHashMap.containsKey(id)){
+            SessionManager.nodesSessionsHashMap.put(id,node);
+        }
+    }
+
+    public static String getNode(long id){
+        return nodesSessionsHashMap.get(id);
     }
 }
