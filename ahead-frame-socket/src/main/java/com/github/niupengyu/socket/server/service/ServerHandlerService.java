@@ -52,7 +52,6 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
         message.setType(SocketContent.HEARTBEAT);
         message.setHead(SocketContent.RESPONSE);
         message.setResponseNode(getMasterConfig().getName());
-        long start= (long) msg.getMessage();
         message.setMessage(responseData(msg));
         message.setRequestNode(msg.getRequestNode());
         session.write(message);
