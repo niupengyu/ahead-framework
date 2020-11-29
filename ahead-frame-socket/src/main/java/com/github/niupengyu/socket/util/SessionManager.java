@@ -20,12 +20,12 @@ public class SessionManager {
             new ConcurrentHashMap();
 
 
-    public static void sendMessage(Message message, Long id){
+    /*public static void sendMessage(Message message, Long id){
         IoSession session=getSession(id);
         if(session!=null){
             session.write(message.toJsonString());
         }
-    }
+    }*/
 
     public static IoSession getSession(Long id){
         SessionInfo sessionInfo=getSessionInfo(id);

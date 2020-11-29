@@ -73,9 +73,9 @@ public class MasterHandler extends IoHandlerAdapter {
     @Override
     public void sessionClosed(IoSession session) throws Exception {
         LOG.warn("sessionClosed. "+session);
-        serverService.closed(session);
-        SessionManager.clear(session.getId());
         serverService.heartbeatTimeOut(session,"disconnect");
+        SessionManager.clear(session.getId());
+        serverService.closed(session);
         session.closeOnFlush();
         // my
     }

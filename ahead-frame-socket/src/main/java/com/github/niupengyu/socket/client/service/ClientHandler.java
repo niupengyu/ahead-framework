@@ -31,7 +31,7 @@ public class ClientHandler extends IoHandlerAdapter{
     @Override
     public void messageSent(IoSession session, Object message) throws Exception {
         // TODO Auto-generated method stub
-        System.out.println("send");
+        //System.out.println("send");
         //super.messageSent(session, message);
         //session.write(message);
         clientService.setSession(session);

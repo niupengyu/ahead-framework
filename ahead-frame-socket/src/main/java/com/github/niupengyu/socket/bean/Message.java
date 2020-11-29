@@ -1,5 +1,7 @@
 package com.github.niupengyu.socket.bean;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.niupengyu.core.util.IdGeneratorUtil;
 import com.github.niupengyu.core.util.StringUtil;
 import com.alibaba.fastjson.JSON;
@@ -16,6 +18,7 @@ public class Message{
         this.type=type;
         this.message=message;
     }*/
+
 
     public Message(String head, String type,String id,long request,String requestNode,Object data){
         this.head=head;
@@ -54,6 +57,8 @@ public class Message{
     //private String message;
 
     private Object message;
+
+    private ObjectMapper objectMapper=new ObjectMapper();
 
     public String getResponseNode() {
         return responseNode;
@@ -99,8 +104,13 @@ public class Message{
         this.message = message;
     }
 
-    public String toJsonString(){
-        return JSON.toJSONString(this);
+    public String toJsonString() throws JsonProcessingException {
+        //return JSON.toJSONString(this);
+        return objectMapper.writeValueAsString(this);
+    }
+
+    public <T> T toObject(Class<T> c){
+        return objectMapper.convertValue(message,c);
     }
 
     public long getRequest() {
@@ -129,7 +139,12 @@ public class Message{
 
     @Override
     public String toString() {
-        String data=toJsonString();
+        String data= null;
+        try {
+            data = toJsonString();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         String s=new StringBuilder()
                 //.append("<|")
 //                .append(type)

@@ -40,8 +40,8 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
     }
 
     @Override
-    public void messageReceived(Message str, IoSession session) throws SysException {
-       String json=str.toJsonString();
+    public void messageReceived(Message str, IoSession session) throws Exception {
+       //String json=str.toJsonString();
         messageMultipleMessageService.add(str);
     }
 

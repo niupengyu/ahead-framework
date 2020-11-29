@@ -7,7 +7,7 @@ import org.apache.mina.core.session.IoSession;
 
 public interface ServerService {
 
-    void messageReceived(Message str, IoSession session) throws SysException;
+    void messageReceived(Message str, IoSession session) throws SysException, Exception;
 
     void heartbeat(IoSession session, Message msg) throws SysException;
 
