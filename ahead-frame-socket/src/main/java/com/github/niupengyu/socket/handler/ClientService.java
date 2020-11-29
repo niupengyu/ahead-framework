@@ -6,7 +6,7 @@ import org.apache.mina.core.session.IoSession;
 
 public interface ClientService {
 
-    void sendMessage(Object msg) ;
+    void sendMessage(String type,Object msg) ;
 
     //String heartbeat(IoSession session);
 

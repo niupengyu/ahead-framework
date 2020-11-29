@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class ClientHandlerService implements ClientService {
 
@@ -28,6 +30,8 @@ public abstract class ClientHandlerService implements ClientService {
     private MultipleMessageService<Message> messageManager;
 
     private ClientInitService clientInitService;
+
+    private final Lock lock = new ReentrantLock();
 
 
     private String status="OFFLINE";
@@ -42,16 +46,24 @@ public abstract class ClientHandlerService implements ClientService {
     }
 
     @Override
-    public void sendMessage(Object message) {
-        if(session==null||!session.isConnected()){
-            reconnection();
+    public void sendMessage(String type,Object message) {
+        lock.lock();
+        try {
+            if(session==null||!session.isConnected()){
+                reconnection();
+            }
+            Message msg=new Message();
+            msg.setRequestNode(clientConfig.getId());
+            msg.setHead("HEAD");
+            msg.setType("MESSAGE");
+            msg.setMessage(message);
+            session.write(msg);
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            lock.unlock();
         }
-        Message msg=new Message();
-        msg.setRequestNode(clientConfig.getId());
-        msg.setHead("HEAD");
-        msg.setType("MESSAGE");
-        msg.setMessage(message);
-        session.write(msg);
+
     }
 
 
