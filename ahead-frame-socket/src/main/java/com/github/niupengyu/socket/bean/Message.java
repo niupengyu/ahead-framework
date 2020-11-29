@@ -67,7 +67,7 @@ public class Message{
         return message;
     }
 
-    public String getMessageStr() {
+    public String messageStr() {
         return StringUtil.valueOf(message);
     }
 
