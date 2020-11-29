@@ -75,4 +75,12 @@ public class SessionManager {
     public static String getNode(long id){
         return nodesSessionsHashMap.get(id);
     }
+
+
+
+    public static long getSession(String node){
+        return sessionsNodesHashMap.get(node);
+    }
+
+
 }

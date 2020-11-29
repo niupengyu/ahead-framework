@@ -58,6 +58,7 @@ public abstract class ClientHandlerService implements ClientService {
             msg.setType("MESSAGE");
             msg.setMessage(message);*/
             Message msg=Message.createRequest(type,clientConfig.getId(),message);
+            logger.info("request {}",msg.toJsonString());
             session.write(msg);
         }catch(Exception e){
             e.printStackTrace();
@@ -79,6 +80,7 @@ public abstract class ClientHandlerService implements ClientService {
             msg.setType("MESSAGE");
             msg.setMessage(message);*/
             Message msg=Message.createResponse(request,clientConfig.getId(),message);
+            logger.info("response {}",msg.toJsonString());
             session.write(msg);
         }catch(Exception e){
             e.printStackTrace();
@@ -215,7 +217,7 @@ public abstract class ClientHandlerService implements ClientService {
         long time=System.currentTimeMillis();
         //message.setNode(getClientConfig().getId());
         logger.debug("CLIENT 收到心跳回应 {} ",message);
-        System.out.println("setResponse "+(i++));
+        //System.out.println("setResponse "+(i++));
         this.messageManager.add(message);
         receivedHeartBeatResponse(message);
     }

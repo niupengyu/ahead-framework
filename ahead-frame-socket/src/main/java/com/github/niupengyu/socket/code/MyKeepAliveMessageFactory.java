@@ -37,7 +37,7 @@ public class MyKeepAliveMessageFactory implements KeepAliveMessageFactory {
     
     public boolean isResponse(IoSession session, Object message) {
         Message rb = (Message) message;
-        System.out.println("isResponse "+(i++));
+        //System.out.println("isResponse "+(i++));
         return keepAliveService.isHeartbeatResponse(rb);
     }
 
