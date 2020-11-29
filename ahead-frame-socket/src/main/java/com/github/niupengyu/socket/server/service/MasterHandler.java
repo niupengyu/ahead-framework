@@ -3,6 +3,7 @@ package com.github.niupengyu.socket.server.service;
 import com.github.niupengyu.core.annotation.AutoConfig;
 import com.github.niupengyu.core.message.MessageService;
 import com.github.niupengyu.socket.bean.Message;
+import com.github.niupengyu.socket.bean.SessionInfo;
 import com.github.niupengyu.socket.handler.KeepAliveService;
 import com.github.niupengyu.socket.handler.ServerService;
 import com.github.niupengyu.socket.server.config.MasterConfig;
@@ -45,6 +46,9 @@ public class MasterHandler extends IoHandlerAdapter {
 
         if(keepAliveService.isHeartbeatRequest(obj)){
             serverService.heartbeat(session,obj);
+            if(!SessionManager.sessionsNodesHashMap.containsKey(obj.getRequestNode())){
+                SessionManager.sessionsNodesHashMap.put(obj.getRequestNode(),session.getId());
+            }
         }else{
             System.out.println("收到其他消息 "+obj);
             serverService.messageReceived(obj,session);
@@ -64,7 +68,7 @@ public class MasterHandler extends IoHandlerAdapter {
         String clientIP = ((InetSocketAddress)session.getRemoteAddress()).getAddress().getHostAddress();
         session.setAttribute(SocketContent.KEY_SESSION_CLIENT_IP, clientIP);
         LOG.info("sessionCreated, client IP: " + clientIP);
-        SessionManager.sessionsConcurrentHashMap.put(session.getId(), session);
+        SessionManager.sessionsConcurrentHashMap.put(session.getId(), new SessionInfo(session));
         LOG.info("-IoSession实例:" + session.toString());
         serverService.setSession(session);
     }

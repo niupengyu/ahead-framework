@@ -193,9 +193,11 @@ public abstract class ClientHandlerService implements ClientService {
         message.setType(SocketContent.HEARTBEAT);
         message.setHead(SocketContent.REQUEST);
         message.setRequestNode(getClientConfig().getId());
-        message.setMessage(System.currentTimeMillis());
+        message.setMessage(requestData());
         return message;
     }
+
+    protected abstract Object requestData();
 
     public void setClientConfig(ClientConfig clientConfig) {
         this.clientConfig = clientConfig;
