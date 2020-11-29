@@ -45,10 +45,10 @@ public class MasterHandler extends IoHandlerAdapter {
         Message obj=(Message)message;
 
         if(keepAliveService.isHeartbeatRequest(obj)){
-            serverService.heartbeat(session,obj);
             if(!SessionManager.sessionsNodesHashMap.containsKey(obj.getRequestNode())){
                 SessionManager.sessionsNodesHashMap.put(obj.getRequestNode(),session.getId());
             }
+            serverService.heartbeat(session,obj);
         }else{
             System.out.println("收到其他消息 "+obj);
             serverService.messageReceived(obj,session);
