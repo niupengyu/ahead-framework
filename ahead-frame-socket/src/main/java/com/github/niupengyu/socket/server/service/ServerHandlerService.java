@@ -9,6 +9,7 @@ import com.github.niupengyu.core.util.Hex;
 import com.github.niupengyu.socket.bean.Message;
 import com.github.niupengyu.socket.handler.ServerService;
 import com.github.niupengyu.socket.server.config.MasterConfig;
+import com.github.niupengyu.socket.util.SessionManager;
 import com.github.niupengyu.socket.util.SocketContent;
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
@@ -16,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 public abstract class ServerHandlerService  implements ServerService,Runnable{
@@ -30,7 +33,7 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
 
     //private Map<Long,String> sessionMap=new HashMap<>();
 
-    private Thread thread;
+    private final Lock lock = new ReentrantLock();
 
     public void startMessageManager() throws Exception {
         messageMultipleMessageService.start();
@@ -39,7 +42,6 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
     @Override
     public void messageReceived(Message str, IoSession session) throws SysException {
        String json=str.toJsonString();
-       System.out.println("------------- "+json);
         messageMultipleMessageService.add(str);
     }
 
@@ -48,17 +50,51 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
         logger.debug("SERVICE 接受到心跳信息"+msg);
         //this.receiveHeartBeat(msg);
         this.messageMultipleMessageService.add(msg);
-        Message message=new Message();
+        /*Message message=new Message();
         message.setType(SocketContent.HEARTBEAT);
         message.setHead(SocketContent.RESPONSE);
         message.setResponseNode(getMasterConfig().getName());
         message.setMessage(responseData(msg));
-        message.setRequestNode(msg.getRequestNode());
+        message.setRequestNode(msg.getRequestNode());*/
+        Message message=Message.createResponse(msg,getMasterConfig().getName(),responseData(msg));
         session.write(message);
     }
 
     protected abstract Object responseData(Message msg);
 
+    @Override
+    public void sendRequest(long sessionId, String type,Object msg) throws SysException {
+        lock.lock();
+        try {
+            IoSession session= SessionManager.getSession(sessionId);
+            if(session==null){
+                throw new SysException("找不到会话 "+sessionId);
+            }
+            Message message=Message.createRequest(type,getMasterConfig().getName(),msg);
+            session.write(message);
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            lock.unlock();
+        }
+    }
+
+    @Override
+    public void sendResponse(long sessionId, Message request, Object msg) throws SysException {
+        lock.lock();
+        try {
+            IoSession session= SessionManager.getSession(sessionId);
+            if(session==null){
+                throw new SysException("找不到会话 "+sessionId);
+            }
+            Message message=Message.createResponse(request,getMasterConfig().getName(),msg);
+            session.write(message);
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            lock.unlock();
+        }
+    }
 
     @Override
     public void heartbeatTimeOut(IoSession session) {
@@ -104,10 +140,6 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
         } catch (Exception e1) {
             e1.printStackTrace();
         }
-    }
-
-    public Thread getThread() {
-        return thread;
     }
 
     public MultipleMessageService<Message> getMessageMultipleMessageService() {

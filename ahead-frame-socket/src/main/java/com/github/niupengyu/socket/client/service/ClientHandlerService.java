@@ -46,17 +46,39 @@ public abstract class ClientHandlerService implements ClientService {
     }
 
     @Override
-    public void sendMessage(String type,Object message) {
+    public void sendRequest(String type,Object message) {
         lock.lock();
         try {
             if(session==null||!session.isConnected()){
                 reconnection();
             }
-            Message msg=new Message();
+            /*Message msg=new Message();
             msg.setRequestNode(clientConfig.getId());
             msg.setHead("HEAD");
             msg.setType("MESSAGE");
-            msg.setMessage(message);
+            msg.setMessage(message);*/
+            Message msg=Message.createRequest(type,clientConfig.getId(),message);
+            session.write(msg);
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            lock.unlock();
+        }
+
+    }
+    @Override
+    public void sendResponse(Message request,Object message) {
+        lock.lock();
+        try {
+            if(session==null||!session.isConnected()){
+                reconnection();
+            }
+            /*Message msg=new Message();
+            msg.setRequestNode(clientConfig.getId());
+            msg.setHead("HEAD");
+            msg.setType("MESSAGE");
+            msg.setMessage(message);*/
+            Message msg=Message.createResponse(request,clientConfig.getId(),message);
             session.write(msg);
         }catch(Exception e){
             e.printStackTrace();
@@ -201,11 +223,12 @@ public abstract class ClientHandlerService implements ClientService {
     protected abstract void receivedHeartBeatResponse(Message message);
 
     public Message getRequest() {
-        Message message=new Message();
+        /*Message message=new Message();
         message.setType(SocketContent.HEARTBEAT);
         message.setHead(SocketContent.REQUEST);
         message.setRequestNode(getClientConfig().getId());
-        message.setMessage(requestData());
+        message.setMessage(requestData());*/
+        Message message=Message.createRequest(SocketContent.HEARTBEAT,clientConfig.getId(),requestData());
         return message;
     }
 

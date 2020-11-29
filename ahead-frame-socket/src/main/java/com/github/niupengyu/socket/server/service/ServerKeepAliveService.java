@@ -28,23 +28,25 @@ public abstract class ServerKeepAliveService implements KeepAliveService {
 
     @Override
     public Object getResponse( Message request) {
-        Message message=new Message();
+        long start= (long) request.getMessage();
+        /*Message message=new Message();
         message.setType(SocketContent.HEARTBEAT);
         message.setHead(SocketContent.RESPONSE);
         message.setResponseNode(masterConfig.getName());
-        long start= (long) request.getMessage();
-        message.setMessage(DateUtil.getTimeDes(System.currentTimeMillis()-start));
+        message.setMessage(DateUtil.getTimeDes(System.currentTimeMillis()-start));*/
+        Message message=Message.createResponse(request,masterConfig.getName(),DateUtil.getTimeDes(System.currentTimeMillis()-start));
         return JSONObject.toJSONString(message);
     }
 
     @Override
     public Object getRequest() {
         logger.info("server 获取心跳请求内容");
-        Message message=new Message();
+        /*Message message=new Message();
         message.setHead(SocketContent.REQUEST);
         message.setType(SocketContent.HEARTBEAT);
         message.setRequestNode(masterConfig.getName());
-        message.setMessage(System.currentTimeMillis());
+        message.setMessage(System.currentTimeMillis());*/
+        Message message=Message.createRequest(SocketContent.HEARTBEAT,masterConfig.getName(),System.currentTimeMillis());
         return JSONObject.toJSONString(message);
     }
 

@@ -32,16 +32,14 @@ public abstract class ClientKeepAliveService implements KeepAliveService {
 
     @Override
     public Object getResponse(Message request) {
-        //request.setHead(SocketContent.RESPONSE);
-        //request.setNode(clientConfig.getId());
-        Message message=new Message();
+        long start= (long) request.getMessage();
+        /*Message message=new Message();
         message.setType(SocketContent.HEARTBEAT);
         message.setHead(SocketContent.RESPONSE);
         message.setResponseNode(this.clientConfig.getId());
-        long start= (long) request.getMessage();
-        message.setMessage(DateUtil.getTimeDes(System.currentTimeMillis()-start));
-
-        return request;
+        message.setMessage(DateUtil.getTimeDes(System.currentTimeMillis()-start));*/
+        Message message=Message.createResponse(request,clientConfig.getId(),DateUtil.getTimeDes(System.currentTimeMillis()-start));
+        return message;
     }
 
     @Override

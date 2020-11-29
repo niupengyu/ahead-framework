@@ -23,7 +23,7 @@ public class TestMq extends MessageService<String>/* 这里定义消息的数据
 
     }
 
-    public static void main(String[] args) throws SysException {
+    public static void main(String[] args)  {
         TestMq testMq=new TestMq("消息测试");
         //初始化 消息队列并启动
         Thread thread=new Thread(testMq);

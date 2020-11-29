@@ -2,6 +2,7 @@ package com.github.niupengyu.socket.handler;
 
 import com.github.niupengyu.core.exception.SysException;
 import com.github.niupengyu.socket.bean.Message;
+import com.github.niupengyu.socket.util.SessionManager;
 import org.apache.mina.core.session.IoSession;
 
 public interface ServerService {
@@ -18,4 +19,7 @@ public interface ServerService {
 
     void closed(IoSession session);
 
+    void sendRequest(long sessionId, String type,Object msg) throws SysException ;
+
+    void sendResponse(long sessionId, Message request,Object msg) throws SysException ;
 }

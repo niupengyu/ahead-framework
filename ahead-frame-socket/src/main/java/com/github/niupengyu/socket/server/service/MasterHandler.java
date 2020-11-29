@@ -50,7 +50,6 @@ public class MasterHandler extends IoHandlerAdapter {
             }
             serverService.heartbeat(session,obj);
         }else{
-            System.out.println("收到其他消息 "+obj);
             serverService.messageReceived(obj,session);
         }
     }
