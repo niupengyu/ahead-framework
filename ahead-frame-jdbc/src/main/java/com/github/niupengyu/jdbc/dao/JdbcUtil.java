@@ -14,6 +14,7 @@
 package com.github.niupengyu.jdbc.dao;
 
 import com.github.niupengyu.core.exception.SysException;
+import com.github.niupengyu.core.util.StringUtil;
 import com.github.niupengyu.jdbc.annotation.DataSourceManager;
 import com.github.niupengyu.jdbc.bean.DataSourceBean;
 import com.github.niupengyu.jdbc.bean.DbConfig;
@@ -329,6 +330,16 @@ public class JdbcUtil {
         if(jdbcUtil!=null){
             jdbcUtil.close();
         }
+    }
+
+    public static String join(List<Map<String,Object>> list,String key){
+        StringBuilder str=new StringBuilder();
+        for(Map<String,Object> map:list){
+            String id= StringUtil.mapValueString(map,key);
+            str.append(",'").append(id).append("'");
+        }
+        str.deleteCharAt(0);
+        return str.toString();
     }
 }
 
