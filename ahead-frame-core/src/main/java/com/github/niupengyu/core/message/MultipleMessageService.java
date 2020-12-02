@@ -34,6 +34,18 @@ public class MultipleMessageService<T> {
 
     public void start() {
         messageManager=new MessageManager(name,messageListener);
+        /*dataThreads=new Thread[count];
+        for(int i=0;i<count;i++){
+            //Constructor<SimpleMessageService> constructor=serviceClass.getConstructor(MessageManager.class,MultipleMessageService.class);
+            simpleMessageService.init(messageManager,this);
+            Thread thread=new Thread(simpleMessageService);
+            dataThreads[i]=thread;
+            pools.execute(thread);
+        }*/
+        start(messageManager);
+    }
+
+    public void start(MessageManager messageManager) {
         dataThreads=new Thread[count];
         for(int i=0;i<count;i++){
             //Constructor<SimpleMessageService> constructor=serviceClass.getConstructor(MessageManager.class,MultipleMessageService.class);
