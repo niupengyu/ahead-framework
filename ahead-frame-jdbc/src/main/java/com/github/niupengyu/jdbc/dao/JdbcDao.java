@@ -14,6 +14,7 @@
 package com.github.niupengyu.jdbc.dao;
 
 import com.github.niupengyu.core.exception.SysException;
+import com.github.niupengyu.core.util.StringUtil;
 import com.github.niupengyu.jdbc.annotation.DataSourceManager;
 import com.github.niupengyu.jdbc.bean.DataSourceBean;
 import com.github.niupengyu.jdbc.bean.DbConfig;
@@ -690,6 +691,7 @@ public class JdbcDao {
 			addList(rs,list);
 		} catch (SQLException e) {
 			logger.error("查询出错:"+sql, e);
+			logger.error(Arrays.toString(vars));
 			throw new DaoException(e.getMessage());
 		} finally{
 			stmt=closePreStmt(stmt);
@@ -742,6 +744,7 @@ public class JdbcDao {
 			addList(rs,list,queryCallBack);
 		} catch (SQLException e) {
 			logger.error("修改出错:"+sql, e);
+			logger.error(Arrays.toString(vars));
 			throw new DaoException(e.getMessage());
 		} finally{
 			stmt=closePreStmt(stmt);
@@ -765,6 +768,7 @@ public class JdbcDao {
 			addList(rs,list,queryCallBack);
 		} catch (SQLException e) {
 			logger.error("修改出错:"+sql, e);
+			logger.error(StringUtil.valueOf(var));
 			throw new DaoException(e.getMessage());
 		}finally{
 			stmt=closePreStmt(stmt);
@@ -774,7 +778,7 @@ public class JdbcDao {
 		return list;
 	}
 
-	public List<Map<String, Object>> executeQuery(String sql,String[] queryCallBack) throws Exception {
+	public List<Map<String, Object>> executeQuery(String sql,String[] vars) throws Exception {
 		logger.debug("execute {}",sql);
 		Connection conn=null;
 		Statement stmt=null;
@@ -784,9 +788,10 @@ public class JdbcDao {
 			conn=dataSource.getConnection();
 			stmt=conn.createStatement();
 			rs=stmt.executeQuery(sql);
-			addList(rs,list,queryCallBack);
+			addList(rs,list,vars);
 		} catch (SQLException e) {
 			logger.error("getList:"+sql, e);
+			logger.error(Arrays.toString(vars));
 			throw new DaoException(e.getMessage());
 		}finally{
 			rs=closeResultSet(rs);
@@ -817,6 +822,7 @@ public class JdbcDao {
 			addList(rs,list,queryCallBack);
 		} catch (SQLException e) {
 			logger.error("修改出错:"+sql, e);
+			logger.error(Arrays.toString(vars));
 			throw new DaoException(e.getMessage());
 		} finally{
 			stmt=closePreStmt(stmt);
@@ -840,6 +846,7 @@ public class JdbcDao {
 			addList(rs,list,queryCallBack);
 		} catch (SQLException e) {
 			logger.error("修改出错:"+sql, e);
+			logger.error(StringUtil.valueOf(var));
 			throw new DaoException(e.getMessage());
 		}finally{
 			stmt=closePreStmt(stmt);
@@ -863,6 +870,7 @@ public class JdbcDao {
 			addList(rs,list);
 		} catch (SQLException e) {
 			logger.error("查询出错:"+sql, e);
+			logger.error(StringUtil.valueOf(var));
 			throw new DaoException(e.getMessage());
 		}finally{
 			stmt=closePreStmt(stmt);
@@ -996,6 +1004,7 @@ public class JdbcDao {
 			res = stmt.executeUpdate();
 		} catch (SQLException e) {
 			logger.error("修改出错:"+sql, e);
+			logger.error(Arrays.toString(vars));
 			throw new DaoException(e.getMessage());
 		}finally{
 			stmt=closePreStmt(stmt);
@@ -1021,6 +1030,7 @@ public class JdbcDao {
 			res = stmt.execute();
 		} catch (SQLException e) {
 			logger.error("修改出错:"+sql, e);
+			logger.error(Arrays.toString(vars));
 			throw new DaoException(e.getMessage());
 		}finally{
 			stmt=closePreStmt(stmt);
