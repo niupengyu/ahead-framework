@@ -7,7 +7,12 @@ public class SnUtil {
     private long sn;
 
     public SnUtil(int length){
-        sn=length*10;
+        sn=length;
+        this.length=length;
+        for(int i=0;i<length;i++){
+            sn*=10;
+        }
+
     }
 
     public long nextSn(){
@@ -15,7 +20,12 @@ public class SnUtil {
     }
 
     public String nextStringSn(){
-        return String.valueOf(nextSn()).substring(1);
+        System.out.println(nextSn());
+        return String.valueOf(nextSn()).substring(1,length+1);
     }
 
+
+    public static void main(String[] args) {
+        System.out.println(new SnUtil(6).nextStringSn());
+    }
 }
