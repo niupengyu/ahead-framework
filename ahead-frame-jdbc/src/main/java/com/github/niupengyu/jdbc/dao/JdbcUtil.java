@@ -332,11 +332,11 @@ public class JdbcUtil {
         }
     }
 
-    public static String join(List<Map<String,Object>> list,String key){
+    public static String join(List<Map<String,Object>> list,String key,String sp){
         StringBuilder str=new StringBuilder();
         for(Map<String,Object> map:list){
             String id= StringUtil.mapValueString(map,key);
-            str.append(",'").append(id).append("'");
+            str.append(",").append(sp).append(id).append("").append(sp);
         }
         str.deleteCharAt(0);
         return str.toString();
