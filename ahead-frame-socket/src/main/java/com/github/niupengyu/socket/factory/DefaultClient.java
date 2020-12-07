@@ -1,6 +1,7 @@
 package com.github.niupengyu.socket.factory;
 
 import com.github.niupengyu.core.exception.SysException;
+import com.github.niupengyu.core.message.MessageManager;
 import com.github.niupengyu.core.message.MessageService;
 import com.github.niupengyu.core.message.MultipleMessageService;
 import com.github.niupengyu.core.message.SimpleMessageService;
@@ -55,5 +56,29 @@ public class DefaultClient {
         clientHandlerService.startMessageManager();
         clientHandlerService.reconnection();
         //clientInitService.create();
+    }
+
+    public static void main(String[] args) {
+        SimpleMessageService<String> stringSimpleMessageService=new SimpleMessageService<String>() {
+            @Override
+            protected void endOne() {
+                System.out.println("end");
+            }
+
+            @Override
+            public void execute(String messageBean) {
+                System.out.println(messageBean+" "+Thread.currentThread().getId());
+            }
+        };
+        MultipleMessageService<String>
+                multipleMessageService=new MultipleMessageService(3,stringSimpleMessageService,"哈哈哈");
+        multipleMessageService.start();
+        multipleMessageService.add("111111111111");
+        multipleMessageService.add("111111111112");
+        multipleMessageService.add("111111111113");
+        multipleMessageService.add("111111111114");
+        multipleMessageService.add("111111111115");
+        multipleMessageService.add("111111111116");
+
     }
 }

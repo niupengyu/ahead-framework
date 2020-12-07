@@ -163,8 +163,8 @@ public abstract class ClientHandlerService implements ClientService {
         try {
             //IoBuffer rb = (IoBuffer) str;
             //String hex=Hex.byte2HexStr(rb.array());
-            String json=str.toString();
-            //System.out.println("client 收到一条消息------------- "+json);
+            //String json=str.toString();
+            System.out.println("client 收到一条消息------------- ");
             Message obj=(Message)str;
             messageManager.add(obj);
         } catch (Exception e){

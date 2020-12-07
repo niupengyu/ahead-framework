@@ -14,7 +14,7 @@ public class ClientHandler extends IoHandlerAdapter{
 //    @Resource(name="clientHandlerService")
     private ClientService clientService;
 
-    StringBuffer sb=new StringBuffer();
+    //StringBuffer sb=new StringBuffer();
 
     @Override
     public void messageReceived(IoSession session, Object message) throws Exception {
@@ -24,6 +24,7 @@ public class ClientHandler extends IoHandlerAdapter{
         //if(clientService.isHeartBeat(obj)){
         //    clientService.heartbeat(session,obj);
         //}else{
+        //logger.info("messageReceived messageReceived {}",Thread.currentThread().getId());
             clientService.received(obj,session);
         //}
     }
@@ -34,7 +35,8 @@ public class ClientHandler extends IoHandlerAdapter{
         //System.out.println("send");
         //super.messageSent(session, message);
         //session.write(message);
-        clientService.setSession(session);
+        //clientService.setSession(session);
+        logger.info("send send {}",Thread.currentThread().getId());
     }
 
     @Override
