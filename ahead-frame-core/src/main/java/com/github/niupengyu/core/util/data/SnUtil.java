@@ -16,7 +16,7 @@ public class SnUtil {
     }
 
     public long nextSn(){
-        return sn+1;
+        return sn=sn+1;
     }
 
     public String nextStringSn(){
