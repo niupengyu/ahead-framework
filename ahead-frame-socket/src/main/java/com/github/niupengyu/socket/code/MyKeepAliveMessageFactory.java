@@ -1,5 +1,6 @@
 package com.github.niupengyu.socket.code;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.niupengyu.socket.bean.Message;
 import com.github.niupengyu.socket.handler.KeepAliveService;
 import org.apache.mina.core.session.IoSession;
@@ -17,7 +18,12 @@ public class MyKeepAliveMessageFactory implements KeepAliveMessageFactory {
     private KeepAliveService keepAliveService;
 
     public Object getRequest(IoSession session) {
-        return keepAliveService.getRequest();
+        try {
+            return keepAliveService.getRequest();
+        } catch (JsonProcessingException e) {
+            logger.error("获取心跳请求出错",e);
+        }
+       return null;
     }
 
     public Object getResponse(IoSession session, Object message) {
@@ -25,7 +31,12 @@ public class MyKeepAliveMessageFactory implements KeepAliveMessageFactory {
         Message rb = (Message) message;
         //String hex= Hex.byte2HexStr(rb.array());
         //logger.info("getResponse "+message);
-        return keepAliveService.getResponse(rb);
+        try {
+            return keepAliveService.getResponse(rb);
+        } catch (JsonProcessingException e) {
+            logger.error("获取心跳响应出错",e);
+        }
+        return null;
     }
 
     public boolean isRequest(IoSession session, Object message) {

@@ -2,6 +2,7 @@ package com.github.niupengyu.socket.client.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.niupengyu.core.message.MessageService;
 import com.github.niupengyu.core.message.MultipleMessageService;
 import com.github.niupengyu.core.util.DateUtil;
@@ -58,7 +59,7 @@ public abstract class ClientHandlerService implements ClientService {
             msg.setType("MESSAGE");
             msg.setMessage(message);*/
             Message msg=Message.createRequest(type,clientConfig.getId(),message);
-            logger.info("request {}",msg.toJsonString());
+            //logger.info("request {}",msg.toJsonString());
             session.write(msg);
         }catch(Exception e){
             e.printStackTrace();
@@ -224,7 +225,7 @@ public abstract class ClientHandlerService implements ClientService {
 
     protected abstract void receivedHeartBeatResponse(Message message);
 
-    public Message getRequest() {
+    public Message getRequest() throws JsonProcessingException {
         /*Message message=new Message();
         message.setType(SocketContent.HEARTBEAT);
         message.setHead(SocketContent.REQUEST);

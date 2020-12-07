@@ -1,5 +1,6 @@
 package com.github.niupengyu.socket.handler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.niupengyu.core.exception.SysException;
 import com.github.niupengyu.socket.bean.Message;
 import com.github.niupengyu.socket.util.SessionManager;
@@ -9,7 +10,7 @@ public interface ServerService {
 
     void messageReceived(Message str, IoSession session) throws SysException, Exception;
 
-    void heartbeat(IoSession session, Message msg) throws SysException;
+    void heartbeat(IoSession session, Message msg) throws SysException, JsonProcessingException, Exception;
 
     void heartbeatTimeOut(IoSession session) ;
 

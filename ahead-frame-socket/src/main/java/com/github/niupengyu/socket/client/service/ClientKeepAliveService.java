@@ -1,5 +1,6 @@
 package com.github.niupengyu.socket.client.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.niupengyu.core.util.DateUtil;
 import com.github.niupengyu.socket.bean.Message;
 import com.github.niupengyu.socket.client.config.ClientConfig;
@@ -31,7 +32,7 @@ public abstract class ClientKeepAliveService implements KeepAliveService {
     }
 
     @Override
-    public Object getResponse(Message request) {
+    public Object getResponse(Message request) throws JsonProcessingException {
         long start= (long) request.getMessage();
         /*Message message=new Message();
         message.setType(SocketContent.HEARTBEAT);
@@ -43,7 +44,7 @@ public abstract class ClientKeepAliveService implements KeepAliveService {
     }
 
     @Override
-    public Object getRequest() {
+    public Object getRequest() throws JsonProcessingException {
         Message message=this.clientHandlerService.getRequest();
         logger.debug("发送心跳 {}",message);
         return message;

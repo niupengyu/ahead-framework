@@ -1,11 +1,14 @@
 package com.github.niupengyu.socket.bean;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.niupengyu.core.util.IdGeneratorUtil;
 import com.github.niupengyu.core.util.StringUtil;
 import com.alibaba.fastjson.JSON;
 import com.github.niupengyu.socket.util.SocketContent;
+
+import java.util.List;
 
 public class Message{
 
@@ -20,19 +23,19 @@ public class Message{
     }*/
 
 
-    public Message(String head, String type,String id,long request,String requestNode,Object data){
+    public Message(String head, String type,String id,long request,String requestNode,Object data) throws JsonProcessingException {
         this.head=head;
         this.type=type;
         this.id=id;
-        this.message=data;
+        this.message=objectMapper.writeValueAsString(data);
         this.request=request;
         this.requestNode=requestNode;
     }
 
-    public Message(String head, String type,String id,long request,String requestNode,long response,String responseNode,Object data){
+    public Message(String head, String type,String id,long request,String requestNode,long response,String responseNode,Object data) throws JsonProcessingException {
         this.head=head;
         this.type=type;
-        this.message=data;
+        this.message=objectMapper.writeValueAsString(data);
         this.id=id;
         this.request=request;
         this.requestNode=requestNode;
@@ -56,7 +59,7 @@ public class Message{
 
     //private String message;
 
-    private Object message;
+    private String message;
 
     private ObjectMapper objectMapper=new ObjectMapper();
 
@@ -100,7 +103,7 @@ public class Message{
         return StringUtil.valueOf(message);
     }
 
-    public void setMessage(Object message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 
@@ -109,8 +112,12 @@ public class Message{
         return objectMapper.writeValueAsString(this);
     }
 
-    public <T> T toObject(Class<T> c){
-        return objectMapper.convertValue(message,c);
+    public <T> T toObject(Class<T> c) throws JsonProcessingException {
+        return objectMapper.readValue(message,c);
+    }
+
+    public <T> T toList( TypeReference<T> tr) throws JsonProcessingException {
+        return objectMapper.readValue(message, tr);
     }
 
     public long getRequest() {
@@ -161,12 +168,12 @@ public class Message{
         return s;
     }
 
-    public static Message createRequest(String type,String requestNode,Object data){
+    public static Message createRequest(String type,String requestNode,Object data) throws JsonProcessingException {
         Message message=new Message(SocketContent.REQUEST, type, IdGeneratorUtil.uuid32(),System.currentTimeMillis(),requestNode,data);
         return message;
     }
 
-    public static Message createResponse(Message message,String responseNode,Object data){
+    public static Message createResponse(Message message,String responseNode,Object data) throws JsonProcessingException {
         Message message1=new Message(SocketContent.RESPONSE,message.getType(), message.getId(),
                 message.getRequest(),message.getRequestNode(),
                 System.currentTimeMillis(),responseNode,data);

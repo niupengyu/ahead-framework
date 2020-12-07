@@ -1,6 +1,7 @@
 package com.github.niupengyu.socket.server.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.niupengyu.core.exception.SysException;
 import com.github.niupengyu.core.message.MessageService;
 import com.github.niupengyu.core.message.MultipleMessageService;
@@ -46,7 +47,7 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
     }
 
     @Override
-    public void heartbeat(IoSession session, Message msg) throws SysException {
+    public void heartbeat(IoSession session, Message msg) throws Exception {
         logger.debug("SERVICE 接受到心跳信息"+msg);
         //this.receiveHeartBeat(msg);
         this.messageMultipleMessageService.add(msg);
