@@ -336,7 +336,7 @@ public class JdbcUtil {
         StringBuilder str=new StringBuilder();
         for(Map<String,Object> map:list){
             String id= StringUtil.mapValueString(map,key);
-            str.append(",").append(sp).append(id).append("").append(sp);
+            str.append(",").append(sp).append(id).append(sp);
         }
         str.deleteCharAt(0);
         return str.toString();
