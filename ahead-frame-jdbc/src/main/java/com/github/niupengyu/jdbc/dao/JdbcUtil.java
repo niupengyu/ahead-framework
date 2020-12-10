@@ -341,6 +341,20 @@ public class JdbcUtil {
         str.deleteCharAt(0);
         return str.toString();
     }
+
+    public static void main(String[] args) {
+        Map<String,Object> map=new HashMap();
+        map.put("id",1111);
+        Map map1=new HashMap();
+        map1.put("id",2222);
+        Map map2=new HashMap();
+        map2.put("id",3333);
+        List<Map<String,Object>> list=new ArrayList<>();
+        list.add(map);
+        list.add(map1);
+        list.add(map2);
+        System.out.println(join(list,"id",""));
+    }
 }
 
 
