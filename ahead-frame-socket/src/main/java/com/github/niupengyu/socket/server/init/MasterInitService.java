@@ -39,7 +39,7 @@ public class MasterInitService{
             logger.info("服务器启动成功 "+masterConfig.getPort());
             myHandler.exe();
         }catch (Exception e){
-            logger.info("服务器启动失败");
+            logger.error("服务器启动失败",e);
         }
     }
 

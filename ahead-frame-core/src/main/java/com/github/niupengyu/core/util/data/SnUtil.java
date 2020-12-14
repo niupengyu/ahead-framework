@@ -15,17 +15,27 @@ public class SnUtil {
 
     }
 
+    public SnUtil(int start,int length){
+        sn=length;
+        this.length=length;
+        for(int i=0;i<length;i++){
+            sn*=10;
+        }
+        sn+=start;
+    }
+
     public long nextSn(){
         return sn=sn+1;
     }
 
     public String nextStringSn(){
-        System.out.println(nextSn());
-        return String.valueOf(nextSn()).substring(1,length+1);
+        String next=String.valueOf(nextSn());
+        System.out.println(next);
+        return next.substring(1,length+1);
     }
 
 
     public static void main(String[] args) {
-        System.out.println(new SnUtil(6).nextStringSn());
+        System.out.println(new SnUtil(21,6).nextStringSn());
     }
 }
