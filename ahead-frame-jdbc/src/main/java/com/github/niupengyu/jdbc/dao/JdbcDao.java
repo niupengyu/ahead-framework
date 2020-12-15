@@ -619,12 +619,14 @@ public class JdbcDao {
 
 	public Map<String, Object> selectOne(String sql,Object ... objects) throws DaoException{
 		logger.debug("execute {}",sql);
+		logger.debug("params {}",Arrays.toString(objects));
 		List<Map<String, Object>> array=executeQuery(sql,objects);
 		return one(array,sql);
 	}
 
 	public Map<String, Object> selectOne(String sql,Object object) throws DaoException{
 		logger.debug("execute {}",sql);
+		logger.debug("params {}",object);
 		List<Map<String, Object>> array=executeQuery(sql,object);
 		return one(array,sql);
 	}
@@ -673,6 +675,7 @@ public class JdbcDao {
 
 	public List<Map<String,Object>> executeQuery(String sql, Object ... vars) throws DaoException {
 		logger.debug("execute {}",sql);
+		logger.debug(Arrays.toString(vars));
 		Connection conn=null;
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
@@ -756,6 +759,7 @@ public class JdbcDao {
 
 	public List<Map<String,Object>> executeQuery(String sql, Object var,QueryCallBack queryCallBack) throws Exception {
 		logger.debug("execute {}",sql);
+		logger.debug(StringUtil.valueOf(var));
 		Connection conn=null;
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
@@ -780,6 +784,7 @@ public class JdbcDao {
 
 	public List<Map<String, Object>> executeQuery(String sql,String[] vars) throws Exception {
 		logger.debug("execute {}",sql);
+		logger.debug(Arrays.toString(vars));
 		Connection conn=null;
 		Statement stmt=null;
 		ResultSet rs=null;
@@ -803,6 +808,7 @@ public class JdbcDao {
 
 	public List<Map<String,Object>> executeQuery(String sql,String[] queryCallBack, Object ... vars) throws Exception {
 		logger.debug("execute {}",sql);
+		logger.debug(Arrays.toString(vars));
 		//logger.info(sql);
 		//logger.info(Arrays.toString(vars));
 		Connection conn=null;
@@ -834,6 +840,7 @@ public class JdbcDao {
 
 	public List<Map<String,Object>> executeQuery(String sql, Object var,String[] queryCallBack) throws Exception {
 		logger.debug("execute {}",sql);
+		logger.debug(StringUtil.valueOf(var));
 		Connection conn=null;
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
@@ -858,6 +865,7 @@ public class JdbcDao {
 
 	public List<Map<String,Object>> executeQuery(String sql, Object var) throws DaoException {
 		logger.debug("execute {}",sql);
+		logger.debug(StringUtil.valueOf(var));
 		Connection conn=null;
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
@@ -989,6 +997,7 @@ public class JdbcDao {
 
 	public int executeUpdate(String sql, Object ... vars) throws DaoException {
 		logger.debug("execute {}",sql);
+		logger.debug(Arrays.toString(vars));
 		int res=0;
 		Connection conn=null;
 		PreparedStatement stmt=null;
@@ -1015,6 +1024,7 @@ public class JdbcDao {
 	
 	public boolean execute(String sql, Object ... vars) throws DaoException {
 		logger.debug("execute {}",sql);
+		logger.debug(Arrays.toString(vars));
 		boolean res=false;
 		Connection conn=null;
 		PreparedStatement stmt=null;
