@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class MessageManager<T> {
 
-    private static final Logger logger= LoggerFactory.getLogger(MessageManager.class);
+    private static final Logger logger= LoggerFactory.getLogger("messageManager");
     /**
      * 线程锁
      */
