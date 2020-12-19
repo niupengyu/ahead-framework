@@ -131,29 +131,18 @@ public class TryToReconnectDataSource implements DataSource{
     public void close(){
         JdbcDao.closeConn(connection);
         connection=null;
+        logger.info("关闭连接!");
     }
 
 
     public void createConnection(){
         this.connection= JdbcDao.createConn(driverClassName,url,username,password);
+        logger.info("创建连接 {},{}",driverClassName,username);
     }
 
     public List<ConnectionInfo> getConnectionInfoList() {
         return connectionInfoList;
     }
 
-    public static void main(String[] args) throws SQLException {
-        String className="com.mysql.jdbc.Driver";
-        String url="jdbc:mysql://192.168.64.128:3306/eps_schedule?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true";
-        String username="root";
-        String password="123456";
-        TryToReconnectDataSource tryToReconnectDataSource=
-                new TryToReconnectDataSource(className,url,username,password);
-        Connection connection=tryToReconnectDataSource.getConnection();
-        connection.createStatement().executeQuery("select * from test1");
-        connection.close();
-        connection.createStatement().executeQuery("select * from test2");
-        connection.close();
-        System.out.println(connection.isClosed());
-    }
+
 }
