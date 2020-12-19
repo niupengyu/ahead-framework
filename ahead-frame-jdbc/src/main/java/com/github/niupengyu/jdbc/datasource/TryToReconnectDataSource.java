@@ -51,8 +51,9 @@ public class TryToReconnectDataSource implements DataSource{
         if(connection==null||connection.isClosed()){
             reconnection();
         }
+        System.out.println(connection);
         Connection proxyConn =(Connection) Proxy.newProxyInstance(connection.getClass().getClassLoader(),
-            connection.getClass().getInterfaces(), new InvocationHandler() {
+                new Class[] { Connection.class }, new InvocationHandler() {
                 @Override
                 public Object invoke(Object proxy, Method method, Object[] args)
                         throws Throwable {
@@ -143,6 +144,5 @@ public class TryToReconnectDataSource implements DataSource{
     public List<ConnectionInfo> getConnectionInfoList() {
         return connectionInfoList;
     }
-
 
 }

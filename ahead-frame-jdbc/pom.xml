@@ -140,6 +140,13 @@
             <artifactId>ojdbc</artifactId>
             <version>6</version>
         </dependency>-->
+        <dependency>
+            <groupId>ojdbc</groupId>
+            <artifactId>ojdbc</artifactId>
+            <version>6</version>
+            <!--<scope>system</scope>
+            <systemPath>${basedir}/lib/ojdbc-6.jar</systemPath>-->
+        </dependency>
     </dependencies>
 
     <build>
