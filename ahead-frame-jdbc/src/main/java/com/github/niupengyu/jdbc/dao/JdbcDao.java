@@ -23,6 +23,7 @@ import com.github.niupengyu.jdbc.dao.callback.QueryCallBack;
 import com.github.niupengyu.jdbc.dao.callback.UpdateCallBack;
 import com.github.niupengyu.jdbc.datasource.BasicDataSource;
 import com.github.niupengyu.jdbc.datasource.SingleDataSource;
+import com.github.niupengyu.jdbc.datasource.TryToReconnectDataSource;
 import com.github.niupengyu.jdbc.exception.DaoException;
 import com.github.niupengyu.jdbc.util.RsUtil;
 import com.alibaba.druid.pool.DruidDataSource;
@@ -57,41 +58,6 @@ public class JdbcDao {
 
 	private static final Logger logger= LoggerFactory.getLogger("dataSource");
 
-	/*public List<Map<String,Object>> getList1(String sql) throws DaoException {
-		Connection conn=null;
-		Statement stmt=null;
-		ResultSet rs=null;
-		List<Map<String,Object>> list=new ArrayList<>();
-		try {
-			conn=dataSource.getConnection();
-			stmt=conn.createStatement();
-			rs=stmt.executeQuery(sql);
-			//ResultSetMetaData rsmd = rs.getMetaData();
-			//int size=rsmd.getColumnCount();
-			addList(rs,list);
-		} catch (SQLException e) {
-			logger.error("getList:"+sql, e);
-			throw new DaoException(e.getMessage());
-		}finally{
-			rs=closeResultSet(rs);
-			stmt=closeStmt(stmt);
-			conn=closeConn(conn);
-		}
-		return list;
-	}*/
-
-	/*public List<Map<String,Object>> getList(String sql) throws DaoException {
-		Connection conn=null;
-		try {
-			conn=dataSource.getConnection();
-			return getList(conn,sql);
-		} catch (SQLException e) {
-			logger.error("getList:"+sql, e);
-			throw new DaoException(e.getMessage());
-		}finally{
-			conn=closeConn(conn);
-		}
-	}*/
 
 	public <T> List<T> getListOne(String sql) throws DaoException {
 		logger.debug("getListOne {}",sql);
@@ -1280,6 +1246,13 @@ public class JdbcDao {
 		return basicDataSource;
 	}
 
+	public static DataSource createTrDataSource(String driver, String url,
+											  String username, String password){
+		TryToReconnectDataSource dataSource=
+				new TryToReconnectDataSource(driver,url,username,password);
+		return dataSource;
+	}
+
 
 	private static DataSource
 	connectionDataSource(String driver,
@@ -1301,7 +1274,6 @@ public class JdbcDao {
 		bds.setPassword(password);
 		bds.initPool(new DbConfig(),dataSource);*/
 		//dataSourceMap.put(type,druidXADataSource);
-
 		return druidXADataSource;
 	}
 
