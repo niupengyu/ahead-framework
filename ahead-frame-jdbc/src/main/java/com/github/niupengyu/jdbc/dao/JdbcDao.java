@@ -1066,6 +1066,9 @@ public class JdbcDao {
 
 
 	public int executeUpdate(String sql,List<Map<String, Object>> updateList,UpdateCallBack updateCallBack) throws Exception {
+		return executeUpdate(false,sql,updateList,updateCallBack);
+	}
+	public int executeUpdate(boolean autoCommit,String sql,List<Map<String, Object>> updateList,UpdateCallBack updateCallBack) throws Exception {
 		logger.debug("execute {}",sql);
 		int res=-1;
 		PreparedStatement stmt=null;
@@ -1073,7 +1076,7 @@ public class JdbcDao {
 		try{
 			int i=0;
 			targetConn=dataSource.getConnection();
-			targetConn.setAutoCommit(false);
+			targetConn.setAutoCommit(autoCommit);
 			stmt=targetConn.prepareStatement(sql);
 			for(Map<String,Object> data:updateList){
 				updateCallBack.addStmt(data,stmt);
@@ -1097,31 +1100,21 @@ public class JdbcDao {
 	}
 
 	public int executeInsert(String sql,List<Map<String, Object>> insertList,InsertCallBack insertCallBack) throws Exception {
+		return executeInsert(false,sql,insertList,insertCallBack);
+	}
+
+	public int executeInsert(boolean autoCommit,String sql,List<Map<String, Object>> insertList,InsertCallBack insertCallBack) throws Exception {
 		logger.debug("execute {}",sql);
 		int res=-1;
 		PreparedStatement stmt=null;
 		Connection targetConn=null;
 		try{
 			targetConn=dataSource.getConnection();
-			targetConn.setAutoCommit(false);
+			targetConn.setAutoCommit(autoCommit);
 			stmt=targetConn.prepareStatement(sql);
 			int i=0;
 			for(Map<String,Object> data:insertList){
-				//logger.info(data.toString());
 
-				/*String sql1="insert into JJDB(JJDBH,BJNR,GXSJC,SLDBH,BIG_CHAR,N1,N2,N3,N4,BJSJ) " +
-						"values(?,?,?,?,?,?,?,?,?,?,)";
-				PreparedStatement stmt1=targetConn.prepareStatement(sql);
-				stmt1.setString(1,"123");
-				stmt1.setString(2,"456");
-				stmt1.setTimestamp(3,new Timestamp(System.currentTimeMillis()));
-				stmt1.setString(4,"789");
-				stmt1.setString(5,"100");
-				stmt1.setLong(6,System.currentTimeMillis());
-				stmt1.setFloat(7,3.2f);
-				stmt1.setDouble(8,45.646465);
-				stmt1.setInt(9,546);
-				stmt1.setInt(10,0);*/
 				insertCallBack.addStmt(data,stmt);
 				stmt.addBatch();
 				i++;
