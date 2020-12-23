@@ -145,4 +145,13 @@ public class TryToReconnectDataSource implements DataSource{
         return connectionInfoList;
     }
 
+
+    public static List<ConnectionInfo> close(DataSource dataSource){
+        if(dataSource!=null&&dataSource instanceof TryToReconnectDataSource){
+            TryToReconnectDataSource tryToReconnectDataSource= (TryToReconnectDataSource) dataSource;
+            tryToReconnectDataSource.close();
+            return tryToReconnectDataSource.getConnectionInfoList();
+        }
+        return new ArrayList<>();
+    }
 }
