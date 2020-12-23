@@ -31,4 +31,12 @@ public class ConnectionInfo {
     public String timeDes() {
         return DateUtil.getTimeDes(endLost-startLost);
     }
+
+    @Override
+    public String toString() {
+        return "ConnectionInfo{" +
+                "startLost=" + startLost +
+                ", endLost=" + endLost +
+                '}';
+    }
 }
