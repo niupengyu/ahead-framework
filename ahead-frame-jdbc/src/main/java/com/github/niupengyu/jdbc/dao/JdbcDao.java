@@ -1066,9 +1066,6 @@ public class JdbcDao {
 
 
 	public int executeUpdate(String sql,List<Map<String, Object>> updateList,UpdateCallBack updateCallBack) throws Exception {
-		return executeUpdate(false,sql,updateList,updateCallBack);
-	}
-	public int executeUpdate(boolean autoCommit,String sql,List<Map<String, Object>> updateList,UpdateCallBack updateCallBack) throws Exception {
 		logger.debug("execute {}",sql);
 		int res=-1;
 		PreparedStatement stmt=null;
@@ -1076,7 +1073,7 @@ public class JdbcDao {
 		try{
 			int i=0;
 			targetConn=dataSource.getConnection();
-			targetConn.setAutoCommit(autoCommit);
+			targetConn.setAutoCommit(false);
 			stmt=targetConn.prepareStatement(sql);
 			for(Map<String,Object> data:updateList){
 				updateCallBack.addStmt(data,stmt);
@@ -1098,19 +1095,42 @@ public class JdbcDao {
 		}
 		return res;
 	}
-
-	public int executeInsert(String sql,List<Map<String, Object>> insertList,InsertCallBack insertCallBack) throws Exception {
-		return executeInsert(false,sql,insertList,insertCallBack);
+	public int executeUpdateFalse(String sql,List<Map<String, Object>> updateList,UpdateCallBack updateCallBack) throws Exception {
+		logger.debug("execute {}",sql);
+		int res=-1;
+		PreparedStatement stmt=null;
+		Connection targetConn=null;
+		try{
+			int i=0;
+			targetConn=dataSource.getConnection();
+			stmt=targetConn.prepareStatement(sql);
+			for(Map<String,Object> data:updateList){
+				updateCallBack.addStmt(data,stmt);
+				stmt.addBatch();
+				i++;
+			}
+			stmt.executeBatch();
+			res=i;
+		}catch (Exception e){
+			logger.error("修改出错 " +sql,e);
+			throw new SysException(e.getMessage());
+		}finally {
+			JdbcDao.closeStmt(stmt);
+			JdbcDao.closeConn(targetConn);
+			stmt=null;
+			targetConn=null;
+		}
+		return res;
 	}
 
-	public int executeInsert(boolean autoCommit,String sql,List<Map<String, Object>> insertList,InsertCallBack insertCallBack) throws Exception {
+	public int executeInsert(String sql,List<Map<String, Object>> insertList,InsertCallBack insertCallBack) throws Exception {
 		logger.debug("execute {}",sql);
 		int res=-1;
 		PreparedStatement stmt=null;
 		Connection targetConn=null;
 		try{
 			targetConn=dataSource.getConnection();
-			targetConn.setAutoCommit(autoCommit);
+			targetConn.setAutoCommit(false);
 			stmt=targetConn.prepareStatement(sql);
 			int i=0;
 			for(Map<String,Object> data:insertList){
@@ -1134,6 +1154,37 @@ public class JdbcDao {
 		}
 		return res;
 	}
+
+	public int executeInsertFalse(String sql,List<Map<String, Object>> insertList,InsertCallBack insertCallBack) throws Exception {
+		logger.debug("execute {}",sql);
+		int res=-1;
+		PreparedStatement stmt=null;
+		Connection targetConn=null;
+		try{
+			targetConn=dataSource.getConnection();
+			stmt=targetConn.prepareStatement(sql);
+			int i=0;
+			for(Map<String,Object> data:insertList){
+
+				insertCallBack.addStmt(data,stmt);
+				stmt.addBatch();
+				i++;
+			}
+			stmt.executeBatch();
+			res=i;
+		}catch (Exception e){
+			logger.error("插入出错 "+sql,e);
+			throw new SysException(e.getMessage());
+		}finally {
+			JdbcDao.closeStmt(stmt);
+			JdbcDao.closeConn(targetConn);
+			stmt=null;
+			targetConn=null;
+		}
+		return res;
+	}
+
+
 	public int executeInsertJson(String sql, List<JSONObject> insertList, InsertCallBack insertCallBack) throws Exception {
 		logger.debug("execute {}",sql);
 		int res=-1;
