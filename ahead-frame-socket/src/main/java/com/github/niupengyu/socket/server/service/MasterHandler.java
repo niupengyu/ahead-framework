@@ -61,6 +61,7 @@ public class MasterHandler extends IoHandlerAdapter {
     public void sessionCreated(IoSession session) throws Exception {
         LOG.warn("remote client [" + session.getRemoteAddress().toString() + "] connected.");
         // 设置IoSession闲置时间，参数单位是秒
+        LOG.info("设置IoSession闲置时间 {} 秒",masterConfig.getIdeTime());
         session.getConfig().setIdleTime(IdleStatus.BOTH_IDLE, this.masterConfig.getIdeTime());
         String clientIP = ((InetSocketAddress)session.getRemoteAddress()).getAddress().getHostAddress();
         session.setAttribute(SocketContent.KEY_SESSION_CLIENT_IP, clientIP);

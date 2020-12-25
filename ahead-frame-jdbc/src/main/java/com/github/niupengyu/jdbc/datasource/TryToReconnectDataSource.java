@@ -51,7 +51,6 @@ public class TryToReconnectDataSource implements DataSource{
         if(connection==null||connection.isClosed()){
             reconnection();
         }
-        System.out.println(connection);
         Connection proxyConn =(Connection) Proxy.newProxyInstance(connection.getClass().getClassLoader(),
                 new Class[] { Connection.class }, new InvocationHandler() {
                 @Override
@@ -154,4 +153,13 @@ public class TryToReconnectDataSource implements DataSource{
         }
         return new ArrayList<>();
     }
+
+    /*public static void main(String[] args) throws SQLException {
+        TryToReconnectDataSource dataSource=new TryToReconnectDataSource(
+                "com.mysql.jdbc.Driver",
+                "jdbc:mysql://192.168.64.128:3306/eps_schedule?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true",
+                "root","123456");
+        dataSource.getConnection();
+        System.out.println(TryToReconnectDataSource.close(dataSource));
+    }*/
 }
