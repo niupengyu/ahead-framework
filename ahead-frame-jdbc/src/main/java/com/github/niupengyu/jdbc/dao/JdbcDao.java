@@ -1345,7 +1345,9 @@ public class JdbcDao {
 	public static Connection closeConn(Connection conn) {
 		if (conn!=null) {
 			try {
-				conn.close();
+				if(!conn.isClosed()){
+					conn.close();
+				}
 			} catch (SQLException e) {
 				logger.error("关闭连接失败",e);
 			} finally {
