@@ -64,20 +64,24 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
     protected abstract Object responseData(Message msg);
 
     @Override
-    public void sendRequest(long sessionId, String type,String topic,Object msg) throws SysException {
+    public void sendRequest(long sessionId, String type,Object msg) throws SysException {
         lock.lock();
         try {
             IoSession session= SessionManager.getSession(sessionId);
             if(session==null){
                 throw new SysException("找不到会话 "+sessionId);
             }
-            Message message=Message.createRequest(type,topic,getMasterConfig().getName(),msg);
+            Message message=createMessage(type,msg);
             session.write(message);
         }catch(Exception e){
             e.printStackTrace();
         }finally{
             lock.unlock();
         }
+    }
+
+    protected Message createMessage(String type,Object message) throws JsonProcessingException {
+        return Message.createRequest(type/*,topic*/,getMasterConfig().getName(),message);
     }
 
     @Override

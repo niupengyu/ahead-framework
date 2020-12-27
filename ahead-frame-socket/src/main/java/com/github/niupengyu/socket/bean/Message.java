@@ -17,18 +17,18 @@ public class Message{
     }
 
     public Message(String head, String type,String id,long request,
-                   String requestNode,Object data,String topic) throws JsonProcessingException {
+                   String requestNode,Object data/*,String topic*/) throws JsonProcessingException {
         this.head=head;
         this.type=type;
         this.id=id;
         this.message=objectMapper.writeValueAsString(data);
         this.request=request;
         this.requestNode=requestNode;
-        this.topic=topic;
+        //this.topic=topic;
     }
 
     public Message(String head, String type,String id,long request,String requestNode,
-                   long response,String responseNode,Object data,String topic) throws JsonProcessingException {
+                   long response,String responseNode,Object data/*,String topic*/) throws JsonProcessingException {
         this.head=head;
         this.type=type;
         this.message=objectMapper.writeValueAsString(data);
@@ -37,7 +37,7 @@ public class Message{
         this.requestNode=requestNode;
         this.response=response;
         this.responseNode=responseNode;
-        this.topic=topic;
+        //this.topic=topic;
     }
 
     private String id;
@@ -48,7 +48,7 @@ public class Message{
 
     private String responseNode;
 
-    private String topic;
+    //private String topic;
 
     private String requestNode;
 
@@ -143,14 +143,14 @@ public class Message{
         this.id = id;
     }
 
-    public String getTopic() {
+    /*public String getTopic() {
         return topic;
     }
 
     public void setTopic(String topic) {
         this.topic = topic;
     }
-
+*/
     @Override
     public String toString() {
         String data= null;
@@ -175,16 +175,16 @@ public class Message{
         return s;
     }
 
-    public static Message createRequest(String type,String topic,String requestNode,Object data) throws JsonProcessingException {
+    public static Message createRequest(String type,/*String topic,*/String requestNode,Object data) throws JsonProcessingException {
         Message message=new Message(SocketContent.REQUEST, type,
-                IdGeneratorUtil.uuid32(),System.currentTimeMillis(),requestNode,data,topic);
+                IdGeneratorUtil.uuid32(),System.currentTimeMillis(),requestNode,data/*,topic*/);
         return message;
     }
 
     public static Message createResponse(Message message,String responseNode,Object data) throws JsonProcessingException {
         Message message1=new Message(SocketContent.RESPONSE,message.getType(), message.getId(),
                 message.getRequest(),message.getRequestNode(),
-                System.currentTimeMillis(),responseNode,data,message.getTopic());
+                System.currentTimeMillis(),responseNode,data/*,message.getTopic()*/);
         return message1;
     }
 }
