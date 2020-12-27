@@ -58,7 +58,7 @@ public abstract class ClientHandlerService implements ClientService {
             msg.setHead("HEAD");
             msg.setType("MESSAGE");
             msg.setMessage(message);*/
-            Message msg=Message.createRequest(type,clientConfig.getId(),message);
+            Message msg=Message.createRequest(type,type,clientConfig.getId(),message);
             //logger.info("request {}",msg.toJsonString());
             session.write(msg);
         }catch(Exception e){
@@ -231,7 +231,7 @@ public abstract class ClientHandlerService implements ClientService {
         message.setHead(SocketContent.REQUEST);
         message.setRequestNode(getClientConfig().getId());
         message.setMessage(requestData());*/
-        Message message=Message.createRequest(SocketContent.HEARTBEAT,clientConfig.getId(),requestData());
+        Message message=Message.createRequest(SocketContent.HEARTBEAT,SocketContent.HEARTBEAT,clientConfig.getId(),requestData());
         return message;
     }
 

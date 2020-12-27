@@ -47,7 +47,7 @@ public abstract class ServerKeepAliveService implements KeepAliveService {
         message.setType(SocketContent.HEARTBEAT);
         message.setRequestNode(masterConfig.getName());
         message.setMessage(System.currentTimeMillis());*/
-        Message message=Message.createRequest(SocketContent.HEARTBEAT,masterConfig.getName(),System.currentTimeMillis());
+        Message message=Message.createRequest(SocketContent.HEARTBEAT,SocketContent.HEARTBEAT,masterConfig.getName(),System.currentTimeMillis());
         return JSONObject.toJSONString(message);
     }
 

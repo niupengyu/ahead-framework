@@ -71,7 +71,7 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
             if(session==null){
                 throw new SysException("找不到会话 "+sessionId);
             }
-            Message message=Message.createRequest(type,getMasterConfig().getName(),msg);
+            Message message=Message.createRequest(type,type,getMasterConfig().getName(),msg);
             session.write(message);
         }catch(Exception e){
             e.printStackTrace();
