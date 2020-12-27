@@ -94,7 +94,7 @@ public class Message{
         this.type = type;
     }
 
-    public Object getMessage() {
+    public String getMessage() {
         return message;
     }
 

@@ -29,7 +29,7 @@ public abstract class ServerKeepAliveService implements KeepAliveService {
 
     @Override
     public Object getResponse( Message request) throws JsonProcessingException {
-        long start= (long) request.getMessage();
+        long start=Long.parseLong(request.getMessage());
         /*Message message=new Message();
         message.setType(SocketContent.HEARTBEAT);
         message.setHead(SocketContent.RESPONSE);
