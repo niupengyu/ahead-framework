@@ -6,7 +6,7 @@ import org.apache.mina.core.session.IoSession;
 
 public interface ClientService {
 
-    void sendRequest(String type,Object msg) ;
+    void sendRequest(String type,String topic,Object msg) ;
 
     void sendResponse(Message request,Object message);
 

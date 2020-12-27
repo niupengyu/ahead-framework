@@ -47,7 +47,7 @@ public abstract class ClientHandlerService implements ClientService {
     }
 
     @Override
-    public void sendRequest(String type,Object message) {
+    public void sendRequest(String type,String topic,Object message) {
         lock.lock();
         try {
             if(session==null||!session.isConnected()){
@@ -58,7 +58,7 @@ public abstract class ClientHandlerService implements ClientService {
             msg.setHead("HEAD");
             msg.setType("MESSAGE");
             msg.setMessage(message);*/
-            Message msg=Message.createRequest(type,type,clientConfig.getId(),message);
+            Message msg=Message.createRequest(type,topic,clientConfig.getId(),message);
             //logger.info("request {}",msg.toJsonString());
             session.write(msg);
         }catch(Exception e){
