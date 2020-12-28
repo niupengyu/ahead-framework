@@ -21,7 +21,8 @@ public class Message{
         this.head=head;
         this.type=type;
         this.id=id;
-        this.message=objectMapper.writeValueAsString(data);
+        this.message=data;
+        //this.message=objectMapper.writeValueAsString(data);
         this.request=request;
         this.requestNode=requestNode;
         //this.topic=topic;
@@ -31,7 +32,8 @@ public class Message{
                    long response,String responseNode,Object data/*,String topic*/) throws JsonProcessingException {
         this.head=head;
         this.type=type;
-        this.message=objectMapper.writeValueAsString(data);
+        this.message=data;
+        //this.message=objectMapper.writeValueAsString(data);
         this.id=id;
         this.request=request;
         this.requestNode=requestNode;
@@ -62,7 +64,7 @@ public class Message{
 
     //private String message;
 
-    private String message;
+    private Object message;
 
     private ObjectMapper objectMapper=new ObjectMapper();
 
@@ -106,17 +108,18 @@ public class Message{
         this.type = type;
     }
 
-    public String getMessage() {
+    public Object getMessage() {
         return message;
+    }
+
+    public void setMessage(Object message) {
+        this.message = message;
     }
 
     public String messageStr() {
         return StringUtil.valueOf(message);
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public String toJsonString() throws JsonProcessingException {
         //return JSON.toJSONString(this);
@@ -124,11 +127,11 @@ public class Message{
     }
 
     public <T> T toObject(Class<T> c) throws JsonProcessingException {
-        return objectMapper.readValue(message,c);
+        return objectMapper.convertValue(message,c);
     }
 
     public <T> T toList( TypeReference<T> tr) throws JsonProcessingException {
-        return objectMapper.readValue(message, tr);
+        return objectMapper.convertValue(message, tr);
     }
 
     public long getRequest() {

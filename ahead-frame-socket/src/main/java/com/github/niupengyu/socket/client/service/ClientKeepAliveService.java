@@ -33,7 +33,7 @@ public abstract class ClientKeepAliveService implements KeepAliveService {
 
     @Override
     public Object getResponse(Message request) throws JsonProcessingException {
-        long start= Long.parseLong(request.getMessage());
+        long start=(long)request.getMessage();
         /*Message message=new Message();
         message.setType(SocketContent.HEARTBEAT);
         message.setHead(SocketContent.RESPONSE);

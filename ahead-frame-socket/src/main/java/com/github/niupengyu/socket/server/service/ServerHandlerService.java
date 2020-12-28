@@ -91,7 +91,7 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
             if(session==null){
                 throw new SysException("找不到会话 "+sessionId);
             }
-            message.setRequestNode(getMasterConfig().getName());
+            createMessage(message);
             session.write(message);
         }catch(Exception e){
             e.printStackTrace();
@@ -100,6 +100,9 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
         }
     }
 
+    protected void createMessage(Message message) {
+        message.setRequestNode(getMasterConfig().getName());
+    }
 
     @Override
     public void sendResponse(long sessionId, Message request, Object msg) throws SysException {

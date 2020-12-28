@@ -74,7 +74,7 @@ public abstract class ClientHandlerService implements ClientService {
             if(session==null||!session.isConnected()){
                 reconnection();
             }
-            msg.setResponseNode(clientConfig.getId());
+            createMessage(msg);
             logger.info("client send message"+msg);
             session.write(msg);
         }catch(Exception e){
@@ -83,6 +83,10 @@ public abstract class ClientHandlerService implements ClientService {
             lock.unlock();
         }
 
+    }
+
+    protected void createMessage(Message msg) {
+        msg.setRequestNode(clientConfig.getId());
     }
 
     @Override
