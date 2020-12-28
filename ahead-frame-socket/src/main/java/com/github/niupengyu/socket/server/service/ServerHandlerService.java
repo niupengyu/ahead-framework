@@ -43,6 +43,9 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
     @Override
     public void messageReceived(Message str, IoSession session) throws Exception {
        //String json=str.toJsonString();
+        if("INIT".equals(str.getType())){
+            SessionManager.putNode(str.getRequestNode(),session.getId());
+        }
         messageMultipleMessageService.add(str);
     }
 

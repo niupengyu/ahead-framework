@@ -45,7 +45,7 @@ public class MasterHandler extends IoHandlerAdapter {
         Message obj=(Message)message;
 
         if(keepAliveService.isHeartbeatRequest(obj)){
-            SessionManager.putNode(obj.getRequestNode(),session.getId());
+
             serverService.heartbeat(session,obj);
         }else{
             serverService.messageReceived(obj,session);

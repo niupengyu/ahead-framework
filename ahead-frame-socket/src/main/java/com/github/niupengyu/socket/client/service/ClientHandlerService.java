@@ -109,7 +109,7 @@ public abstract class ClientHandlerService implements ClientService {
             if(session==null||!session.isConnected()){
                 reconnection();
             }
-            msg.setResponseNode(clientConfig.getId());
+            msg.setRequestNode(clientConfig.getId());
             logger.info("response {}",msg.toJsonString());
             session.write(msg);
         }catch(Exception e){
@@ -125,7 +125,6 @@ public abstract class ClientHandlerService implements ClientService {
     public synchronized void reconnection() throws Exception {
         status="LOST";
         logger.info("reconnection");
-        //TODO 失败重新选举主机
         flag=false;
         while(true){
             if(session!=null&&session.isConnected()){
@@ -145,7 +144,8 @@ public abstract class ClientHandlerService implements ClientService {
     public void setSession(IoSession session) throws Exception {
         logger.info("setSession");
         this.session=session;
-        sendRequest(this.getRequest());
+        Message message=this.getRequest("INIT");
+        sendRequest(message);
         status="NORMAL";
     }
 
@@ -153,6 +153,7 @@ public abstract class ClientHandlerService implements ClientService {
     public boolean isHeartBeat(Message msg) {
 //        return SocketContent.REQUEST.equals(msg.getHead());
         //System.out.println("isHeartBeat "+SocketContent.HEARTBEAT.equals(msg.getType()));
+        logger.info("心跳 {} {}",Thread.currentThread().getId(),msg);
         return SocketContent.HEARTBEAT.equals(msg.getType());
     }
 
@@ -180,10 +181,10 @@ public abstract class ClientHandlerService implements ClientService {
         status="RECONNECTION";
         session=clientInitService.create(3);
         if(session==null){
-            System.out.println("连不上服务器");
+            logger.error("连不上服务器");
             connectionError();
         }else{
-            this.setSession(session);
+            //this.setSession(session);
             status="CONNECTED";
         }
     }
@@ -194,7 +195,6 @@ public abstract class ClientHandlerService implements ClientService {
             //IoBuffer rb = (IoBuffer) str;
             //String hex=Hex.byte2HexStr(rb.array());
             //String json=str.toString();
-            System.out.println("client 收到一条消息------------- ");
             Message obj=(Message)str;
             messageManager.add(obj);
         } catch (Exception e){
@@ -247,21 +247,16 @@ public abstract class ClientHandlerService implements ClientService {
     public void setResponse(Message message) {
         long time=System.currentTimeMillis();
         //message.setNode(getClientConfig().getId());
-        logger.debug("CLIENT 收到心跳回应 {} ",message);
+        logger.debug("CLIENT 收到心跳回应 {} {}",Thread.currentThread().getId(),message);
         //System.out.println("setResponse "+(i++));
-        this.messageManager.add(message);
+        //this.messageManager.add(message);
         receivedHeartBeatResponse(message);
     }
 
     protected abstract void receivedHeartBeatResponse(Message message);
 
-    public Message getRequest() throws Exception {
-        /*Message message=new Message();
-        message.setType(SocketContent.HEARTBEAT);
-        message.setHead(SocketContent.REQUEST);
-        message.setRequestNode(getClientConfig().getId());
-        message.setMessage(requestData());*/
-        Message message=Message.createRequest(SocketContent.HEARTBEAT/*,SocketContent.HEARTBEAT*/,clientConfig.getId(),requestData());
+    public Message getRequest(String type) throws Exception {
+        Message message=Message.createRequest(type/*,SocketContent.HEARTBEAT*/,clientConfig.getId(),requestData());
         return message;
     }
 

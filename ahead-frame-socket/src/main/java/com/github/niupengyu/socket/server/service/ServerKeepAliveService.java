@@ -24,7 +24,11 @@ public abstract class ServerKeepAliveService implements KeepAliveService {
 
     @Override
     public boolean isHeartbeatRequest( Message message) {
-        return SocketContent.REQUEST.equals(message.getHead());
+
+        return SocketContent.REQUEST.equals(message.getHead())
+                && SocketContent.HEARTBEAT.equals(message.getType());
+
+        //return SocketContent.REQUEST.equals(message.getHead());
     }
 
     @Override
