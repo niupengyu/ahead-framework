@@ -68,7 +68,6 @@ public class MasterHandler extends IoHandlerAdapter {
         LOG.info("sessionCreated, client IP: " + clientIP);
         SessionManager.sessionsConcurrentHashMap.put(session.getId(), new SessionInfo(session));
         LOG.info("-IoSession实例:" + session.toString());
-        serverService.setSession(session);
     }
 
     @Override
@@ -89,6 +88,7 @@ public class MasterHandler extends IoHandlerAdapter {
     }
     @Override
     public void sessionOpened(IoSession session) throws Exception {
+        serverService.setSession(session);
         LOG.warn("sessionOpened.");
         //
         //session.getConfig().setIdleTime(IdleStatus.BOTH_IDLE, IDLE);

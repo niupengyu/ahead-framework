@@ -146,7 +146,7 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
     }
 
     public void setSession(IoSession session) {
-        logger.info("setSession");
+        logger.info("server setSession");
     }
 
     @Override

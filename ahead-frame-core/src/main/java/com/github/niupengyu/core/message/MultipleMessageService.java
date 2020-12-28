@@ -53,7 +53,7 @@ public class MultipleMessageService<T> {
     }
 
     public void add(T o){
-        logger.info("add new message "+o);
+        logger.info(name +" add new message "+o);
         this.simpleMessageService.add(o);
         if(pools.getActiveCount()<count){
             pools.execute(simpleMessageService);

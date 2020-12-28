@@ -60,11 +60,14 @@ public class ClientHandler extends IoHandlerAdapter{
     public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
         // TODO Auto-generated method stub
         //super.sessionIdle(session, status);
+
     }
 
     @Override
     public void sessionOpened(IoSession session) throws Exception {
         // TODO Auto-generated method stub
+        logger.info("sessionOpened");
+        this.clientService.setSession(session);
     }
 
     @Override
