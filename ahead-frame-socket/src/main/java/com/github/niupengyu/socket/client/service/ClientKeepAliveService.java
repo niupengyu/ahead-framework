@@ -19,7 +19,7 @@ public abstract class ClientKeepAliveService implements KeepAliveService {
     private static final Logger logger= LoggerFactory.getLogger(ClientKeepAliveService.class);
 
     @Override
-    public void heartbeatTimeOut(IoSession session) {
+    public void heartbeatTimeOut(IoSession session) throws Exception {
         System.out.println("失去心跳");
         clientHandlerService.reconnection();
     }
@@ -44,7 +44,7 @@ public abstract class ClientKeepAliveService implements KeepAliveService {
     }
 
     @Override
-    public Object getRequest() throws JsonProcessingException {
+    public Object getRequest() throws Exception {
         Message message=this.clientHandlerService.getRequest();
         logger.debug("发送心跳 {}",message);
         return message;

@@ -1,5 +1,8 @@
 package com.github.niupengyu.core.message;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Constructor;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -12,6 +15,8 @@ public class MultipleMessageService<T> {
     private int local;
 
     //private MessageManager<T> messageManager;
+
+    private Logger logger= LoggerFactory.getLogger(MultipleMessageService.class);
 
     private MessageListener messageListener;
 
@@ -48,6 +53,7 @@ public class MultipleMessageService<T> {
     }
 
     public void add(T o){
+        logger.info("add new message "+o);
         this.simpleMessageService.add(o);
         if(pools.getActiveCount()<count){
             pools.execute(simpleMessageService);

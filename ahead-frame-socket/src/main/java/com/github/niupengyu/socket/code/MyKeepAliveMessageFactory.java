@@ -20,7 +20,7 @@ public class MyKeepAliveMessageFactory implements KeepAliveMessageFactory {
     public Object getRequest(IoSession session) {
         try {
             return keepAliveService.getRequest();
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             logger.error("获取心跳请求出错",e);
         }
        return null;

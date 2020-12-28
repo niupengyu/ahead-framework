@@ -6,13 +6,13 @@ import org.apache.mina.core.session.IoSession;
 
 public interface KeepAliveService {
 
-    void heartbeatTimeOut(IoSession session);
+    void heartbeatTimeOut(IoSession session) throws Exception;
 
     boolean isHeartbeatRequest(Message message);
 
     Object getResponse(Message request) throws JsonProcessingException;
 
-    Object getRequest() throws JsonProcessingException;
+    Object getRequest() throws JsonProcessingException, Exception;
 
     boolean isHeartbeatResponse(Message message);
 }

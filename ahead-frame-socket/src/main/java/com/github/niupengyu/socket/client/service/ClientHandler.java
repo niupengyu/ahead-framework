@@ -82,7 +82,7 @@ public class ClientHandler extends IoHandlerAdapter{
         this.clientService = clientService;
     }
 
-    public void connectionError() {
+    public void connectionError() throws Exception {
         this.clientService.connectionError();
     }
 }

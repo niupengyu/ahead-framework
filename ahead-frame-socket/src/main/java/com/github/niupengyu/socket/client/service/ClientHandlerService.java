@@ -2,8 +2,6 @@ package com.github.niupengyu.socket.client.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.niupengyu.core.message.MessageService;
 import com.github.niupengyu.core.message.MultipleMessageService;
 import com.github.niupengyu.core.util.DateUtil;
 import com.github.niupengyu.core.util.Hex;
@@ -77,6 +75,7 @@ public abstract class ClientHandlerService implements ClientService {
                 reconnection();
             }
             msg.setResponseNode(clientConfig.getId());
+            logger.info("client send message"+msg);
             session.write(msg);
         }catch(Exception e){
             e.printStackTrace();
@@ -93,11 +92,6 @@ public abstract class ClientHandlerService implements ClientService {
             if(session==null||!session.isConnected()){
                 reconnection();
             }
-            /*Message msg=new Message();
-            msg.setRequestNode(clientConfig.getId());
-            msg.setHead("HEAD");
-            msg.setType("MESSAGE");
-            msg.setMessage(message);*/
             Message msg=Message.createResponse(request,clientConfig.getId(),message);
             logger.info("response {}",msg.toJsonString());
             session.write(msg);
@@ -115,12 +109,6 @@ public abstract class ClientHandlerService implements ClientService {
             if(session==null||!session.isConnected()){
                 reconnection();
             }
-            /*Message msg=new Message();
-            msg.setRequestNode(clientConfig.getId());
-            msg.setHead("HEAD");
-            msg.setType("MESSAGE");
-            msg.setMessage(message);*/
-            //Message msg=Message.createResponse(request,clientConfig.getId(),message);
             msg.setResponseNode(clientConfig.getId());
             logger.info("response {}",msg.toJsonString());
             session.write(msg);
@@ -134,7 +122,7 @@ public abstract class ClientHandlerService implements ClientService {
 
 
     @Override
-    public synchronized void reconnection() {
+    public synchronized void reconnection() throws Exception {
         status="LOST";
         logger.info("reconnection");
         //TODO 失败重新选举主机
@@ -154,9 +142,10 @@ public abstract class ClientHandlerService implements ClientService {
 
 
     @Override
-    public void setSession(IoSession session) {
+    public void setSession(IoSession session) throws Exception {
         logger.info("setSession");
         this.session=session;
+        sendRequest(this.getRequest());
         status="NORMAL";
     }
 
@@ -175,7 +164,7 @@ public abstract class ClientHandlerService implements ClientService {
     }
 
     @Override
-    public void connectionError() {
+    public void connectionError() throws Exception {
         reconnection();
         //System.out.println("不连了  自立门户");
         //status="OFFLINE";
@@ -183,7 +172,7 @@ public abstract class ClientHandlerService implements ClientService {
     }
 
     @Override
-    public void create() {
+    public void create() throws Exception {
         /*if(session!=null){
             session.closeNow();
         }*/
@@ -266,7 +255,7 @@ public abstract class ClientHandlerService implements ClientService {
 
     protected abstract void receivedHeartBeatResponse(Message message);
 
-    public Message getRequest() throws JsonProcessingException {
+    public Message getRequest() throws Exception {
         /*Message message=new Message();
         message.setType(SocketContent.HEARTBEAT);
         message.setHead(SocketContent.REQUEST);
