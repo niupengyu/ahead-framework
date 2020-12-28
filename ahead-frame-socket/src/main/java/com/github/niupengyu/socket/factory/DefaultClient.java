@@ -23,15 +23,14 @@ public class DefaultClient {
 
     //@PostConstruct
     public void create(ClientKeepAliveService keepAliveService, ClientHandlerService clientHandlerService, ClientConfig clientConfig,
-                       SimpleMessageService simpleMessageService, String name, int count) throws Exception {
+                       SimpleMessageService simpleMessageService, String name) throws Exception {
 
         //clientConfig.setId(IdGeneratorUtil.uuid32());
         if(StringUtil.isNull(clientConfig.getId())){
             throw new SysException("socket 客户端 没有配置唯一标识 [news.client.id]");
         }
-
         MultipleMessageService<Message>
-                multipleMessageService=new MultipleMessageService(count,simpleMessageService,name);
+                multipleMessageService=new MultipleMessageService(clientConfig.getThreadCount(),simpleMessageService,name);
 
         //ClientHandlerService clientHandlerService=new ClientHandlerService();
         clientHandlerService.setClientConfig(clientConfig);
@@ -60,10 +59,6 @@ public class DefaultClient {
 
     public static void main(String[] args) {
         SimpleMessageService<String> stringSimpleMessageService=new SimpleMessageService<String>() {
-            @Override
-            protected void endOne() {
-                System.out.println("end");
-            }
 
             @Override
             public void execute(String messageBean) {

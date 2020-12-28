@@ -17,10 +17,11 @@ public class DefaultServer {
 
     public void create(ServerHandlerService serverHandlerService,
                        MasterConfig masterConfig, ServerKeepAliveService keepAliveService,
-                       SimpleMessageService simpleMessageService,String name,int count) throws Exception {
+                       SimpleMessageService simpleMessageService,String name) throws Exception {
 
         MultipleMessageService<Message>
-                multipleMessageService=new MultipleMessageService(count,simpleMessageService,name);
+                multipleMessageService=
+                new MultipleMessageService(masterConfig.getThreadCount(),simpleMessageService,name);
 
         serverHandlerService.setMasterConfig(masterConfig);
         serverHandlerService.setMessageMultipleMessageService(multipleMessageService);

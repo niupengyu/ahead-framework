@@ -11,13 +11,11 @@ public class MultipleMessageService<T> {
 
     private int local;
 
-    private MessageManager<T> messageManager;
+    //private MessageManager<T> messageManager;
 
     private MessageListener messageListener;
 
-    private SimpleMessageService simpleMessageService;
-
-    private Thread[] dataThreads;
+    private SimpleMessageService<T> simpleMessageService;
 
     private String name;
 
@@ -33,27 +31,11 @@ public class MultipleMessageService<T> {
     }
 
     public void start() {
-        messageManager=new MessageManager(name,messageListener);
-        /*dataThreads=new Thread[count];
-        for(int i=0;i<count;i++){
-            //Constructor<SimpleMessageService> constructor=serviceClass.getConstructor(MessageManager.class,MultipleMessageService.class);
-            simpleMessageService.init(messageManager,this);
-            Thread thread=new Thread(simpleMessageService);
-            dataThreads[i]=thread;
-            pools.execute(thread);
-        }*/
-        start(messageManager);
+        start(new MessageManager(name,messageListener));
     }
 
     public void start(MessageManager messageManager) {
-        dataThreads=new Thread[count];
-        for(int i=0;i<count;i++){
-            //Constructor<SimpleMessageService> constructor=serviceClass.getConstructor(MessageManager.class,MultipleMessageService.class);
-            simpleMessageService.init(messageManager,this);
-            Thread thread=new Thread(simpleMessageService);
-            dataThreads[i]=thread;
-            pools.execute(thread);
-        }
+        simpleMessageService.init(messageManager,this);
     }
 
     public void endOne(int i) {
@@ -61,17 +43,36 @@ public class MultipleMessageService<T> {
     }
 
     public void end() throws InterruptedException {
-        messageManager.setStop(true);
-        while(true){
-            if(local>=count){
-                break;
-            }
-            Thread.sleep(1000l);
-        }
+        simpleMessageService.setStop(true);
+        pools.shutdown();
     }
 
     public void add(T o){
-        this.messageManager.add(o);
+        this.simpleMessageService.add(o);
+        if(pools.getActiveCount()<count){
+            pools.execute(simpleMessageService);
+        }
     }
 
+
+    public static void main(String[] args) throws InterruptedException {
+        MultipleMessageService<String> multipleMessageService=
+                new MultipleMessageService(3, new SimpleMessageService<String>() {
+
+                    @Override
+                    public void execute(String messageBean) {
+                        System.out.println(messageBean);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },"TEST");
+        multipleMessageService.start(new MessageManager(""));
+        for(int i=0;i<10;i++){
+            multipleMessageService.add("1"+i);
+        }
+        multipleMessageService.end();
+    }
 }

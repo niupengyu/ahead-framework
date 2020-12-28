@@ -17,6 +17,16 @@ public class MasterConfig {
 
     private int ideTime=60;
 
+    private int threadCount=3;
+
+    public int getThreadCount() {
+        return threadCount;
+    }
+
+    public void setThreadCount(int threadCount) {
+        this.threadCount = threadCount;
+    }
+
     public String getName() {
         return name;
     }

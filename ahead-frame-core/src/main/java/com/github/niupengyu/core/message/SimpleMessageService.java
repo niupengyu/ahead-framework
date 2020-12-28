@@ -7,11 +7,21 @@ public abstract class SimpleMessageService<T> extends MessageService<T>{
 
     @Override
     protected void endExecute() {
-        endOne();
         multipleMessageService.endOne(1);
     }
 
-    protected abstract void endOne();
+    @Override
+    public void run() {
+        while(true){
+            T messageBean=this.getMessage();
+            if(messageBean==null){
+                break;
+            }
+            this.execute(messageBean);
+        }
+        this.endExecute();
+    }
+
 
     public void init(MessageManager messageManager, MultipleMessageService multipleMessageService) {
         super.init(messageManager);

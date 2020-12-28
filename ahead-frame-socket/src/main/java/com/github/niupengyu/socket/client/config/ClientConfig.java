@@ -27,6 +27,16 @@ public class ClientConfig {
 
     private int requestTimeout=10;
 
+    private int threadCount=3;
+
+    public int getThreadCount() {
+        return threadCount;
+    }
+
+    public void setThreadCount(int threadCount) {
+        this.threadCount = threadCount;
+    }
+
     public int getRequestInterval() {
         return requestInterval;
     }
