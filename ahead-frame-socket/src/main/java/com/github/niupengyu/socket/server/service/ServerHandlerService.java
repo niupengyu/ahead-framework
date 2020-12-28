@@ -71,7 +71,7 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
             if(session==null){
                 throw new SysException("找不到会话 "+sessionId);
             }
-            Message message=createMessage(type,msg);
+            Message message=Message.createRequest(type/*,topic*/,getMasterConfig().getName(),msg);
             session.write(message);
         }catch(Exception e){
             e.printStackTrace();
@@ -80,9 +80,23 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
         }
     }
 
-    protected Message createMessage(String type,Object message) throws JsonProcessingException {
-        return Message.createRequest(type/*,topic*/,getMasterConfig().getName(),message);
+    @Override
+    public void sendRequest(long sessionId, Message message) throws Exception {
+        lock.lock();
+        try {
+            IoSession session= SessionManager.getSession(sessionId);
+            if(session==null){
+                throw new SysException("找不到会话 "+sessionId);
+            }
+            message.setRequestNode(getMasterConfig().getName());
+            session.write(message);
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            lock.unlock();
+        }
     }
+
 
     @Override
     public void sendResponse(long sessionId, Message request, Object msg) throws SysException {

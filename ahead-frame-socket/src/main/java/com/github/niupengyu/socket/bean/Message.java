@@ -48,7 +48,9 @@ public class Message{
 
     private String responseNode;
 
-    //private String topic;
+    private String topic;
+
+    private String receiveType;
 
     private String requestNode;
 
@@ -61,6 +63,14 @@ public class Message{
     private String message;
 
     private ObjectMapper objectMapper=new ObjectMapper();
+
+    public String getReceiveType() {
+        return receiveType;
+    }
+
+    public void setReceiveType(String receiveType) {
+        this.receiveType = receiveType;
+    }
 
     public String getResponseNode() {
         return responseNode;
@@ -143,14 +153,14 @@ public class Message{
         this.id = id;
     }
 
-    /*public String getTopic() {
+    public String getTopic() {
         return topic;
     }
 
     public void setTopic(String topic) {
         this.topic = topic;
     }
-*/
+
     @Override
     public String toString() {
         String data= null;
@@ -185,6 +195,19 @@ public class Message{
         Message message1=new Message(SocketContent.RESPONSE,message.getType(), message.getId(),
                 message.getRequest(),message.getRequestNode(),
                 System.currentTimeMillis(),responseNode,data/*,message.getTopic()*/);
+        return message1;
+    }
+
+    public static Message createRequest(String type,Object data) throws JsonProcessingException {
+        Message message=new Message(SocketContent.REQUEST, type,
+                IdGeneratorUtil.uuid32(),System.currentTimeMillis(),null,data/*,topic*/);
+        return message;
+    }
+
+    public static Message createResponse(Message message,Object data) throws JsonProcessingException {
+        Message message1=new Message(SocketContent.RESPONSE,message.getType(), message.getId(),
+                message.getRequest(),message.getRequestNode(),
+                System.currentTimeMillis(),null,data/*,message.getTopic()*/);
         return message1;
     }
 }

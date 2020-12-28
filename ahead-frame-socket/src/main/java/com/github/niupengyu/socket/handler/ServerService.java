@@ -8,6 +8,8 @@ import org.apache.mina.core.session.IoSession;
 
 public interface ServerService {
 
+    void sendRequest(long sessionId, Message message) throws Exception;
+
     void messageReceived(Message str, IoSession session) throws SysException, Exception;
 
     void heartbeat(IoSession session, Message msg) throws SysException, JsonProcessingException, Exception;

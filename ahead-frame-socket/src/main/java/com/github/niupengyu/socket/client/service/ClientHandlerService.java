@@ -58,7 +58,7 @@ public abstract class ClientHandlerService implements ClientService {
             msg.setHead("HEAD");
             msg.setType("MESSAGE");
             msg.setMessage(message);*/
-            Message msg=createMessage(type,message);
+            Message msg=Message.createRequest(type/*,topic*/,clientConfig.getId(),message);
             //logger.info("request {}",msg.toJsonString());
             session.write(msg);
         }catch(Exception e){
@@ -69,8 +69,21 @@ public abstract class ClientHandlerService implements ClientService {
 
     }
 
-    protected Message createMessage(String type,Object message) throws JsonProcessingException {
-        return Message.createRequest(type/*,topic*/,clientConfig.getId(),message);
+    @Override
+    public void sendRequest(Message msg) {
+        lock.lock();
+        try {
+            if(session==null||!session.isConnected()){
+                reconnection();
+            }
+            msg.setResponseNode(clientConfig.getId());
+            session.write(msg);
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            lock.unlock();
+        }
+
     }
 
     @Override
