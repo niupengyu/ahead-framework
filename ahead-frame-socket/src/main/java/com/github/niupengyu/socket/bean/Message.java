@@ -48,7 +48,9 @@ public class Message{
 
     private String responseNode;
 
-    private String topic;
+    private String send;
+
+    private String receive;
 
     private String receiveType;
 
@@ -153,12 +155,20 @@ public class Message{
         this.id = id;
     }
 
-    public String getTopic() {
-        return topic;
+    public String getSend() {
+        return send;
     }
 
-    public void setTopic(String topic) {
-        this.topic = topic;
+    public void setSend(String send) {
+        this.send = send;
+    }
+
+    public String getReceive() {
+        return receive;
+    }
+
+    public void setReceive(String receive) {
+        this.receive = receive;
     }
 
     @Override

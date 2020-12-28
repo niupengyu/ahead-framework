@@ -108,6 +108,29 @@ public abstract class ClientHandlerService implements ClientService {
         }
 
     }
+    @Override
+    public void sendResponse(Message msg) {
+        lock.lock();
+        try {
+            if(session==null||!session.isConnected()){
+                reconnection();
+            }
+            /*Message msg=new Message();
+            msg.setRequestNode(clientConfig.getId());
+            msg.setHead("HEAD");
+            msg.setType("MESSAGE");
+            msg.setMessage(message);*/
+            //Message msg=Message.createResponse(request,clientConfig.getId(),message);
+            msg.setResponseNode(clientConfig.getId());
+            logger.info("response {}",msg.toJsonString());
+            session.write(msg);
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            lock.unlock();
+        }
+
+    }
 
 
     @Override

@@ -116,6 +116,24 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
     }
 
     @Override
+    public void sendResponse(long sessionId,Message message) throws SysException {
+        lock.lock();
+        try {
+            IoSession session= SessionManager.getSession(sessionId);
+            if(session==null){
+                throw new SysException("找不到会话 "+sessionId);
+            }
+            //Message message=Message.createResponse(request,getMasterConfig().getName(),msg);
+            message.setResponseNode(getMasterConfig().getName());
+            session.write(message);
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            lock.unlock();
+        }
+    }
+
+    @Override
     public void heartbeatTimeOut(IoSession session) {
         logger.info("heartbeatTimeOut1111111111111");
     }

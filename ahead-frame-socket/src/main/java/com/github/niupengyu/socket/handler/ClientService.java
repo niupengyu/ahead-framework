@@ -12,6 +12,8 @@ public interface ClientService {
 
     void sendResponse(Message request,Object message);
 
+    public void sendResponse(Message msg);
+
     //String heartbeat(IoSession session);
 
     void reconnection();

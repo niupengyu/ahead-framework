@@ -25,4 +25,6 @@ public interface ServerService {
     void sendRequest(long sessionId, String type,Object msg) throws SysException ;
 
     void sendResponse(long sessionId, Message request,Object msg) throws SysException ;
+
+    void sendResponse(long sessionId,Message message) throws SysException;
 }
