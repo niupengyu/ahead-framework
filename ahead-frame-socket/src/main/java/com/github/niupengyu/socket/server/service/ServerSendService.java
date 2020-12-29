@@ -12,7 +12,8 @@ public class ServerSendService extends SimpleMessageService<Message> {
 
     private Logger logger= LoggerFactory.getLogger(ServerSendService.class);
 
-    public ServerSendService(ServerHandlerService serverHandlerService){
+    public ServerSendService(ServerHandlerService serverHandlerService,String name){
+        super(name);
         this.serverHandlerService=serverHandlerService;
     }
 

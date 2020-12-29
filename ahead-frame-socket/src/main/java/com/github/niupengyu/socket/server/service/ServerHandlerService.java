@@ -39,10 +39,8 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
     private final Lock lock = new ReentrantLock();
 
     public void startMessageManager() throws Exception {
-        ServerSendService serverSendService=new ServerSendService(this);
+        ServerSendService serverSendService=new ServerSendService(this,"server 发送队列");
         sendMessageService=new MultipleMessageService<>(masterConfig.getSendCount(),serverSendService,"server 发送消息处理");
-        sendMessageService.start();
-        messageMultipleMessageService.start();
     }
 
     @Override

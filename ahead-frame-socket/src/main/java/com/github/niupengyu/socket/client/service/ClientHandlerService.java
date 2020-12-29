@@ -46,10 +46,8 @@ public abstract class ClientHandlerService implements ClientService {
 
     public void startMessageManager() throws Exception {
 
-        ClientSendService clientSendService=new ClientSendService(this);
+        ClientSendService clientSendService=new ClientSendService(this,"发送消息队列");
         sendMessageService=new MultipleMessageService<>(clientConfig.getSendCount(),clientSendService,"client 发送消息处理");
-        sendMessageService.start();
-        messageManager.start();
     }
 
     @Override

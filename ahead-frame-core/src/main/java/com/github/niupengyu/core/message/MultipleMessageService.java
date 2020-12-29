@@ -4,15 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class MultipleMessageService<T> {
 
     private int count;
-
-    private int local;
 
     //private MessageManager<T> messageManager;
 
@@ -24,28 +20,16 @@ public class MultipleMessageService<T> {
 
     private String name;
 
-    private ThreadPoolExecutor pools;
+    private ExecutorService pools;
 
     public MultipleMessageService(int count,SimpleMessageService simpleMessageService,String name){
         this.count=count;
         this.simpleMessageService=simpleMessageService;
         this.messageListener=new MessageListener();
         this.name=name;
-        pools =new ThreadPoolExecutor(1,count,0l, TimeUnit.SECONDS,
-                new SynchronousQueue<Runnable>());
+        pools =Executors.newSingleThreadExecutor();
     }
 
-    public void start() {
-        start(new MessageManager(name,messageListener));
-    }
-
-    public void start(MessageManager messageManager) {
-        simpleMessageService.init(messageManager,this);
-    }
-
-    public void endOne(int i) {
-        local+=i;
-    }
 
     public void end() throws InterruptedException {
         simpleMessageService.setStop(true);
@@ -54,15 +38,13 @@ public class MultipleMessageService<T> {
 
     public void add(T o){
         this.simpleMessageService.add(o);
-        if(pools.getActiveCount()<count){
-            pools.execute(simpleMessageService);
-        }
+        pools.execute(simpleMessageService);
     }
 
 
     public static void main(String[] args) throws InterruptedException {
         MultipleMessageService<String> multipleMessageService=
-                new MultipleMessageService(3, new SimpleMessageService<String>() {
+                new MultipleMessageService(3, new SimpleMessageService<String>(new MessageManager("")) {
 
                     @Override
                     public void execute(String messageBean) {
@@ -74,7 +56,6 @@ public class MultipleMessageService<T> {
                         }
                     }
                 },"TEST");
-        multipleMessageService.start(new MessageManager(""));
         for(int i=0;i<10;i++){
             multipleMessageService.add("1"+i);
         }

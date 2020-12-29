@@ -1,30 +1,24 @@
 package com.github.niupengyu.core.message;
 
-public abstract class SimpleMessageService<T> extends MessageService<T>{
-
-    private MultipleMessageService multipleMessageService;
+public abstract class SimpleMessageService<T>  extends AbstractMessageService<T> implements Runnable{
 
 
-    @Override
-    protected void endExecute() {
-        multipleMessageService.endOne(1);
+    public SimpleMessageService(String name) {
+        super(name);
+    }
+
+    public SimpleMessageService(MessageManager<T> dataManager) {
+        super(dataManager);
     }
 
     @Override
     public void run() {
-        while(true){
+        //while(true){
             T messageBean=this.getMessage();
             if(messageBean==null){
-                break;
+                return;
             }
             this.execute(messageBean);
-        }
-        this.endExecute();
-    }
-
-
-    public void init(MessageManager messageManager, MultipleMessageService multipleMessageService) {
-        super.init(messageManager);
-        this.multipleMessageService=multipleMessageService;
+        //}
     }
 }

@@ -58,7 +58,7 @@ public class DefaultClient {
     }
 
     public static void main(String[] args) {
-        SimpleMessageService<String> stringSimpleMessageService=new SimpleMessageService<String>() {
+        SimpleMessageService<String> stringSimpleMessageService=new SimpleMessageService<String>("") {
 
             @Override
             public void execute(String messageBean) {
@@ -67,7 +67,6 @@ public class DefaultClient {
         };
         MultipleMessageService<String>
                 multipleMessageService=new MultipleMessageService(3,stringSimpleMessageService,"哈哈哈");
-        multipleMessageService.start();
         multipleMessageService.add("111111111111");
         multipleMessageService.add("111111111112");
         multipleMessageService.add("111111111113");

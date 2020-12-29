@@ -26,17 +26,17 @@ public abstract class AbstractMessageService<T>{
             dataManager) {
         this.dataManager=dataManager;
     }
-    public AbstractMessageService() {
+    /*public AbstractMessageService() {
 
-    }
+    }*/
 
     /**
      * 初始化
      * @param dataManager
      */
-    public void init(MessageManager dataManager) {
+    /*public void init(MessageManager dataManager) {
         this.dataManager=dataManager;
-    }
+    }*/
 
 
 

@@ -6,9 +6,9 @@ import java.util.List;
 
 public abstract class MessageService<T> extends AbstractMessageService<T> implements Runnable{
 
-    public MessageService(){
+    /*public MessageService(){
 
-    }
+    }*/
 
     public MessageService(String name) {
         super(name);
