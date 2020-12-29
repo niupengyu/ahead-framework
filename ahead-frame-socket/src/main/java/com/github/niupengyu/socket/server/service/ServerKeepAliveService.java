@@ -39,7 +39,8 @@ public abstract class ServerKeepAliveService implements KeepAliveService {
         message.setHead(SocketContent.RESPONSE);
         message.setResponseNode(masterConfig.getName());
         message.setMessage(DateUtil.getTimeDes(System.currentTimeMillis()-start));*/
-        Message message=Message.createResponse(request,masterConfig.getName(),DateUtil.getTimeDes(System.currentTimeMillis()-start));
+        Message message=Message.createResponse(request,DateUtil.getTimeDes(System.currentTimeMillis()-start));
+        message.setResponseNode(masterConfig.getName());
         return JSONObject.toJSONString(message);
     }
 
@@ -51,7 +52,8 @@ public abstract class ServerKeepAliveService implements KeepAliveService {
         message.setType(SocketContent.HEARTBEAT);
         message.setRequestNode(masterConfig.getName());
         message.setMessage(System.currentTimeMillis());*/
-        Message message=Message.createRequest(SocketContent.HEARTBEAT/*,SocketContent.HEARTBEAT*/,masterConfig.getName(),System.currentTimeMillis());
+        Message message=Message.createRequest(SocketContent.HEARTBEAT/*,SocketContent.HEARTBEAT*/,System.currentTimeMillis());
+        message.setRequestNode(masterConfig.getName());
         return JSONObject.toJSONString(message);
     }
 

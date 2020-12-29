@@ -117,7 +117,7 @@ public class DataSourceFactory {
 		return basicDataSource;
     }
 
-    public static DataSource getDefaultSource(DataSourceBean value,DbConfig dbConfig){
+    public static DataSource getDefaultSource(DataSourceBean value,DbConfig dbConfig) throws Exception {
         return new SingleDataSource(dbConfig,value);
     }
 

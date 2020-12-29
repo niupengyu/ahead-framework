@@ -29,6 +29,16 @@ public class ClientConfig {
 
     private int threadCount=3;
 
+    private int sendCount=3;
+
+    public int getSendCount() {
+        return sendCount;
+    }
+
+    public void setSendCount(int sendCount) {
+        this.sendCount = sendCount;
+    }
+
     public int getThreadCount() {
         return threadCount;
     }

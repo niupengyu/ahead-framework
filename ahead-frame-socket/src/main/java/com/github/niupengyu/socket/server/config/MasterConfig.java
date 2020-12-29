@@ -19,6 +19,16 @@ public class MasterConfig {
 
     private int threadCount=3;
 
+    private int sendCount=1;
+
+    public int getSendCount() {
+        return sendCount;
+    }
+
+    public void setSendCount(int sendCount) {
+        this.sendCount = sendCount;
+    }
+
     public int getThreadCount() {
         return threadCount;
     }

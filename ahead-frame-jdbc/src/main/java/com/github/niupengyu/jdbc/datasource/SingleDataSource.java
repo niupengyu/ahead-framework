@@ -20,7 +20,7 @@ public class SingleDataSource implements DataSource{
 
     private Connection connection;
 
-    public SingleDataSource(DbConfig db, DataSourceBean dataSource){
+    public SingleDataSource(DbConfig db, DataSourceBean dataSource) throws Exception {
         String driverClassName=StringUtil.valueOf(dataSource.getDriverClassName(),
                 db.getDriverClassName());
         String url=StringUtil.valueOf(dataSource.getUrl(),db.getUrl());

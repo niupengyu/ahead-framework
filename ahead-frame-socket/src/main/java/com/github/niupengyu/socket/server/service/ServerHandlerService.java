@@ -30,6 +30,8 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
 
     private MultipleMessageService<Message> messageMultipleMessageService;
 
+    private MultipleMessageService<Message> sendMessageService;
+
     private MasterConfig masterConfig;
 
     //private Map<Long,String> sessionMap=new HashMap<>();
@@ -37,6 +39,9 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
     private final Lock lock = new ReentrantLock();
 
     public void startMessageManager() throws Exception {
+        ServerSendService serverSendService=new ServerSendService(this);
+        sendMessageService=new MultipleMessageService<>(masterConfig.getSendCount(),serverSendService,"server 发送消息处理");
+        sendMessageService.start();
         messageMultipleMessageService.start();
     }
 
@@ -60,44 +65,23 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
         message.setResponseNode(getMasterConfig().getName());
         message.setMessage(responseData(msg));
         message.setRequestNode(msg.getRequestNode());*/
-        Message message=Message.createResponse(msg,getMasterConfig().getName(),responseData(msg));
+        Message message=Message.createResponse(msg,responseData(msg));
+        createMessage(message);
         session.write(message);
     }
 
     protected abstract Object responseData(Message msg);
 
     @Override
-    public void sendRequest(long sessionId, String type,Object msg) throws SysException {
-        lock.lock();
-        try {
-            IoSession session= SessionManager.getSession(sessionId);
-            if(session==null){
-                throw new SysException("找不到会话 "+sessionId);
-            }
-            Message message=Message.createRequest(type/*,topic*/,getMasterConfig().getName(),msg);
-            session.write(message);
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-            lock.unlock();
-        }
+    public void sendRequest(long sessionId, String type,Object msg) throws Exception {
+        Message message=Message.createRequest(type/*,topic*/,msg);
+        sendRequest(sessionId,message);
     }
 
     @Override
     public void sendRequest(long sessionId, Message message) throws Exception {
-        lock.lock();
-        try {
-            IoSession session= SessionManager.getSession(sessionId);
-            if(session==null){
-                throw new SysException("找不到会话 "+sessionId);
-            }
-            createMessage(message);
-            session.write(message);
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-            lock.unlock();
-        }
+        createMessage(message);
+        send(sessionId,message);
     }
 
     protected void createMessage(Message message) {
@@ -105,38 +89,34 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
     }
 
     @Override
-    public void sendResponse(long sessionId, Message request, Object msg) throws SysException {
-        lock.lock();
-        try {
-            IoSession session= SessionManager.getSession(sessionId);
-            if(session==null){
-                throw new SysException("找不到会话 "+sessionId);
-            }
-            Message message=Message.createResponse(request,getMasterConfig().getName(),msg);
-            session.write(message);
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-            lock.unlock();
-        }
+    public void sendResponse(long sessionId, Message request, Object msg) throws Exception {
+        Message message=Message.createResponse(request,msg);
+        sendResponse(sessionId,message);
     }
 
     @Override
-    public void sendResponse(long sessionId,Message message) throws SysException {
-        lock.lock();
+    public void sendResponse(long sessionId,Message message) throws Exception {
+        createMessage(message);
+        send(sessionId,message);
+    }
+
+    public void send(long sessionId,Message message) throws SysException {
+        /*lock.lock();
         try {
             IoSession session= SessionManager.getSession(sessionId);
             if(session==null){
                 throw new SysException("找不到会话 "+sessionId);
             }
-            //Message message=Message.createResponse(request,getMasterConfig().getName(),msg);
-            message.setResponseNode(getMasterConfig().getName());
+            message.setRequestSession(sessionId);
             session.write(message);
         }catch(Exception e){
-            e.printStackTrace();
+            logger.info("socket 异常",e);
+            throw new SysException(e.getMessage());
         }finally{
             lock.unlock();
-        }
+        }*/
+        message.setRequestSession(sessionId);
+        sendMessageService.add(message);
     }
 
     @Override
@@ -200,5 +180,14 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
 
     public MasterConfig getMasterConfig() {
         return masterConfig;
+    }
+
+    public void send(Message message) throws SysException {
+        long sessionId=message.getRequestSession();
+        IoSession session= SessionManager.getSession(sessionId);
+        if(session==null){
+            throw new SysException("找不到会话 "+sessionId);
+        }
+        session.write(message);
     }
 }

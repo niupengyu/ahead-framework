@@ -17,19 +17,19 @@ public class Message{
     }
 
     public Message(String head, String type,String id,long request,
-                   String requestNode,Object data/*,String topic*/) throws JsonProcessingException {
+                   /*String requestNode,*/Object data/*,String topic*/) throws JsonProcessingException {
         this.head=head;
         this.type=type;
         this.id=id;
         this.message=data;
         //this.message=objectMapper.writeValueAsString(data);
         this.request=request;
-        this.requestNode=requestNode;
+        //this.requestNode=requestNode;
         //this.topic=topic;
     }
 
     public Message(String head, String type,String id,long request,String requestNode,
-                   long response,String responseNode,Object data/*,String topic*/) throws JsonProcessingException {
+                   long response,/*String responseNode,*/Object data/*,String topic*/) throws JsonProcessingException {
         this.head=head;
         this.type=type;
         this.message=data;
@@ -38,7 +38,7 @@ public class Message{
         this.request=request;
         this.requestNode=requestNode;
         this.response=response;
-        this.responseNode=responseNode;
+        //this.responseNode=responseNode;
         //this.topic=topic;
     }
 
@@ -65,6 +65,26 @@ public class Message{
     //private String message;
 
     private Object message;
+
+    private long requestSession;
+
+    private long length;
+
+    public long getLength() {
+        return length;
+    }
+
+    public void setLength(long length) {
+        this.length = length;
+    }
+
+    public long getRequestSession() {
+        return requestSession;
+    }
+
+    public void setRequestSession(long requestSession) {
+        this.requestSession = requestSession;
+    }
 
     private ObjectMapper objectMapper=new ObjectMapper();
 
@@ -198,29 +218,36 @@ public class Message{
         return s;
     }
 
-    public static Message createRequest(String type,/*String topic,*/String requestNode,Object data) throws JsonProcessingException {
+    /*public static Message createRequest(String type,*//*String topic,*//*String requestNode,Object data) throws JsonProcessingException {
         Message message=new Message(SocketContent.REQUEST, type,
-                IdGeneratorUtil.uuid32(),System.currentTimeMillis(),requestNode,data/*,topic*/);
+                IdGeneratorUtil.uuid32(),System.currentTimeMillis(),requestNode,data*//*,topic*//*);
         return message;
     }
 
     public static Message createResponse(Message message,String responseNode,Object data) throws JsonProcessingException {
         Message message1=new Message(SocketContent.RESPONSE,message.getType(), message.getId(),
                 message.getRequest(),message.getRequestNode(),
-                System.currentTimeMillis(),responseNode,data/*,message.getTopic()*/);
+                System.currentTimeMillis(),responseNode,data*//*,message.getTopic()*//*);
         return message1;
-    }
+    }*/
 
     public static Message createRequest(String type,Object data) throws JsonProcessingException {
         Message message=new Message(SocketContent.REQUEST, type,
-                IdGeneratorUtil.uuid32(),System.currentTimeMillis(),null,data/*,topic*/);
+                IdGeneratorUtil.uuid32(),System.currentTimeMillis(),data/*,topic*/);
         return message;
     }
 
     public static Message createResponse(Message message,Object data) throws JsonProcessingException {
         Message message1=new Message(SocketContent.RESPONSE,message.getType(), message.getId(),
                 message.getRequest(),message.getRequestNode(),
-                System.currentTimeMillis(),null,data/*,message.getTopic()*/);
+                System.currentTimeMillis(),data/*,message.getTopic()*/);
+        return message1;
+    }
+
+    public static Message createResponse(String type,Message message,Object data) throws JsonProcessingException {
+        Message message1=new Message(SocketContent.RESPONSE,type, message.getId(),
+                message.getRequest(),message.getRequestNode(),
+                System.currentTimeMillis(),data/*,message.getTopic()*/);
         return message1;
     }
 }

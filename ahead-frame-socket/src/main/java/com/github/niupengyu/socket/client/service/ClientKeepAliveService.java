@@ -39,7 +39,8 @@ public abstract class ClientKeepAliveService implements KeepAliveService {
         message.setHead(SocketContent.RESPONSE);
         message.setResponseNode(this.clientConfig.getId());
         message.setMessage(DateUtil.getTimeDes(System.currentTimeMillis()-start));*/
-        Message message=Message.createResponse(request,clientConfig.getId(),DateUtil.getTimeDes(System.currentTimeMillis()-start));
+        Message message=Message.createResponse(request,DateUtil.getTimeDes(System.currentTimeMillis()-start));
+        message.setResponseNode(clientConfig.getId());
         return message;
     }
 

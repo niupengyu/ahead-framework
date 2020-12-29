@@ -34,7 +34,7 @@ public class TryToReconnectDataSource implements DataSource{
     private Connection connection;
 
 
-    public TryToReconnectDataSource(String driverClassName, String url, String username, String password) {
+    public TryToReconnectDataSource(String driverClassName, String url, String username, String password) throws Exception {
         this.driverClassName = driverClassName;
         this.url = url;
         this.username = username;
@@ -135,7 +135,7 @@ public class TryToReconnectDataSource implements DataSource{
     }
 
 
-    public void createConnection(){
+    public void createConnection() throws Exception {
         this.connection= JdbcDao.createConn(driverClassName,url,username,password);
         logger.info("创建连接 {},{}",driverClassName,username);
     }

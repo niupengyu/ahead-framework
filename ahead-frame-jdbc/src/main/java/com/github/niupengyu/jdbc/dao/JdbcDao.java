@@ -1249,26 +1249,18 @@ public class JdbcDao {
 
 
 
-	public static Connection createConn(String driver,String url,String username,String password){
+	public static Connection createConn(String driver,String url,String username,String password) throws Exception {
 		Connection conn=null;
-		try {
-			Class.forName(driver);
-			conn=DriverManager.getConnection(url,username,password);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Class.forName(driver);
+		conn=DriverManager.getConnection(url,username,password);
 		return conn;
 	}
 
 	public static DataSource createDataSource(String driver, String url,
 											  String username, String password,
-											  DataSourceBean dataSourceBean){
+											  DataSourceBean dataSourceBean) throws Exception {
 		DataSource dataSource=null;
-		try {
-			dataSource=connectionDataSource(driver,url,username,password,dataSourceBean);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		dataSource=connectionDataSource(driver,url,username,password,dataSourceBean);
 		return dataSource;
 	}
 
@@ -1276,22 +1268,18 @@ public class JdbcDao {
 											  String username, String password,
 											  DataSourceBean dataSourceBean){
 		BasicDataSource basicDataSource=null;
-		try {
-			basicDataSource=new BasicDataSource();
-			basicDataSource.setDriverClassName(driver);
-			basicDataSource.setUrl(url);
-			basicDataSource.setUsername(username);
-			basicDataSource.setPassword(password);
-			basicDataSource.initPool(new DbConfig(),dataSourceBean);
-			//dataSource=connectionDataSource(driver,url,username,password,dataSourceBean);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		basicDataSource=new BasicDataSource();
+		basicDataSource.setDriverClassName(driver);
+		basicDataSource.setUrl(url);
+		basicDataSource.setUsername(username);
+		basicDataSource.setPassword(password);
+		basicDataSource.initPool(new DbConfig(),dataSourceBean);
+		//dataSource=connectionDataSource(driver,url,username,password,dataSourceBean);
 		return basicDataSource;
 	}
 
 	public static DataSource createTrDataSource(String driver, String url,
-											  String username, String password){
+											  String username, String password) throws Exception {
 		TryToReconnectDataSource dataSource=
 				new TryToReconnectDataSource(driver,url,username,password);
 		return dataSource;

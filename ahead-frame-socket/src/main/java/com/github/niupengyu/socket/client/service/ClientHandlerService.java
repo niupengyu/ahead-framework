@@ -2,6 +2,8 @@ package com.github.niupengyu.socket.client.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.niupengyu.core.exception.SysException;
 import com.github.niupengyu.core.message.MultipleMessageService;
 import com.github.niupengyu.core.util.DateUtil;
 import com.github.niupengyu.core.util.Hex;
@@ -9,6 +11,7 @@ import com.github.niupengyu.socket.bean.Message;
 import com.github.niupengyu.socket.client.config.ClientConfig;
 import com.github.niupengyu.socket.client.init.ClientInitService;
 import com.github.niupengyu.socket.handler.ClientService;
+import com.github.niupengyu.socket.server.service.ServerSendService;
 import com.github.niupengyu.socket.util.SocketContent;
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
@@ -32,6 +35,7 @@ public abstract class ClientHandlerService implements ClientService {
 
     private final Lock lock = new ReentrantLock();
 
+    private MultipleMessageService<Message> sendMessageService;
 
     private String status="OFFLINE";
 
@@ -41,48 +45,24 @@ public abstract class ClientHandlerService implements ClientService {
     private Thread thread;
 
     public void startMessageManager() throws Exception {
+
+        ClientSendService clientSendService=new ClientSendService(this);
+        sendMessageService=new MultipleMessageService<>(clientConfig.getSendCount(),clientSendService,"client 发送消息处理");
+        sendMessageService.start();
         messageManager.start();
     }
 
     @Override
-    public void sendRequest(String type,Object message) {
-        lock.lock();
-        try {
-            if(session==null||!session.isConnected()){
-                reconnection();
-            }
-            /*Message msg=new Message();
-            msg.setRequestNode(clientConfig.getId());
-            msg.setHead("HEAD");
-            msg.setType("MESSAGE");
-            msg.setMessage(message);*/
-            Message msg=Message.createRequest(type/*,topic*/,clientConfig.getId(),message);
-            //logger.info("request {}",msg.toJsonString());
-            session.write(msg);
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-            lock.unlock();
-        }
+    public void sendRequest(String type,Object message) throws Exception {
+        Message msg=Message.createRequest(type/*,topic*/,message);
+        sendRequest(msg);
 
     }
 
     @Override
-    public void sendRequest(Message msg) {
-        lock.lock();
-        try {
-            if(session==null||!session.isConnected()){
-                reconnection();
-            }
-            createMessage(msg);
-            logger.info("client send message"+msg);
-            session.write(msg);
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-            lock.unlock();
-        }
-
+    public void sendRequest(Message msg) throws SysException {
+        createMessage(msg);
+        send(msg);
     }
 
     protected void createMessage(Message msg) {
@@ -90,40 +70,38 @@ public abstract class ClientHandlerService implements ClientService {
     }
 
     @Override
-    public void sendResponse(Message request,Object message) {
-        lock.lock();
-        try {
-            if(session==null||!session.isConnected()){
-                reconnection();
-            }
-            Message msg=Message.createResponse(request,clientConfig.getId(),message);
-            logger.info("response {}",msg.toJsonString());
-            session.write(msg);
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-            lock.unlock();
-        }
-
+    public void sendResponse(Message request,Object message) throws Exception {
+        Message msg=Message.createResponse(request,message);
+        //logger.info("response {}",msg.toJsonString());
+        sendResponse(msg);
     }
+
     @Override
-    public void sendResponse(Message msg) {
-        lock.lock();
+    public void sendResponse(Message msg) throws SysException {
+        createMessage(msg);
+        send(msg);
+    }
+
+    public void send(Message message) throws SysException {
+        /*lock.lock();
         try {
             if(session==null||!session.isConnected()){
                 reconnection();
             }
-            msg.setRequestNode(clientConfig.getId());
-            logger.info("response {}",msg.toJsonString());
-            session.write(msg);
+            //logger.info("response {}",msg.toJsonString());
+            session.write(message);
         }catch(Exception e){
-            e.printStackTrace();
+            logger.info("socket 异常",e);
+            throw new SysException(e.getMessage());
         }finally{
             lock.unlock();
-        }
-
+        }*/
+        sendMessageService.add(message);
     }
 
+    public void finallySend(Message message) {
+        session.write(message);
+    }
 
     @Override
     public synchronized void reconnection() throws Exception {
@@ -260,7 +238,8 @@ public abstract class ClientHandlerService implements ClientService {
     protected abstract void receivedHeartBeatResponse(Message message);
 
     public Message getRequest(String type) throws Exception {
-        Message message=Message.createRequest(type/*,SocketContent.HEARTBEAT*/,clientConfig.getId(),requestData());
+        Message message=Message.createRequest(type/*,SocketContent.HEARTBEAT*/,requestData());
+        createMessage(message);
         return message;
     }
 
@@ -281,4 +260,5 @@ public abstract class ClientHandlerService implements ClientService {
     public Thread getThread() {
         return thread;
     }
+
 }

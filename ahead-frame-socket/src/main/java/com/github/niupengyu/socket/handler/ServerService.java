@@ -22,9 +22,9 @@ public interface ServerService {
 
     void closed(IoSession session);
 
-    void sendRequest(long sessionId, String type,Object msg) throws SysException ;
+    void sendRequest(long sessionId, String type,Object msg) throws SysException, Exception;
 
-    void sendResponse(long sessionId, Message request,Object msg) throws SysException ;
+    void sendResponse(long sessionId, Message request,Object msg) throws SysException, Exception;
 
-    void sendResponse(long sessionId,Message message) throws SysException;
+    void sendResponse(long sessionId,Message message) throws SysException, Exception;
 }
