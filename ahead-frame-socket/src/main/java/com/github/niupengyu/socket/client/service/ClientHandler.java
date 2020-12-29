@@ -25,7 +25,7 @@ public class ClientHandler extends IoHandlerAdapter{
         //    clientService.heartbeat(session,obj);
         //}else{
         //logger.info("messageReceived messageReceived {}",Thread.currentThread().getId());
-        logger.info("收到 {} {}",Thread.currentThread().getId(),message);
+        //logger.info("收到 {} {}",Thread.currentThread().getId(),message);
             clientService.received(obj,session);
         //}
     }
@@ -37,7 +37,7 @@ public class ClientHandler extends IoHandlerAdapter{
         //super.messageSent(session, message);
         //session.write(message);
         //clientService.setSession(session);
-        logger.info("send send {}",Thread.currentThread().getId());
+        //logger.info("send send {}",Thread.currentThread().getId());
     }
 
     @Override
