@@ -25,7 +25,7 @@ public class ClientHandler extends IoHandlerAdapter{
         //    clientService.heartbeat(session,obj);
         //}else{
         //logger.info("messageReceived messageReceived {}",Thread.currentThread().getId());
-        //logger.info("收到 {} {}",Thread.currentThread().getId(),message);
+        logger.info("收到 {} {}",Thread.currentThread().getId(),message);
             clientService.received(obj,session);
         //}
     }

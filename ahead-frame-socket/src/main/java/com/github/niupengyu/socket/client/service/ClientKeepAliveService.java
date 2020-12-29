@@ -58,9 +58,11 @@ public abstract class ClientKeepAliveService implements KeepAliveService {
         boolean flag= SocketContent.RESPONSE.equals(message.getHead())
                 && SocketContent.HEARTBEAT.equals(message.getType())
                 &&clientConfig.getId().equals(message.getRequestNode());
-        //System.out.println("isHeartbeatResponse "+(i++));
+        //logger.info("isHeartbeatResponse {} {}",(i++),flag);
+        //logger.info("isHeartbeatResponse {} {}",Thread.currentThread().getId());
+        //logger.info("isHeartbeatResponse {} ",message);
         if(flag){
-            this.clientHandlerService.setResponse(message);
+            //this.clientHandlerService.setResponse(message);
         }
         return flag;
     }

@@ -34,11 +34,6 @@ public abstract class ServerKeepAliveService implements KeepAliveService {
     @Override
     public Object getResponse( Message request) throws JsonProcessingException {
         long start=(long)(request.getMessage());
-        /*Message message=new Message();
-        message.setType(SocketContent.HEARTBEAT);
-        message.setHead(SocketContent.RESPONSE);
-        message.setResponseNode(masterConfig.getName());
-        message.setMessage(DateUtil.getTimeDes(System.currentTimeMillis()-start));*/
         Message message=Message.createResponse(request,DateUtil.getTimeDes(System.currentTimeMillis()-start));
         message.setResponseNode(masterConfig.getName());
         return JSONObject.toJSONString(message);
@@ -47,11 +42,6 @@ public abstract class ServerKeepAliveService implements KeepAliveService {
     @Override
     public Object getRequest() throws JsonProcessingException {
         logger.info("server 获取心跳请求内容");
-        /*Message message=new Message();
-        message.setHead(SocketContent.REQUEST);
-        message.setType(SocketContent.HEARTBEAT);
-        message.setRequestNode(masterConfig.getName());
-        message.setMessage(System.currentTimeMillis());*/
         Message message=Message.createRequest(SocketContent.HEARTBEAT/*,SocketContent.HEARTBEAT*/,System.currentTimeMillis());
         message.setRequestNode(masterConfig.getName());
         return JSONObject.toJSONString(message);

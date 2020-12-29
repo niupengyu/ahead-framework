@@ -2,11 +2,15 @@ package com.github.niupengyu.socket.client.init;
 
 import com.github.niupengyu.core.annotation.AutoConfig;
 import com.github.niupengyu.socket.client.config.ClientConfig;
+import com.github.niupengyu.socket.client.config.ClientSocketConfig;
 import com.github.niupengyu.socket.client.service.ClientHandler;
+import com.github.niupengyu.socket.code.ByteArrayCodecFactory;
 import com.github.niupengyu.socket.handler.ClientService;
 import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
 import org.apache.mina.core.future.ConnectFuture;
 import org.apache.mina.core.session.IoSession;
+import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory;
 import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 import org.slf4j.Logger;
@@ -22,7 +26,7 @@ public class ClientInitService {
 
     private ClientHandler clientHandler;
 
-    private DefaultIoFilterChainBuilder ioFilterChainBuilder;
+    private ClientSocketConfig clientSocketConfig;
 
     private ClientConfig clientConfig;
 
@@ -65,10 +69,12 @@ public class ClientInitService {
 
     private NioSocketConnector nioSocketConnector(){
         NioSocketConnector connector = new NioSocketConnector();
-        connector.setFilterChainBuilder(ioFilterChainBuilder);
-//        connector.getFilterChain().addLast("logger", new SocketConfig().loggingFilter());
-//        connector.getFilterChain().addLast("codec",
-//                new ProtocolCodecFilter(new TextLineCodecFactory(Charset.forName("utf-8")))); //设置编码过滤器
+        connector.setFilterChainBuilder(clientSocketConfig.filterChainBuilder());
+
+        /*DefaultIoFilterChainBuilder chain = connector.getFilterChain();
+
+        chain.addLast("myChain", new ProtocolCodecFilter(new ByteArrayCodecFactory()));*/
+
         connector.setHandler(clientHandler);//设置事件处理器
         SocketSessionConfig cfg=connector.getSessionConfig();
         //cfg.setUseReadOperation(true);
@@ -79,16 +85,12 @@ public class ClientInitService {
         this.clientHandler = clientHandler;
     }
 
-    public void setIoFilterChainBuilder(DefaultIoFilterChainBuilder ioFilterChainBuilder) {
-        this.ioFilterChainBuilder = ioFilterChainBuilder;
-    }
 
     public void setClientConfig(ClientConfig clientConfig) {
         this.clientConfig = clientConfig;
     }
 
     public void close() {
-        System.out.println(session);
         if(session != null && session.isConnected()){
             System.out.println(session.isConnected());
             session.getService().dispose();//add by czp 20181207
@@ -97,5 +99,9 @@ public class ClientInitService {
             session=null;
             connector=null;
         }
+    }
+
+    public void setClientSocketConfig(ClientSocketConfig clientSocketConfig) {
+        this.clientSocketConfig =clientSocketConfig;
     }
 }

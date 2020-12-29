@@ -54,6 +54,10 @@ public class ClientSocketConfig {
 	public DefaultIoFilterChainBuilder filterChainBuilder() {
 		DefaultIoFilterChainBuilder defaultIoFilterChainBuilder =
 				new DefaultIoFilterChainBuilder();
+		return filterChainBuilder(defaultIoFilterChainBuilder);
+	}
+
+	public DefaultIoFilterChainBuilder filterChainBuilder(DefaultIoFilterChainBuilder defaultIoFilterChainBuilder) {
 		//mina自带的线程池filter
 		defaultIoFilterChainBuilder.addLast("executor", executorFilter());
 		defaultIoFilterChainBuilder.addLast("mdcInjectionFilter", mdcInjectionFilter());

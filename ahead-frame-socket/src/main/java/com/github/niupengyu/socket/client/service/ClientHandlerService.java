@@ -61,12 +61,16 @@ public abstract class ClientHandlerService implements ClientService {
 
     @Override
     public void sendRequest(Message msg) throws SysException {
-        createMessage(msg);
+        createRequest(msg);
         send(msg);
     }
 
-    protected void createMessage(Message msg) {
+    protected void createRequest(Message msg) {
         msg.setRequestNode(clientConfig.getId());
+    }
+
+    protected void createResponse(Message msg) {
+        msg.setResponseNode(clientConfig.getId());
     }
 
     @Override
@@ -78,7 +82,7 @@ public abstract class ClientHandlerService implements ClientService {
 
     @Override
     public void sendResponse(Message msg) throws SysException {
-        createMessage(msg);
+        createResponse(msg);
         send(msg);
     }
 
@@ -121,6 +125,23 @@ public abstract class ClientHandlerService implements ClientService {
         //test();
     }
 
+    @Override
+    public void create() throws Exception {
+        /*if(session!=null){
+            session.closeNow();
+        }*/
+        session=null;
+        status="RECONNECTION";
+        session=clientInitService.create(3);
+        if(session==null){
+            logger.error("连不上服务器");
+            connectionError();
+        }else{
+            //this.setSession(session);
+            status="CONNECTED";
+        }
+    }
+
 
     @Override
     public void setSession(IoSession session) throws Exception {
@@ -154,22 +175,7 @@ public abstract class ClientHandlerService implements ClientService {
         //flag=true;
     }
 
-    @Override
-    public void create() throws Exception {
-        /*if(session!=null){
-            session.closeNow();
-        }*/
-        session=null;
-        status="RECONNECTION";
-        session=clientInitService.create(3);
-        if(session==null){
-            logger.error("连不上服务器");
-            connectionError();
-        }else{
-            //this.setSession(session);
-            status="CONNECTED";
-        }
-    }
+
 
     @Override
     public void received(Object str, IoSession session) {
@@ -229,7 +235,7 @@ public abstract class ClientHandlerService implements ClientService {
     public void setResponse(Message message) {
         long time=System.currentTimeMillis();
         //message.setNode(getClientConfig().getId());
-        logger.debug("CLIENT 收到心跳回应 {} {}",Thread.currentThread().getId(),message);
+        //logger.info("CLIENT 收到心跳回应 {} {}",Thread.currentThread().getId(),message);
         //System.out.println("setResponse "+(i++));
         //this.messageManager.add(message);
         receivedHeartBeatResponse(message);
@@ -239,7 +245,7 @@ public abstract class ClientHandlerService implements ClientService {
 
     public Message getRequest(String type) throws Exception {
         Message message=Message.createRequest(type/*,SocketContent.HEARTBEAT*/,requestData());
-        createMessage(message);
+        createRequest(message);
         return message;
     }
 

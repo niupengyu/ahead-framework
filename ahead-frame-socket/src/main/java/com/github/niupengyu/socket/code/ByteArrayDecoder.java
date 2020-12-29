@@ -34,7 +34,7 @@ public class ByteArrayDecoder extends CumulativeProtocolDecoder {
                 //buffer.put(bytes);
                 //将IoBuffer对象写出，在IoHandlerAdapter类的messageReceived方法中进行处理
                 String msg=new String(bytes,"UTF-8");
-                //System.out.println("decode "+msg);
+                //System.out.println(Thread.currentThread().getName()+"decode "+msg);
                 ObjectMapper objectMapper=new ObjectMapper();
                 out.write(objectMapper.readValue(msg,Message.class));
             }

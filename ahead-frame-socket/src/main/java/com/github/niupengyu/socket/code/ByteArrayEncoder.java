@@ -12,6 +12,7 @@ public class ByteArrayEncoder extends ProtocolEncoderAdapter {
  @Override
  public void encode(IoSession session, Object message,
                     ProtocolEncoderOutput out) throws Exception {
+     //System.out.println(message.getClass().getName());
      IoBuffer buf = IoBuffer.allocate(100).setAutoExpand(true);
      //这个判断可根据自己的实际情况而定
      ObjectMapper objectMapper=new ObjectMapper();
@@ -23,6 +24,7 @@ public class ByteArrayEncoder extends ProtocolEncoderAdapter {
      byte[] heads = NumberUtil.int2Bytes(bytes.length);//调用方法将int数转为byte数组
      buf.put(heads);
      buf.put(bytes);
+     //System.out.println(Thread.currentThread().getName()+"encode "+msg);
      buf.flip();//不可缺少
      out.write(buf);
  }

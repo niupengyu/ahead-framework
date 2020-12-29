@@ -56,17 +56,11 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
 
     @Override
     public void heartbeat(IoSession session, Message msg) throws Exception {
-        logger.debug("SERVICE 接受到心跳信息"+msg);
+        //logger.info("SERVICE 接受到心跳信息"+msg);
         //this.receiveHeartBeat(msg);
         this.messageMultipleMessageService.add(msg);
-        /*Message message=new Message();
-        message.setType(SocketContent.HEARTBEAT);
-        message.setHead(SocketContent.RESPONSE);
-        message.setResponseNode(getMasterConfig().getName());
-        message.setMessage(responseData(msg));
-        message.setRequestNode(msg.getRequestNode());*/
         Message message=Message.createResponse(msg,responseData(msg));
-        createMessage(message);
+        createResponse(message);
         session.write(message);
     }
 
@@ -80,12 +74,16 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
 
     @Override
     public void sendRequest(long sessionId, Message message) throws Exception {
-        createMessage(message);
+        createRequest(message);
         send(sessionId,message);
     }
 
-    protected void createMessage(Message message) {
+    protected void createRequest(Message message) {
         message.setRequestNode(getMasterConfig().getName());
+    }
+
+    protected void createResponse(Message message) {
+        message.setResponseNode(getMasterConfig().getName());
     }
 
     @Override
@@ -96,7 +94,7 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
 
     @Override
     public void sendResponse(long sessionId,Message message) throws Exception {
-        createMessage(message);
+        createResponse(message);
         send(sessionId,message);
     }
 

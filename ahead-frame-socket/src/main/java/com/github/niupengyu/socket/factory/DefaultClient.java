@@ -49,7 +49,7 @@ public class DefaultClient {
         ClientInitService clientInitService=new ClientInitService();
         clientInitService.setClientConfig(clientConfig);
         clientInitService.setClientHandler(clientHandler);
-        clientInitService.setIoFilterChainBuilder(clientSocketConfig.filterChainBuilder());
+        clientInitService.setClientSocketConfig(clientSocketConfig);
 
         clientHandlerService.setClientInitService(clientInitService);
         clientHandlerService.startMessageManager();
