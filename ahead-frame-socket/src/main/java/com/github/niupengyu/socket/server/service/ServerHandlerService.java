@@ -81,6 +81,7 @@ public abstract class ServerHandlerService  implements ServerService,Runnable{
     }
 
     protected void createResponse(Message message) {
+
         message.setResponseNode(getMasterConfig().getName());
     }
 
