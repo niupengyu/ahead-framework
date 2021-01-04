@@ -30,6 +30,20 @@ public class MultipleMessageService<T> {
         pools =Executors.newSingleThreadExecutor();
     }
 
+    public MultipleMessageService(){
+
+    }
+
+
+    public void init(int count,SimpleMessageService simpleMessageService,String name){
+        this.count=count;
+        this.simpleMessageService=simpleMessageService;
+        this.messageListener=new MessageListener();
+        this.name=name;
+        pools=Executors.newFixedThreadPool(count);
+    }
+
+
 
     public void end() throws InterruptedException {
         simpleMessageService.setStop(true);

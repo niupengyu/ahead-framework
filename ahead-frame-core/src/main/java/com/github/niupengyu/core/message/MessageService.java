@@ -3,6 +3,8 @@ package com.github.niupengyu.core.message;
 import com.github.niupengyu.core.exception.SysException;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public abstract class MessageService<T> extends AbstractMessageService<T> implements Runnable{
 
@@ -12,10 +14,30 @@ public abstract class MessageService<T> extends AbstractMessageService<T> implem
 
     public MessageService(String name) {
         super(name);
+        pools =Executors.newSingleThreadExecutor();
     }
 
     public MessageService(MessageManager<T> dataManager) {
         super(dataManager);
+        pools =Executors.newSingleThreadExecutor();
+    }
+
+    public MessageService(String name,int count) {
+        super(name);
+        pools=Executors.newFixedThreadPool(count);
+    }
+
+    public MessageService(MessageManager<T> dataManager,int count) {
+        super(dataManager);
+        pools=Executors.newFixedThreadPool(count);
+    }
+
+    private ExecutorService pools;
+
+    @Override
+    public void add(T messageBean) {
+        super.add(messageBean);
+        pools.execute(this);
     }
 
     /**
@@ -42,18 +64,5 @@ public abstract class MessageService<T> extends AbstractMessageService<T> implem
     protected abstract void endExecute();
 
 
-    public static void main(String[] args) {
-        new MessageService(new MessageManager("")) {
-            @Override
-            public void execute(Object messageBean) {
-
-            }
-
-            @Override
-            protected void endExecute() {
-
-            }
-        };
-    }
 
 }
