@@ -1,10 +1,8 @@
 package com.github.niupengyu.socket.factory;
 
 import com.github.niupengyu.core.exception.SysException;
-import com.github.niupengyu.core.message.MessageManager;
-import com.github.niupengyu.core.message.MessageService;
+import com.github.niupengyu.core.message.DataRunner;
 import com.github.niupengyu.core.message.MultipleMessageService;
-import com.github.niupengyu.core.message.SimpleMessageService;
 import com.github.niupengyu.core.util.IdGeneratorUtil;
 import com.github.niupengyu.core.util.StringUtil;
 import com.github.niupengyu.socket.bean.Message;
@@ -23,7 +21,7 @@ public class DefaultClient {
 
     //@PostConstruct
     public void create(ClientKeepAliveService keepAliveService, ClientHandlerService clientHandlerService, ClientConfig clientConfig,
-                       SimpleMessageService simpleMessageService, String name) throws Exception {
+                       DataRunner simpleMessageService, String name) throws Exception {
 
         //clientConfig.setId(IdGeneratorUtil.uuid32());
         if(StringUtil.isNull(clientConfig.getId())){
@@ -58,7 +56,7 @@ public class DefaultClient {
     }
 
     public static void main(String[] args) {
-        SimpleMessageService<String> stringSimpleMessageService=new SimpleMessageService<String>("") {
+        DataRunner<String> stringSimpleMessageService=new DataRunner<String>() {
 
             @Override
             public void execute(String messageBean) {

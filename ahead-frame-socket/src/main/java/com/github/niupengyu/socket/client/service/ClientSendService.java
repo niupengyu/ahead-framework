@@ -1,18 +1,18 @@
 package com.github.niupengyu.socket.client.service;
 
-import com.github.niupengyu.core.message.SimpleMessageService;
+import com.github.niupengyu.core.message.DataRunner;
 import com.github.niupengyu.socket.bean.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ClientSendService extends SimpleMessageService<Message> {
+public class ClientSendService implements DataRunner<Message> {
 
     private ClientHandlerService clientHandlerService;
 
     private Logger logger= LoggerFactory.getLogger(ClientSendService.class);
 
     public ClientSendService(ClientHandlerService clientHandlerService,String name){
-        super(name);
+        //super(name);
         this.clientHandlerService=clientHandlerService;
     }
 

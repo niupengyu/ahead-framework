@@ -1,33 +1,26 @@
 package com.github.niupengyu.core.message;
 
+import com.github.niupengyu.core.exception.SysException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
+import java.util.List;
 import java.util.concurrent.*;
 
 public class MultipleMessageService<T> {
 
-    private int count;
 
     //private MessageManager<T> messageManager;
 
     private Logger logger= LoggerFactory.getLogger(MultipleMessageService.class);
 
-    private MessageListener messageListener;
 
-    private SimpleMessageService<T> simpleMessageService;
+    private DataManager dataManager=new DataManager<>();
 
-    private String name;
 
-    private ExecutorService pools;
-
-    public MultipleMessageService(int count,SimpleMessageService simpleMessageService,String name){
-        this.count=count;
-        this.simpleMessageService=simpleMessageService;
-        this.messageListener=new MessageListener();
-        this.name=name;
-        pools =Executors.newSingleThreadExecutor();
+    public MultipleMessageService(int count,DataRunner dataRunner,String name){
+        dataManager.init(name,count,dataRunner);
     }
 
     public MultipleMessageService(){
@@ -35,33 +28,30 @@ public class MultipleMessageService<T> {
     }
 
 
-    public void init(int count,SimpleMessageService simpleMessageService,String name){
-        this.count=count;
-        this.simpleMessageService=simpleMessageService;
-        this.messageListener=new MessageListener();
-        this.name=name;
-        pools=Executors.newFixedThreadPool(count);
+    public void init(int count,DataRunner dataRunner,String name){
+        dataManager.init(name,count,dataRunner);
     }
 
 
 
-    public void end() throws InterruptedException {
-        simpleMessageService.setStop(true);
-        pools.shutdown();
+    public void end() throws Exception {
+        dataManager.end();
     }
 
     public void add(T o){
-        this.simpleMessageService.add(o);
-        pools.execute(simpleMessageService);
+        dataManager.add(o);
+    }
+
+    public void addList(List<T> o) throws Exception {
+        dataManager.addList(o);
     }
 
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws Exception {
         MultipleMessageService<String> multipleMessageService=
-                new MultipleMessageService(3, new SimpleMessageService<String>(new MessageManager("")) {
-
+                new MultipleMessageService(3, new DataRunner() {
                     @Override
-                    public void execute(String messageBean) {
+                    public void execute(Object messageBean) {
                         System.out.println(messageBean);
                         try {
                             Thread.sleep(1000);
@@ -69,7 +59,7 @@ public class MultipleMessageService<T> {
                             e.printStackTrace();
                         }
                     }
-                },"TEST");
+                }, "TEST");
         for(int i=0;i<10;i++){
             multipleMessageService.add("1"+i);
         }

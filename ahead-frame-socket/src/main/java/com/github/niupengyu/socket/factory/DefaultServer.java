@@ -1,9 +1,7 @@
 package com.github.niupengyu.socket.factory;
 
-import com.github.niupengyu.core.message.MessageManager;
-import com.github.niupengyu.core.message.MessageService;
+import com.github.niupengyu.core.message.DataRunner;
 import com.github.niupengyu.core.message.MultipleMessageService;
-import com.github.niupengyu.core.message.SimpleMessageService;
 import com.github.niupengyu.socket.bean.Message;
 import com.github.niupengyu.socket.server.config.MasterConfig;
 import com.github.niupengyu.socket.server.config.ServerConfig;
@@ -17,7 +15,7 @@ public class DefaultServer {
 
     public void create(ServerHandlerService serverHandlerService,
                        MasterConfig masterConfig, ServerKeepAliveService keepAliveService,
-                       SimpleMessageService simpleMessageService,String name) throws Exception {
+                       DataRunner simpleMessageService, String name) throws Exception {
 
         MultipleMessageService<Message>
                 multipleMessageService=

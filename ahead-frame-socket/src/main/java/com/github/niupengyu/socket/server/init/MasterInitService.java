@@ -1,8 +1,5 @@
 package com.github.niupengyu.socket.server.init;
 
-import com.github.niupengyu.core.annotation.AutoConfig;
-import com.github.niupengyu.core.init.InitService;
-import com.github.niupengyu.core.message.MessageService;
 import com.github.niupengyu.socket.server.config.MasterConfig;
 import com.github.niupengyu.socket.server.service.MasterHandler;
 import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;

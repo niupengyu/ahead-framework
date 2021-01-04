@@ -1,7 +1,5 @@
 package com.github.niupengyu.socket.server.service;
 
-import com.github.niupengyu.core.annotation.AutoConfig;
-import com.github.niupengyu.core.message.MessageService;
 import com.github.niupengyu.socket.bean.Message;
 import com.github.niupengyu.socket.bean.SessionInfo;
 import com.github.niupengyu.socket.handler.KeepAliveService;

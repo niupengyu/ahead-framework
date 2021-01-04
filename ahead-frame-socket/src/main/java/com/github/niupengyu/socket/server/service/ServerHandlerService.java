@@ -3,7 +3,6 @@ package com.github.niupengyu.socket.server.service;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.niupengyu.core.exception.SysException;
-import com.github.niupengyu.core.message.MessageService;
 import com.github.niupengyu.core.message.MultipleMessageService;
 import com.github.niupengyu.core.util.DateUtil;
 import com.github.niupengyu.core.util.Hex;
