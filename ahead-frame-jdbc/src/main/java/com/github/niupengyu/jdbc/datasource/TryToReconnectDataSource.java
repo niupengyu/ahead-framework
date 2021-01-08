@@ -56,6 +56,7 @@ public class TryToReconnectDataSource implements DataSource{
                 @Override
                 public Object invoke(Object proxy, Method method, Object[] args)
                         throws Throwable {
+                    //logger.info("local conn is {}",connection);
                     if("close".equals(method.getName())){
                         return connection;
                     }else {
