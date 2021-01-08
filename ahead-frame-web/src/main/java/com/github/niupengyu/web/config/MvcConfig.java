@@ -59,6 +59,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -163,6 +164,18 @@ public class MvcConfig implements WebMvcConfigurer
 		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
 		converter.setObjectMapper(objectMapper());
 		return converter;
+	}
+
+	@Override
+	public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+		Iterator<HttpMessageConverter<?>> it = converters.iterator();
+		while(it.hasNext()){
+			HttpMessageConverter<?> messageConverter = it.next();
+			if (messageConverter instanceof MappingJackson2HttpMessageConverter) {
+				it.remove();
+			}
+		}
+		converters.add(messageConverter());
 	}
 
 	@Bean

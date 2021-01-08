@@ -1,6 +1,7 @@
 package com.github.niupengyu.socket.code;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.niupengyu.core.util.JsonUtil;
 import com.github.niupengyu.core.util.data.NumberUtil;
 import com.github.niupengyu.socket.bean.Message;
 import com.alibaba.fastjson.JSONObject;
@@ -35,8 +36,8 @@ public class ByteArrayDecoder extends CumulativeProtocolDecoder {
                 //将IoBuffer对象写出，在IoHandlerAdapter类的messageReceived方法中进行处理
                 String msg=new String(bytes,"UTF-8");
                 //System.out.println(Thread.currentThread().getName()+"decode "+msg);
-                ObjectMapper objectMapper=new ObjectMapper();
-                out.write(objectMapper.readValue(msg,Message.class));
+                //ObjectMapper objectMapper=new ObjectMapper();
+                out.write(JsonUtil.readValue(msg,Message.class));
             }
             if(in.remaining() > 0){//如果还粘了包，就让父类在进行一次处理
                 return true;
