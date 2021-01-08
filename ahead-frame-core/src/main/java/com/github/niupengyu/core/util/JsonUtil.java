@@ -3,6 +3,10 @@
  */
 package com.github.niupengyu.core.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -391,5 +395,23 @@ public class JsonUtil {
 	public static String beanToJsonList(Object role, String[] arr) throws Exception {
 		// TODO Auto-generated method stub
 		return  "["+beanToJson(role,arr)+"]";
+	}
+
+	private static final ObjectMapper objectMapper=new ObjectMapper();
+
+	public static String writeValueAsString(Object object) throws JsonProcessingException {
+		return objectMapper.writeValueAsString(object);
+	}
+
+	public static <T> T convertValue(Object value,Class<T> c) throws JsonProcessingException {
+		return objectMapper.convertValue(value,c);
+	}
+
+	public static <T> T convertValue(Object value,TypeReference<T> tr) throws JsonProcessingException {
+		return objectMapper.convertValue(value, tr);
+	}
+
+	public static ObjectMapper getObjectMapper() {
+		return objectMapper;
 	}
 }

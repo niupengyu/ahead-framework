@@ -1,6 +1,7 @@
 package com.github.niupengyu.socket.code;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.niupengyu.core.util.JsonUtil;
 import com.github.niupengyu.core.util.data.NumberUtil;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
@@ -15,8 +16,8 @@ public class ByteArrayEncoder extends ProtocolEncoderAdapter {
      //System.out.println(message.getClass().getName());
      IoBuffer buf = IoBuffer.allocate(100).setAutoExpand(true);
      //这个判断可根据自己的实际情况而定
-     ObjectMapper objectMapper=new ObjectMapper();
-     String msg = objectMapper.writeValueAsString(message);
+     //ObjectMapper objectMapper=new ObjectMapper();
+     String msg = JsonUtil.writeValueAsString(message);
      //String msg=message.toString();
      //System.out.println("encode "+msg);
      //String msg = (String) message;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.niupengyu.core.util.IdGeneratorUtil;
+import com.github.niupengyu.core.util.JsonUtil;
 import com.github.niupengyu.core.util.StringUtil;
 import com.alibaba.fastjson.JSON;
 import com.github.niupengyu.socket.util.SocketContent;
@@ -22,10 +23,7 @@ public class Message{
         this.type=type;
         this.id=id;
         this.message=data;
-        //this.message=objectMapper.writeValueAsString(data);
         this.request=request;
-        //this.requestNode=requestNode;
-        //this.topic=topic;
     }
 
     public Message(String head, String type,String id,long request,String requestNode,
@@ -33,7 +31,6 @@ public class Message{
         this.head=head;
         this.type=type;
         this.message=data;
-        //this.message=objectMapper.writeValueAsString(data);
         this.id=id;
         this.request=request;
         this.requestNode=requestNode;
@@ -143,15 +140,15 @@ public class Message{
 
     public String toJsonString() throws JsonProcessingException {
         //return JSON.toJSONString(this);
-        return objectMapper.writeValueAsString(this);
+        return JsonUtil.writeValueAsString(this);
     }
 
     public <T> T toObject(Class<T> c) throws JsonProcessingException {
-        return objectMapper.convertValue(message,c);
+        return JsonUtil.convertValue(message,c);
     }
 
     public <T> T toList( TypeReference<T> tr) throws JsonProcessingException {
-        return objectMapper.convertValue(message, tr);
+        return JsonUtil.convertValue(message, tr);
     }
 
     public long getRequest() {

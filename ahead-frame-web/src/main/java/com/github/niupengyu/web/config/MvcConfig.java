@@ -166,7 +166,8 @@ public class MvcConfig implements WebMvcConfigurer
 	}
 
 	@Bean
-	ObjectMapper objectMapper() {
+	public ObjectMapper objectMapper() {
+		logger.info("配置 json转换类");
 		ObjectMapper objectMapper= new Jackson2ObjectMapperBuilder()
 				.findModulesViaServiceLoader(true)
 				.serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(
