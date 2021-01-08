@@ -13,7 +13,9 @@
  */
 package com.github.niupengyu.web.config;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializationConfig;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.github.niupengyu.core.util.StringUtil;
@@ -58,6 +60,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 
 @Configuration
@@ -170,15 +173,18 @@ public class MvcConfig implements WebMvcConfigurer
 						DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER)))
 				.deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(
 						DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER)))
-				.serializerByType(Timestamp.class, new LocalDateTimeSerializer(
+				/*.serializerByType(Timestamp.class, new LocalDateTimeSerializer(
 						DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER)))
 				.deserializerByType(Timestamp.class, new LocalDateTimeDeserializer(
-						DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER)))
+						DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER)))*/
+
 				.build();
 		SimpleDateFormat myDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		objectMapper.setDateFormat(myDateFormat);
+		objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 		return objectMapper;
 	}
+
 
     /*@Override
     public void configureMessageConverters(
