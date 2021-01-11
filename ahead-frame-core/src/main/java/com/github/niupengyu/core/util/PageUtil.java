@@ -53,7 +53,15 @@ public class PageUtil {
         return total % size == 0 ? total / size : total / size + 1;
     }
 
+    public static long maxPage(int size, long total){
+        return  (total % size == 0 ? total / size : total / size + 1);
+    }
+
     public static int start(int page,int size){
+        return (page - 1) * size;
+    }
+
+    public static long start(int page,long size){
         return (page - 1) * size;
     }
 
@@ -62,6 +70,14 @@ public class PageUtil {
     }
 
     public static int oracleEnd(int page,int size){
+        return page*size;
+    }
+
+    public static long oracleStart(int page,long size){
+        return (page-1)*size;
+    }
+
+    public static long oracleEnd(int page,long size){
         return page*size;
     }
 
