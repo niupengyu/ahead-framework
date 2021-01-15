@@ -3,10 +3,13 @@
  */
 package com.github.niupengyu.core.util;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -398,7 +401,13 @@ public class JsonUtil {
 		return  "["+beanToJson(role,arr)+"]";
 	}
 
-	private static final ObjectMapper objectMapper=new ObjectMapper();
+	private static final ObjectMapper objectMapper=new ObjectMapper()
+//序列化的时候序列对象的所有属性
+		.setSerializationInclusion(JsonInclude.Include.ALWAYS)
+	//反序列化的时候如果多了其他属性,不抛出异常
+		.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+	//如果是空对象的时候,不抛异常
+		.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
 	public static String writeValueAsString(Object object) throws JsonProcessingException {
 		return objectMapper.writeValueAsString(object);
