@@ -44,17 +44,17 @@ public class SessionManager {
         return null;
     }
 
-    public static void putMessage(long id,String msg){
+    /*public static void putMessage(long id,String msg){
         if(messagesConcurrentHashMap.contains(id)){
             messagesConcurrentHashMap.get(id).append(msg);
         }else{
             messagesConcurrentHashMap.put(id,new StringBuffer().append(msg));
         }
-    }
+    }*/
 
-    public static StringBuffer getMessage(long id){
+    /*public static StringBuffer getMessage(long id){
         return messagesConcurrentHashMap.get(id);
-    }
+    }*/
 
     public static void clear(long id) {
         SessionManager.sessionsConcurrentHashMap.remove(id);
