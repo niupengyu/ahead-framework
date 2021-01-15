@@ -172,10 +172,11 @@ public class MvcConfig implements WebMvcConfigurer
 		while(it.hasNext()){
 			HttpMessageConverter<?> messageConverter = it.next();
 			if (messageConverter instanceof MappingJackson2HttpMessageConverter) {
-				it.remove();
+				//it.remove();
+				((MappingJackson2HttpMessageConverter) messageConverter).setObjectMapper(objectMapper());
 			}
 		}
-		converters.add(messageConverter());
+		//converters.add(messageConverter());
 	}
 
 	@Bean
