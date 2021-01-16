@@ -66,7 +66,7 @@ public class MasterHandler extends IoHandlerAdapter {
         }
         String clientIP = ((InetSocketAddress)session.getRemoteAddress()).getAddress().getHostAddress();
         session.setAttribute(SocketContent.KEY_SESSION_CLIENT_IP, clientIP);
-        LOG.info("sessionCreated, client IP: {} SESSION", clientIP,session.getId());
+        LOG.info("sessionCreated, client IP: {} SESSION {}", clientIP,session.getId());
         SessionManager.sessionsConcurrentHashMap.put(session.getId(), new SessionInfo(session));
         LOG.info("-IoSession实例:" + session.toString());
     }
