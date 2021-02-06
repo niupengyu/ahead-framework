@@ -32,8 +32,7 @@ public class RetryJdbcDao implements InvocationHandler {
         Exception exception=null;
         for(;i<count;i++){
             try{
-                System.out.println("执行 第 "+i+" 次");
-                System.out.println("  method "+method +" jdbcDao "+jdbcDao);
+                logger.info("执行 第 "+i+" 次");
                 returnValue=method.invoke(jdbcDao,args);
                 break;
             }catch (Exception e){
@@ -42,7 +41,7 @@ public class RetryJdbcDao implements InvocationHandler {
             Thread.sleep(5000l);
         }
         if(i>=count){
-            System.out.println("执行异常 ！");
+            logger.error("执行异常 ！"+i,exception);
             throw exception;
         }
         return returnValue;
