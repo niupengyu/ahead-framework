@@ -48,7 +48,7 @@ public interface JdbcDaoFace {
 
 	public <T> Set<T> getSetOne(String sql) throws DaoException ;
 
-
+	public DataSource getDataSource();
 
 	public Map<String,Object> getOne(String sql) throws DaoException;
 	

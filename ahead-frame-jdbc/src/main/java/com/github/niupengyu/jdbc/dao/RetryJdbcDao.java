@@ -39,6 +39,7 @@ public class RetryJdbcDao implements InvocationHandler {
             }catch (Exception e){
                 exception=e;
             }
+            Thread.sleep(5000l);
         }
         if(i>=count){
             System.out.println("执行异常 ！");
