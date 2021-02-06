@@ -35,11 +35,12 @@ import org.slf4j.LoggerFactory;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.sql.DataSource;
+import java.lang.reflect.Proxy;
 import java.sql.*;
 import java.util.*;
 
 //@Repository("jdbcDao")
-public class JdbcDao {
+public class JdbcDao implements JdbcDaoFace{
 
 //	@Resource(name="multipleDataSource")
 	private DataSource dataSource;
@@ -546,9 +547,9 @@ public class JdbcDao {
 		return "";
 	}
 
-    interface JdbcCallBack{
+    /*interface JdbcCallBack{
 		public void execute(Statement stmt);
-	}
+	}*/
 	
 
 	
@@ -628,7 +629,7 @@ public class JdbcDao {
 		return one(array,sql);
 	}
 
-	private Map<String, Object> one(List<Map<String, Object>> array,String sql) throws DaoException {
+	public Map<String, Object> one(List<Map<String, Object>> array,String sql) throws DaoException {
 		if(array==null||array.isEmpty()){
 			return new HashMap<>();
 		}
@@ -1424,6 +1425,12 @@ public class JdbcDao {
 
 	public void setConnection(Connection connection){
 		this.dataSource=new SingleDataSource(connection);
+	}
+
+	public static JdbcDaoFace createRetryJdbcDao(JdbcDao jdbcDao){
+		RetryJdbcDao jdbcDaoProxy=new RetryJdbcDao(jdbcDao);
+		ClassLoader loader=jdbcDao.getClass().getClassLoader();
+		return (JdbcDaoFace) Proxy.newProxyInstance(loader,new Class[]{JdbcDaoFace.class},jdbcDaoProxy);
 	}
 }
 

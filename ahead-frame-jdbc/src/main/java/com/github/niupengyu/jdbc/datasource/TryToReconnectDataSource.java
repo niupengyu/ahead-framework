@@ -1,6 +1,7 @@
 package com.github.niupengyu.jdbc.datasource;
 
 import com.github.niupengyu.jdbc.dao.JdbcDao;
+import com.github.niupengyu.jdbc.dao.JdbcDaoFace;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
