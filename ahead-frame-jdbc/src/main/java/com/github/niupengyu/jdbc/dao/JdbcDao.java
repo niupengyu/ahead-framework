@@ -1427,6 +1427,11 @@ public class JdbcDao implements JdbcDaoFace{
 		this.dataSource=new SingleDataSource(connection);
 	}
 
+	public static JdbcDaoFace createRetryJdbcDao(JdbcDao jdbcDao,int count){
+		RetryJdbcDao jdbcDaoProxy=new RetryJdbcDao(jdbcDao,count);
+		ClassLoader loader=jdbcDao.getClass().getClassLoader();
+		return (JdbcDaoFace) Proxy.newProxyInstance(loader,new Class[]{JdbcDaoFace.class},jdbcDaoProxy);
+	}
 	public static JdbcDaoFace createRetryJdbcDao(JdbcDao jdbcDao){
 		RetryJdbcDao jdbcDaoProxy=new RetryJdbcDao(jdbcDao);
 		ClassLoader loader=jdbcDao.getClass().getClassLoader();

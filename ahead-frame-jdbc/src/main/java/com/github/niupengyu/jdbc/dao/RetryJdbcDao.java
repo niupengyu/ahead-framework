@@ -20,6 +20,11 @@ public class RetryJdbcDao implements InvocationHandler {
         this.jdbcDao=jdbcDao;
     }
 
+    public RetryJdbcDao(JdbcDao jdbcDao, int count) {
+        this.jdbcDao=jdbcDao;
+        this.count=count;
+    }
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Object returnValue=null;
@@ -44,7 +49,7 @@ public class RetryJdbcDao implements InvocationHandler {
 
     public static void main(String[] args) throws DaoException {
         JdbcDao jdbcDao=new JdbcDao();
-        JdbcDaoFace realSubjectProxy= JdbcDao.createRetryJdbcDao(jdbcDao);
+        JdbcDaoFace realSubjectProxy= JdbcDao.createRetryJdbcDao(jdbcDao,5);
         realSubjectProxy.getIntValue("");
     }
 }
