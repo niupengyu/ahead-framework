@@ -7,6 +7,7 @@ import com.github.niupengyu.jdbc.bean.DbConfig;
 import com.github.niupengyu.jdbc.bean.MybatisConfiguration;
 import com.github.niupengyu.jdbc.bean.MybatisInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.reflection.wrapper.ObjectWrapperFactory;
 import org.apache.ibatis.session.Configuration;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
@@ -59,6 +60,7 @@ public class BeanFactory {
         return configuration;
     }
 
+
     public BeanDefinitionBuilder createConfiguration(DbConfig dbConfig, DataSourceBean ds){
 
         BeanDefinitionBuilder configuration = BeanDefinitionBuilder
@@ -109,6 +111,7 @@ public class BeanFactory {
                 configuration.addPropertyValue(entry.getKey(),entry.getValue());
             }
         }
+
     }
 
     public BeanDefinitionBuilder createMapperScanner(List<String> mappers,String dsName) {

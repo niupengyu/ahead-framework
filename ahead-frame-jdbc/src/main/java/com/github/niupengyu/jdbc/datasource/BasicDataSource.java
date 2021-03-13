@@ -10,6 +10,7 @@
  */
 package com.github.niupengyu.jdbc.datasource;
 
+import com.github.niupengyu.core.util.ClassUtil;
 import com.github.niupengyu.core.util.StringUtil;
 import com.github.niupengyu.jdbc.bean.DataSourceBean;
 import com.github.niupengyu.jdbc.bean.DbConfig;
@@ -19,8 +20,10 @@ import org.apache.commons.dbcp2.PoolableConnectionFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 
 import javax.sql.DataSource;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 
@@ -65,6 +68,9 @@ public class BasicDataSource extends org.apache.commons.dbcp2.BasicDataSource {
     }
 
     public void initPool(DbConfig db, DataSourceBean dataSource) {
+
+
+
         this.setInitialSize(
                 StringUtil.integerValueOf(dataSource.getInitialSize(), db.getInitialSize()));
         this.setMaxTotal(
@@ -213,6 +219,34 @@ public class BasicDataSource extends org.apache.commons.dbcp2.BasicDataSource {
                 StringUtil.booleanValueOf(value.getRemoveAbandoned(), dbConfig.getRemoveAbandoned()));
         druidDataSource.setRemoveAbandonedTimeout(
                 StringUtil.integerValueOf(value.getRemoveAbandonedTimeout(), dbConfig.getRemoveAbandonedTimeout()));
+    }
+
+    public static void main(String[] args) {
+        BasicDataSource basicDataSource=new BasicDataSource();
+       /* DruidDataSource druidDataSource = new DruidDataSource();
+        Properties properties=new Properties();
+        properties.put("druid.initialSize","5");
+        properties.put("druid.initialSize","1");
+        properties.put("druid.maxActive","1");
+        properties.put("druid.maxIdle","1");
+        properties.put("druid.minIdle","1");
+        properties.put("druid.maxWait","60000");
+        properties.put("druid.validationQuery","select now()");
+        properties.put("druid.validationQueryTimeout","1");
+        properties.put("druid.testWhileIdle","true");
+        properties.put("druid.testOnBorrow","true");
+        properties.put("druid.timeBetweenEvictionRunsMillis","3600000");
+        properties.put("druid.numTestsPerEvictionRun","20");
+        properties.put("druid.minEvictableIdleTimeMillis","120000");
+        properties.put("druid.removeAbandoned","true");
+        properties.put("druid.removeAbandonedTimeout","6000000");
+        properties.put("druid.minPoolSize","1");
+        properties.put("druid.maxPoolSize","1");
+        properties.put("druid.borrowConnectionTimeout","60");
+       // druidDataSource.setInitialSize(5);
+        druidDataSource.configFromPropety(properties);
+        System.out.println(druidDataSource.getInitialSize());
+        System.out.println(druidDataSource.getValidationQuery());*/
     }
 }
 

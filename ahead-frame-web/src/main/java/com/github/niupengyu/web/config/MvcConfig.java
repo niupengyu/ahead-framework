@@ -124,7 +124,6 @@ public class MvcConfig implements WebMvcConfigurer
 
 	@Bean
 	public HandlerInterceptorAdapter interceptor() {
-		logger.info("hahahahsssssssssssss");
 		WebRequestInterceptorImpl webRequestInterceptor=
 				new WebRequestInterceptorImpl();
 		//webRequestInterceptor

@@ -30,7 +30,7 @@ public class GlobalExceptionHandler1 {
         response.setContentType(ClientContent.CONTENT_JSON);
         ResponseData responseData=new ResponseData();
         responseData.setCode(e.getCode());
-        e.printStackTrace();
+        //e.printStackTrace();
         responseData.setToken(req.getSession().getId());
         responseData.setTimestamp(System.currentTimeMillis());
         responseData.setMessage(e.getMessage());
@@ -41,12 +41,11 @@ public class GlobalExceptionHandler1 {
     @ExceptionHandler(value = RequestException.class)
     @ResponseBody
     public ResponseData requestException(HttpServletRequest req, HttpServletResponse response, RequestException e){
-        logger.error("---GlobalExceptionHandler RequestException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
-        logger.error("GlobalExceptionHandler1---RequestException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
+        logger.error("---GlobalExceptionHandler1 RequestException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
         response.setContentType(ClientContent.CONTENT_JSON);
         ResponseData responseData=new ResponseData();
         responseData.setCode(e.getCode());
-        e.printStackTrace();
+        //e.printStackTrace();
         responseData.setToken(req.getSession().getId());
         response.setStatus(e.getCode());
         responseData.setTimestamp(System.currentTimeMillis());
@@ -58,12 +57,11 @@ public class GlobalExceptionHandler1 {
     @ExceptionHandler(value = NoHandlerFoundException.class)
     @ResponseBody
     public ResponseData defaultErrorHandler(HttpServletRequest req, HttpServletResponse response, NoHandlerFoundException e){
-        logger.error("---DefaultException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage());
-        logger.error("GlobalExceptionHandler1---NoHandlerFoundException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
+        logger.error("---GlobalExceptionHandler1 DefaultException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage());
         response.setContentType(ClientContent.CONTENT_JSON);
         ResponseData responseData=new ResponseData();
         responseData.setCode(404);
-        e.printStackTrace();
+        //e.printStackTrace();
         responseData.setToken(req.getSession().getId());
         responseData.setTimestamp(System.currentTimeMillis());
         responseData.setMessage(e.getMessage());
