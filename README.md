@@ -50,3 +50,7 @@ mkfs.ext4 /dev/sdb
  
  $ gpg --keyserver hkp://pgp.mit.edu --search-keys xxxxx@xxxx.com # user email address
 >gpg --keyserver http://keys.openpgp.org  --send-keys 123123123
+>
+
+
+docker run -tid -p 8581:8081 --name niu_nexus -e NEXUS_CONTEXT=nexus -v /usr/local/nexus3/nexus-data:/home/niupengyu/nexus3/  docker.io/sonatype/nexus3

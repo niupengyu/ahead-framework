@@ -40,7 +40,7 @@
             <comments>A business-friendly OSS license</comments>
         </license>
     </licenses>
-
+<!--    git config &#45;&#45;system http.sslcainfo "D:\develop\MyGit\Git\etc\pki\ca-trust\extracted\openssl\ca-bundle.trust.crt"-->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
