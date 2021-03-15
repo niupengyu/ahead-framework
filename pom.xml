@@ -194,18 +194,28 @@
         </profile>
     </profiles>
     <distributionManagement>
-        <snapshotRepository>
-            <!-- 这个id需要在setting.xml中设置  -->
+        <!--<snapshotRepository>
+            &lt;!&ndash; 这个id需要在setting.xml中设置  &ndash;&gt;
             <id>sonatype-nexus-snapshots</id>
             <name>OSS Snapshots Repository</name>
-            <!-- 这里的url就是Issue中回复的snapshots 的repo地址-->
+            &lt;!&ndash; 这里的url就是Issue中回复的snapshots 的repo地址&ndash;&gt;
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
             <id>sonatype-nexus-staging</id>
             <name>OSS Staging Repository</name>
-            <!-- 这里的url就是Issue中回复的staging 的repo地址-->
+            &lt;!&ndash; 这里的url就是Issue中回复的staging 的repo地址&ndash;&gt;
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>-->
+        <repository>
+            <id>releases</id>
+            <name>Nexus Release Repository</name>
+            <url>http://39.99.141.98:8581/nexus/repository/maven-releases/</url>
         </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>http://39.99.141.98:8581/nexus/repository/maven-snapshots/</url>
+        </snapshotRepository>
     </distributionManagement>
 </project>

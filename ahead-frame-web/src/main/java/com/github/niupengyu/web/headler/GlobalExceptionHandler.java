@@ -43,7 +43,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = CasException.class)
     public void requestException(HttpServletRequest req, HttpServletResponse response, CasException e) throws IOException {
         logger.error("---GlobalExceptionHandler CasException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
-        logger.error("GlobalExceptionHandler1---CasException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
         response.sendRedirect(e.getMessage());
     }
 

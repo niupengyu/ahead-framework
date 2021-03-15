@@ -26,7 +26,7 @@ public class GlobalExceptionHandler1 {
     @ExceptionHandler(value = SysException.class)
     @ResponseBody
     public ResponseData baseErrorHandler(HttpServletRequest req, HttpServletResponse response, SysException e){
-        logger.error("GlobalExceptionHandler1---SysException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
+        logger.error("GlobalExceptionHandler1---SysException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage());
         response.setContentType(ClientContent.CONTENT_JSON);
         ResponseData responseData=new ResponseData();
         responseData.setCode(e.getCode());
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler1 {
     @ExceptionHandler(value = RequestException.class)
     @ResponseBody
     public ResponseData requestException(HttpServletRequest req, HttpServletResponse response, RequestException e){
-        logger.error("---GlobalExceptionHandler1 RequestException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
+        logger.error("---GlobalExceptionHandler1 RequestException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage());
         response.setContentType(ClientContent.CONTENT_JSON);
         ResponseData responseData=new ResponseData();
         responseData.setCode(e.getCode());
@@ -72,7 +72,6 @@ public class GlobalExceptionHandler1 {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public ResponseData defaultErrorHandler(HttpServletRequest req, HttpServletResponse response, Exception e){
-        logger.error("---DefaultException Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage());
         logger.error("GlobalExceptionHandler1---Exception Handler---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage(),e);
         response.setContentType(ClientContent.CONTENT_JSON);
         ResponseData responseData=new ResponseData();
